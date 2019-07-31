@@ -28,14 +28,14 @@ public class Calc_class {
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //
     // ***********  Calc_HYOF ************
-    // 今月使用量の計算
+    // 使用量金額の計算
     //
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
     static String Calc_HYOF_PRICE (float row , SQLiteDatabase db){
         String regex = "^-?(0|[1-9]\\d*)(\\.\\d+|)$";
         Pattern p = Pattern.compile(regex);
         String price = null;
-        String minutes = null;
+        String minutes;
 
         if(row <= 50.1) {
             int usage_integer_minutes_C = (int) Math.floor(row);
@@ -43,7 +43,8 @@ public class Calc_class {
             Matcher matcher = (Matcher) p.matcher(s);
 
             if(matcher.matches()) {
-                minutes = String.format("%.f",(row % 1.0 * 10));
+                int row1 = (int) (row % 1.0 * 10);
+                minutes = String.valueOf(row1);
             }
             else{
                 minutes = "0";

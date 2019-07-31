@@ -189,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
 
                 String Usaged_now = Row1.getText().toString();
                 String Usaged_now2 = Row2.getText().toString();
+
+                Row3.setText("");
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
 
                 COL_BAN++ ;
@@ -207,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String Usaged_now = Row1.getText().toString();
                 String Usaged_now2 = Row2.getText().toString();
+
+                Row3.setText("");
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
 
                 COL_BAN--;
