@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText Row1 = findViewById(R.id.Row1_Text);
         final TextView Row2 = findViewById(R.id.Row2_Text);
         final TextView Row3 = findViewById(R.id.Row3_Text);
+        final TextView Row3_2 = findViewById(R.id.Row3_Text2);
         final Button End = findViewById(R.id.end_app);
 
         //-------------------------------------------------------------------------------------------
@@ -109,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 //        main_screen.Com_Select(MainActivity.this ,kenshin_db.db,COL_BAN);
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
 
-
         //-------------------------------------------------------------------------------------------
         //
         //CSV入力(button6)
@@ -149,9 +149,6 @@ public class MainActivity extends AppCompatActivity {
                         kenshin_db.allDelete("HYOF");
                         Log.d("Cursor", "データを消去します");
 
-                        //kenshin_db.db.execSQL("DROP TABLE IF EXISTS TOKUIF");   *テーブル削除用　基本コメント隠し
-                        //tokuif.onCreate(kenshin_db.db);
-
                         new TOKUIF().TOKUIF_CSV(kenshin_db.db, MainActivity.this);
                         new HYOF().HYOF_CSV(kenshin_db.db,MainActivity.this);
 
@@ -177,10 +174,13 @@ public class MainActivity extends AppCompatActivity {
         // *** 最初の人 ***
         //-----------------------------------------------------------------------------------------------------------------
 
-       main_screen.Com_Select(this, kenshin_db.db,COL_BAN);
+        main_screen.Com_Select(this, kenshin_db.db,COL_BAN);
 
         //-----------------------------------------------------------------------------------------------------------------
         // *** DOWN　: 選択ボタン判定 ***
+        //
+        //COL_BAN = TOKUIFの連番と連動　COLBAN = 1 の時　TOKUIF.ban = 1 の人を指す
+        //
         //-----------------------------------------------------------------------------------------------------------------
 
         Down.setOnClickListener(new View.OnClickListener() {
@@ -189,42 +189,46 @@ public class MainActivity extends AppCompatActivity {
 
                 String Usaged_now = Row1.getText().toString();
                 String Usaged_now2 = Row2.getText().toString();
+                String price = Row3.getText().toString();
+                String Tax = Row3_2.getText().toString();
 
-                Row3.setText("");
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
+                tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
 
                 COL_BAN++ ;
-                //main_screen.Com_Select(MainActivity.this ,kenshin_db.db,COL_BAN);
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
 
             }
         });
-
         //-----------------------------------------------------------------------------------------------------------------
+        //
         // *** UP : 選択ボタン判定 ***
+        //
         //-----------------------------------------------------------------------------------------------------------------
-
         Up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Usaged_now = Row1.getText().toString();
                 String Usaged_now2 = Row2.getText().toString();
+                String price = Row3.getText().toString();
+                String Tax = Row3_2.getText().toString();
 
-                Row3.setText("");
+
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
+                tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
 
                 COL_BAN--;
-                // main_screen.Com_Select(MainActivity.this, kenshin_db.db,COL_BAN);
-                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
 
             }
         });
 
         //------------------------------------------------------------------------------------------------------------------
+        //
         // ***** 使用量計算 *****
+        //
         //------------------------------------------------------------------------------------------------------------------
         Row1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean handled = false;
@@ -233,9 +237,6 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         final String Row1_text = Row1.getText().toString();
                         Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1_text), kenshin_db.db,COL_BAN));
-                        final String Row3_text = Row2.getText().toString();
-                        Row3.setText(Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row3_text),kenshin_db.db));
-
                         handled = true;
                     }
                     catch (NumberFormatException e) {
@@ -244,11 +245,22 @@ public class MainActivity extends AppCompatActivity {
                                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                                    //--------------------------------------------------------------------------
+                                    //
+                                    //
+                                    //
+                                    //--------------------------------------------------------------------------
                                     }
                                 }).show();
                     }
                 }
+                //--------------------------------------------------------------------------------------------------------
+                //
+                // ***** 金額、内消費税　入力タスク *****
+                //
+                //-------------------------------------------------------------------------------------------------------
+                final String Row3_text = Row2.getText().toString();
+                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row3_text),kenshin_db.db ,COL_BAN , MainActivity.this);
                 return handled;
             }
         });
@@ -257,12 +269,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 kenshin_db.close();
+                COL_BAN = 0;
                 finish();
             }
-
         });
-
     }
-
-
 }

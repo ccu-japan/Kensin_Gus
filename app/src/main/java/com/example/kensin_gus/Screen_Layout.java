@@ -40,8 +40,9 @@ public class Screen_Layout {
 
             //     String col_ban = Integer.toString(COL_BAN);
             Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+            Cursor C_price  = db.rawQuery("SELECT /*i:0*/T_T_Billing ,/*i:1*/ G_C_tax FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
             c.moveToFirst();
-
+            c.moveToFirst();
 
 
             TextView name = mainActivity.findViewById(R.id.name);
@@ -49,6 +50,8 @@ public class Screen_Layout {
             TextView used = mainActivity.findViewById(R.id.Row1_Text2);
             EditText now  = mainActivity.findViewById(R.id.Row1_Text);
             TextView usaged = mainActivity.findViewById(R.id.Row2_Text);
+            TextView Row3_Text = mainActivity.findViewById(R.id.Row3_Text);
+            TextView Row3_2Text = mainActivity.findViewById(R.id.Row3_Text2);
 
             try {
 
@@ -57,6 +60,9 @@ public class Screen_Layout {
                 used.setText(c.getString(4));
                 usaged.setText(c.getString(8));
                 now.setText(c.getString(5));
+                Row3_Text.setText(C_price.getString(0));
+                Row3_2Text.setText(C_price.getString(1));
+
 
             }
             catch(IndexOutOfBoundsException e) {
@@ -72,26 +78,30 @@ public class Screen_Layout {
             }
 
         }
-        //------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //***** 画面表示タスク　******
         //
-        // ******  ******
         //
-        //------------------------------------------------------------------------------------------------------------
-
+        //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
+        //
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
         @SuppressLint("SetTextI18n")
         static int SELECT_COM(MainActivity mainActivity, int COL_BAN , SQLiteDatabase db) {
 
-            //     String col_ban = Integer.toString(COL_BAN);
             Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+            Cursor C_price  = db.rawQuery("SELECT /*i:0*/T_T_Billing ,/*i:1*/ G_C_tax FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+
             c.moveToFirst();
-
-
+            C_price.moveToFirst();
 
             TextView name = mainActivity.findViewById(R.id.name);
             TextView code = mainActivity.findViewById(R.id.code);
             TextView used = mainActivity.findViewById(R.id.Row1_Text2);
             EditText now  = mainActivity.findViewById(R.id.Row1_Text);
             TextView usaged = mainActivity.findViewById(R.id.Row2_Text);
+            TextView Row3_Text = mainActivity.findViewById(R.id.Row3_Text);
+            TextView Row3_2Text = mainActivity.findViewById(R.id.Row3_Text2);
+
 
             try {
 
@@ -100,6 +110,8 @@ public class Screen_Layout {
                 used.setText(c.getString(4));
                 usaged.setText(c.getString(8));
                 now.setText(c.getString(5));
+                Row3_Text.setText(C_price.getString(0));
+                Row3_2Text.setText(C_price.getString(1));
 
             }
             catch(IndexOutOfBoundsException e) {

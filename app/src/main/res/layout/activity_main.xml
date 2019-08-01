@@ -226,7 +226,7 @@
                 android:autofillHints=""
                 android:ems="5"
                 android:focusable="false"
-                android:gravity="right"
+                android:gravity="center"
                 android:textSize="36sp"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />

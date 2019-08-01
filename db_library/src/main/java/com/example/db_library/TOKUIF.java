@@ -220,16 +220,45 @@ public class TOKUIF {
                         e.printStackTrace();
                 }
         }
-        public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2,int COL_BAN) {
-                @SuppressLint("Recycle") final Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+        public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN) {
+
+                @SuppressLint("Recycle") final Cursor c = db.rawQuery("SELECT /*i:0*/ company ,/*i:1*/ customer ,/* i:2*/ place ,/*i:3*/ T_T_usage  FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
                 c.moveToFirst();
 
                 try {
                         values.put("T_T_pointer", Usaged_now);
                         values.put(" T_T_usage", Usaged_now2);
-                        db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{c.getString(6), c.getString(2), c.getString(7)});  //レコード登録
+                        db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{c.getString(0), c.getString(1), c.getString(2)});  //レコード登録
                 }
                 catch (NumberFormatException e) {
+                        Log.d("Number", "NumberFormatException");
+                }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //***** TAX_PRICE (料金データ登録)******
+        //1. G_T_rate : ガス消費税率  2. S_price   : 基本料金　    3.M_price     : マイコン料金　4.A_price : 警報機料金　
+        //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
+        //
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        public void TAX_PRICE(String Price , String Tax , ContentValues values , SQLiteDatabase db , int COL_BAN) {
+                Cursor cursor = db.rawQuery("SELECT/*i:0*/ G_T_rate ,/*i:1*/ S_price  , /*i:2*/M_C_price   ,/*i:3*/ A_price ," +
+                                                        "/*i:4*/  G_price ,/*i:5*/  B_amount ,/*i:6*/ T_T_Billing ,/*i:7*/ G_C_tax ," +
+                                                        "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  " +
+                                                        "FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+                cursor.moveToFirst();
+                try {
+                        int price_only_GUS = (int) (Integer.parseInt(Price) - Integer.parseInt(cursor.getString(1)) - Float.parseFloat(cursor.getString(2)) - Float.parseFloat(cursor.getString(3)));
+                        int price_No_Tax   = Integer.parseInt(Price) - Integer.parseInt(Tax);
+
+                        values.put("G_price",price_only_GUS);
+                        values.put("B_amount",price_No_Tax);
+                        values.put("G_C_tax",Integer.parseInt(Tax));
+                        values.put("T_T_Billing",Integer.parseInt(Price));
+                        db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(8), cursor.getString(9), cursor.getString(10)});  //レコード登録
+
+
+                } catch (NumberFormatException e) {
                         Log.d("Number", "NumberFormatException");
                 }
 
