@@ -190,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
                 COL_BAN++ ;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
 
+                Log.d("BAN", "BAN ; " + String.valueOf(COL_BAN));
+
             }
         });
         //-----------------------------------------------------------------------------------------------------------------
@@ -267,4 +269,3 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
- 

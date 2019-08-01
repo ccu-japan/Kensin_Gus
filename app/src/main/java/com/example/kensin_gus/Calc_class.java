@@ -3,7 +3,6 @@ package com.example.kensin_gus;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.regex.Matcher;
@@ -42,23 +41,17 @@ public class Calc_class {
         TextView Row3_Text2 = main.findViewById(R.id.Row3_Text2);
 
 
-        if (row <= 50.1 || row < 0) {
+        if (row <= 50.1) {
             int usage_integer_minutes_C = (int) Math.floor(row);
             String s = String.valueOf(row);
             Matcher matcher = (Matcher) p.matcher(s);
-
 
             if (matcher.matches()) {
                 int row1 = (int) (row % 1.0 * 10);
                 minutes = String.valueOf(row1);
             } else {
                 minutes = "0";
-
             }
-
-            Log.d("Calc", "整数部：" + usage_integer_minutes_C);
-            Log.d("Calc", "少数部：" + minutes);
-
 
             Cursor cursor = db.rawQuery("SELECT /*i:0*/ usage_integer_minutes ,/*i:1*/c_point_0 ,/*i:2*/c_point_1 ,/*i:3*/c_point_2 ,/*i:4*/c_point_3 ,/*i:5*/c_point_4 , " +
                     "/*i:6*/c_point_5 , /*i:7*/c_point_6 , /*i:8*/c_point_7 ,/*i:9*/ c_point_8 ,/*i:10*/ c_point_9  FROM HYOF WHERE usage_integer_minutes = " + usage_integer_minutes_C, null);
@@ -67,45 +60,45 @@ public class Calc_class {
             Cursor cursor1 = db.rawQuery("SELECT/*i:0*/G_T_rate ,/*i:1*/S_price ,/*i:2*/M_C_price ,/*i:3*/A_price ,/*i:4*/G_C_tax ,/*i:5*/B_amount FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
             cursor1.moveToFirst();
 
-            switch (minutes) {
-                case "0":
-                    price = Integer.parseInt(cursor.getString(1));
-                    break;
-                case "1":
-                    price = Integer.parseInt(cursor.getString(2));
-                    break;
-                case "2":
-                    price = Integer.parseInt(cursor.getString(3));
-                    break;
-                case "3":
-                    price = Integer.parseInt(cursor.getString(4));
-                    break;
-                case "4":
-                    price = Integer.parseInt(cursor.getString(5));
-                    break;
-                case "5":
-                    price = Integer.parseInt(cursor.getString(6));
-                    break;
-                case "6":
-                    price = Integer.parseInt(cursor.getString(7));
-                    break;
-                case "7":
-                    price = Integer.parseInt(cursor.getString(8));
-                    break;
-                case "8":
-                    price = Integer.parseInt(cursor.getString(9));
-                    break;
-                case "9":
-                    price = Integer.parseInt(cursor.getString(10));
-                    break;
+            if(row >= 0.0) {
+                switch (minutes) {
+                    case "0":
+                        price = Integer.parseInt(cursor.getString(1));
+                        break;
+                    case "1":
+                        price = Integer.parseInt(cursor.getString(2));
+                        break;
+                    case "2":
+                        price = Integer.parseInt(cursor.getString(3));
+                        break;
+                    case "3":
+                        price = Integer.parseInt(cursor.getString(4));
+                        break;
+                    case "4":
+                        price = Integer.parseInt(cursor.getString(5));
+                        break;
+                    case "5":
+                        price = Integer.parseInt(cursor.getString(6));
+                        break;
+                    case "6":
+                        price = Integer.parseInt(cursor.getString(7));
+                        break;
+                    case "7":
+                        price = Integer.parseInt(cursor.getString(8));
+                        break;
+                    case "8":
+                        price = Integer.parseInt(cursor.getString(9));
+                        break;
+                    case "9":
+                        price = Integer.parseInt(cursor.getString(10));
+                        break;
+                }
             }
             price = (int) ( price + Float.parseFloat(cursor1.getString(1)) + Float.parseFloat(cursor1.getString(2)) + Float.parseFloat(cursor1.getString(3)) );
             TAX = (int) ( price * Float.parseFloat(cursor1.getString(0)) / 100 );
 
-            Log.d("TAX","TAX : " + TAX);
-
-
         }
+
         Row3_Text.setText(String.valueOf(price + TAX));
         Row3_Text2.setText(String.valueOf(TAX));
 
