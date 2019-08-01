@@ -45,15 +45,19 @@ public class MainActivity extends AppCompatActivity {
         Button tsv_Import = findViewById(R.id.button6);
         final Button Down = findViewById(R.id.down);
         final Button Up = findViewById(R.id.up);
+        final Button Update = findViewById(R.id.Update);
+        final Button End = findViewById(R.id.end_app);
+
         final Kenshin_DB kenshin_db = new Kenshin_DB(getApplicationContext());
         final TOKUIF tokuif = new TOKUIF();
         final HYOF hyof = new HYOF();
+        final Button_Processing button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
+
         final EditText Row1 = findViewById(R.id.Row1_Text);
         final TextView Row2 = findViewById(R.id.Row2_Text);
         final TextView Row3 = findViewById(R.id.Row3_Text);
         final TextView Row3_2 = findViewById(R.id.Row3_Text2);
-        final Button End = findViewById(R.id.end_app);
 
         //-------------------------------------------------------------------------------------------
         //
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         COL_BAN++ ;
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
+        button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
 
         //-------------------------------------------------------------------------------------------
         //
@@ -163,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
                                         //*** 取り込んだ後のテキスト処理 ***
                                         //
                                         //--------------------------------------------------------------------------------
+                                        COL_BAN = 1;
+                                        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
                                     }
                                 }).show();
                     }
@@ -186,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
+                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
 
                 COL_BAN++ ;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
@@ -210,9 +218,10 @@ public class MainActivity extends AppCompatActivity {
 
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
+                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
 
                 COL_BAN--;
-                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
 
             }
         });
@@ -223,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
         //
         //------------------------------------------------------------------------------------------------------------------
         Row1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean handled = false;
@@ -256,6 +266,17 @@ public class MainActivity extends AppCompatActivity {
                 final String Row3_text = Row2.getText().toString();
                 Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row3_text),kenshin_db.db ,COL_BAN , MainActivity.this);
                 return handled;
+            }
+        });
+        //--------------------------------------------------------------------------------------------------------
+        //
+        // ***** 確定・未入力変更ボタンタスク *****
+        //
+        //-------------------------------------------------------------------------------------------------------
+        Update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
             }
         });
 

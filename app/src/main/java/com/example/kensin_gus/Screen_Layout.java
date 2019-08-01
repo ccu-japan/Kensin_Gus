@@ -1,12 +1,14 @@
 package com.example.kensin_gus;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,56 +30,6 @@ public class Screen_Layout {
             textView.setText(sdf.format(d));
         }
 
-        //------------------------------------------------------------------------------------------------------------
-        //
-        // ****** 企業選択ボタン ******
-        //
-        //------------------------------------------------------------------------------------------------------------
-        @SuppressLint("SetTextI18n")
-        void Com_Select(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN) {
-
-
-
-            //     String col_ban = Integer.toString(COL_BAN);
-            Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
-            Cursor C_price  = db.rawQuery("SELECT /*i:0*/T_T_Billing ,/*i:1*/ G_C_tax FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
-            c.moveToFirst();
-            c.moveToFirst();
-
-
-            TextView name = mainActivity.findViewById(R.id.name);
-            TextView code = mainActivity.findViewById(R.id.code);
-            TextView used = mainActivity.findViewById(R.id.Row1_Text2);
-            EditText now  = mainActivity.findViewById(R.id.Row1_Text);
-            TextView usaged = mainActivity.findViewById(R.id.Row2_Text);
-            TextView Row3_Text = mainActivity.findViewById(R.id.Row3_Text);
-            TextView Row3_2Text = mainActivity.findViewById(R.id.Row3_Text2);
-
-            try {
-
-                name.setText(c.getString(0) + c.getString(1));
-                code.setText(c.getString(2) + c.getString(3));
-                used.setText(c.getString(4));
-                usaged.setText(c.getString(8));
-                now.setText(c.getString(5));
-                Row3_Text.setText(C_price.getString(0));
-                Row3_2Text.setText(C_price.getString(1));
-
-
-            }
-            catch(IndexOutOfBoundsException e) {
-                if(c.getPosition() < 0) {
-                    Toast.makeText(mainActivity, "このレコードは先頭です", Toast.LENGTH_SHORT).show();
-                    COL_BAN =1;
-                } else{
-                    Toast.makeText(mainActivity, "このレコードは最終です", Toast.LENGTH_SHORT).show();
-                    COL_BAN = -1;
-                }
-            }catch (NumberFormatException e){
-                Log.d("number","数値以外があります");
-            }
-
-        }
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //***** 画面表示タスク　******
         //
@@ -116,10 +68,22 @@ public class Screen_Layout {
             }
             catch(IndexOutOfBoundsException e) {
                 if(COL_BAN < 1) {
-                    Toast.makeText(mainActivity, "このレコードは先頭です", Toast.LENGTH_SHORT).show();
-                    COL_BAN =1;
+                    new AlertDialog.Builder(mainActivity).setTitle("確認ダイアログ")
+                                                            .setMessage("このレコードは先頭です。")
+                                                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialogInterface, int idx) {
+                                                                }
+                                                            }).show();
+                    COL_BAN = 1;
                 } else{
-                    Toast.makeText(mainActivity, "このレコードは最終です", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(mainActivity).setTitle("確認ダイアログ")
+                            .setMessage("このレコードは最終です。")
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int idx) {
+                                }
+                            }).show();
                     COL_BAN --;
                 }
             }catch (NumberFormatException e){

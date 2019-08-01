@@ -145,7 +145,9 @@ public class TOKUIF {
 
         public void TOKUIF_CSV(SQLiteDatabase db, Context context) {
                 //-----------------------------------------------------------------------------------------------------------------------
+                //
                 // *** CSV読込 ***
+                //
                 //-----------------------------------------------------------------------------------------------------------------------
                 AssetManager assetManager = context.getResources().getAssets();
                 try {
@@ -244,17 +246,19 @@ public class TOKUIF {
         public void TAX_PRICE(String Price , String Tax , ContentValues values , SQLiteDatabase db , int COL_BAN) {
                 Cursor cursor = db.rawQuery("SELECT/*i:0*/ G_T_rate ,/*i:1*/ S_price  , /*i:2*/M_C_price   ,/*i:3*/ A_price ," +
                                                         "/*i:4*/  G_price ,/*i:5*/  B_amount ,/*i:6*/ T_T_Billing ,/*i:7*/ G_C_tax ," +
-                                                        "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  " +
+                                                        "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  ,/*i:11*/P_flag " +
                                                         "FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
                 cursor.moveToFirst();
                 try {
                         int price_only_GUS = (int) (Integer.parseInt(Price) - Integer.parseInt(cursor.getString(1)) - Float.parseFloat(cursor.getString(2)) - Float.parseFloat(cursor.getString(3)));
                         int price_No_Tax   = Integer.parseInt(Price) - Integer.parseInt(Tax);
+                        String P_flag = "1";
 
                         values.put("G_price",price_only_GUS);
                         values.put("B_amount",price_No_Tax);
                         values.put("G_C_tax",Integer.parseInt(Tax));
                         values.put("T_T_Billing",Integer.parseInt(Price));
+                        values.put("P_flag" , P_flag);
                         db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(8), cursor.getString(9), cursor.getString(10)});  //レコード登録
 
 
