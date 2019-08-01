@@ -42,7 +42,7 @@ public class Calc_class {
         TextView Row3_Text2 = main.findViewById(R.id.Row3_Text2);
 
 
-        if (row <= 50.1) {
+        if (row <= 50.1 || row < 0) {
             int usage_integer_minutes_C = (int) Math.floor(row);
             String s = String.valueOf(row);
             Matcher matcher = (Matcher) p.matcher(s);

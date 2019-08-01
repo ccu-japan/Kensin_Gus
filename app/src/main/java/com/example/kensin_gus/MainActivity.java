@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         //-------------------------------------------------------------------------------------------
 
         COL_BAN++ ;
-//        main_screen.Com_Select(MainActivity.this ,kenshin_db.db,COL_BAN);
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
 
         //-------------------------------------------------------------------------------------------
@@ -171,18 +170,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //-----------------------------------------------------------------------------------------------------------------
-        // *** 最初の人 ***
-        //-----------------------------------------------------------------------------------------------------------------
-
-        main_screen.Com_Select(this, kenshin_db.db,COL_BAN);
-
-        //-----------------------------------------------------------------------------------------------------------------
         // *** DOWN　: 選択ボタン判定 ***
         //
         //COL_BAN = TOKUIFの連番と連動　COLBAN = 1 の時　TOKUIF.ban = 1 の人を指す
         //
         //-----------------------------------------------------------------------------------------------------------------
-
         Down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
