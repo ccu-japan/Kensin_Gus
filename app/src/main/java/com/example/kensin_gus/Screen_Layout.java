@@ -37,7 +37,7 @@ public class Screen_Layout {
         //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
         //
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        @SuppressLint("SetTextI18n")
+        @SuppressLint({"SetTextI18n", "DefaultLocale"})
         static int SELECT_COM(MainActivity mainActivity, int COL_BAN , SQLiteDatabase db) {
 
             Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
@@ -57,13 +57,16 @@ public class Screen_Layout {
 
 
             try {
+                String Row3_text = String.format("%,d",Integer.parseInt(C_price.getString(0)));
+                String Row3_text2 = String.format("%,d",Integer.parseInt(C_price.getString(1)));
+
                     name.setText(c.getString(0) + c.getString(1));
                     code.setText(c.getString(2) + c.getString(3));
                     used.setText(c.getString(4));
                     usaged.setText(c.getString(8));
                     now.setText(c.getString(5));
-                    Row3_Text.setText(C_price.getString(0));
-                    Row3_2Text.setText(C_price.getString(1));
+                    Row3_Text.setText(Row3_text);
+                    Row3_2Text.setText(Row3_text2);
 
 
             }

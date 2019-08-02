@@ -98,8 +98,10 @@ public class Calc_class {
         TAX = (int) (price * Float.parseFloat(cursor1.getString(0)) / 100);
 
 
-        Row3_Text.setText(String.valueOf(price + TAX));
-        Row3_Text2.setText(String.valueOf(TAX));
+        @SuppressLint("DefaultLocale") String Row3_text = String.format("%,d",(price + TAX));
+        @SuppressLint("DefaultLocale") String Row3_text2 = String.format("%,d",TAX);
+        Row3_Text.setText(Row3_text);
+        Row3_Text2.setText(Row3_text2);
 
     }
 }
