@@ -14,18 +14,25 @@ public class Button_Processing {
         cursor.moveToFirst();
 
         final Button Update_button = mainActivity.findViewById(R.id.Update);
+        final Button Check_button = mainActivity.findViewById(R.id.Check_Button);
         EditText Row1 = mainActivity.findViewById(R.id.Row1_Text);
         String TRUE = "1";
         String FALSE = " ";
 
-        if (cursor.getString(0).equals(TRUE)) {
+        if (cursor.getString(0).equals(TRUE))
+        {
             Update_button.setText("済");
             Values.put("P_flag", FALSE);
             Row1.setEnabled(false);
-        } else if (cursor.getString(0).equals(FALSE)) {
+            Check_button.setEnabled(true);
+
+        }
+        else if (cursor.getString(0).equals(FALSE))
+        {
             Update_button.setText("未");
             Values.put("P_flag", TRUE);
             Row1.setEnabled(true);
+            Check_button.setEnabled(false);
         }
 
         db.update("TOKUIF", Values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録
@@ -39,6 +46,7 @@ public class Button_Processing {
         cursor.moveToFirst();
 
         final Button Update_button = mainActivity.findViewById(R.id.Update);
+        final Button Check_button = mainActivity.findViewById(R.id.Check_Button);
         EditText Row1 = mainActivity.findViewById(R.id.Row1_Text);
         String TRUE = "1";
         String FALSE = " ";
@@ -47,12 +55,14 @@ public class Button_Processing {
             Update_button.setText("未");
             Values.put("P_flag", TRUE);
             Row1.setEnabled(true);
+            Check_button.setEnabled(false);
         }
         else
         {
             Update_button.setText("済");
             Values.put("P_flag", FALSE);
             Row1.setEnabled(false);
+            Check_button.setEnabled(true);
         }
 
         db.update("TOKUIF", Values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録

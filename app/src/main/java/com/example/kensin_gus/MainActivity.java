@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         final Button Up = findViewById(R.id.up);
         final Button Update = findViewById(R.id.Update);
         final Button End = findViewById(R.id.end_app);
+        final Button Check = findViewById(R.id.Check_Button);
 
         final Kenshin_DB kenshin_db = new Kenshin_DB(getApplicationContext());
         final TOKUIF tokuif = new TOKUIF();
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         COL_BAN++ ;
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
-        button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN ,values);
+        button_processing.Up_Down_Button(MainActivity.this,kenshin_db.db, COL_BAN ,values);
 
         //-------------------------------------------------------------------------------------------
         //
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                                         COL_BAN = 1;
                                         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
                                         Update.setText("未");
+                                        Check.setEnabled(false);
 
                                     }
                                 }).show();
