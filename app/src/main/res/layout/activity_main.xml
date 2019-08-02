@@ -151,8 +151,8 @@
                 android:imeOptions="actionGo"
                 android:inputType="numberDecimal"
                 android:maxLength="8"
-                android:text="0"
                 android:textSize="36sp"
+                android:hint="数値を入力"
                 tools:ignore="HardcodedText,LabelFor"
                 tools:targetApi="o" />
 

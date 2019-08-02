@@ -228,8 +228,9 @@ public class TOKUIF {
                 c.moveToFirst();
 
                 try {
-                        values.put("T_T_pointer", Usaged_now);
-                        values.put(" T_T_usage", Usaged_now2);
+
+                        values.put("T_T_pointer", Integer.parseInt(Usaged_now));
+                        values.put(" T_T_usage", Integer.parseInt(Usaged_now2));
                         db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{c.getString(0), c.getString(1), c.getString(2)});  //レコード登録
                 }
                 catch (NumberFormatException e) {

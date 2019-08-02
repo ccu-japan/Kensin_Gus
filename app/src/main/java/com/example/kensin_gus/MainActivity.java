@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         COL_BAN++ ;
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
-        button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
+        button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN ,values);
 
         //-------------------------------------------------------------------------------------------
         //
@@ -170,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
                                         //--------------------------------------------------------------------------------
                                         COL_BAN = 1;
                                         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
+                                        Update.setText("未");
+
                                     }
                                 }).show();
                     }
@@ -184,7 +186,8 @@ public class MainActivity extends AppCompatActivity {
         //-----------------------------------------------------------------------------------------------------------------
         Down.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
 
                 String Usaged_now = Row1.getText().toString();
                 String Usaged_now2 = Row2.getText().toString();
@@ -193,12 +196,11 @@ public class MainActivity extends AppCompatActivity {
 
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
+                button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN, values);
 
                 COL_BAN++ ;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
-
-                Log.d("BAN", "BAN ; " + String.valueOf(COL_BAN));
+                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN, values);
 
             }
         });
@@ -215,13 +217,14 @@ public class MainActivity extends AppCompatActivity {
                 String price = Row3.getText().toString();
                 String Tax = Row3_2.getText().toString();
 
-
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
+                button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN, values);
 
                 COL_BAN--;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+
+                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN, values);
 
             }
         });
@@ -242,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
                         final String Row1_text = Row1.getText().toString();
                         Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1_text), kenshin_db.db,COL_BAN));
                         handled = true;
+
                     }
                     catch (NumberFormatException e) {
                         new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
@@ -276,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN);
+                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN , values);
             }
         });
 

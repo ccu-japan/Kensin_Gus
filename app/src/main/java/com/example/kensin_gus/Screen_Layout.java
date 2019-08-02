@@ -48,6 +48,7 @@ public class Screen_Layout {
 
             TextView name = mainActivity.findViewById(R.id.name);
             TextView code = mainActivity.findViewById(R.id.code);
+
             TextView used = mainActivity.findViewById(R.id.Row1_Text2);
             EditText now  = mainActivity.findViewById(R.id.Row1_Text);
             TextView usaged = mainActivity.findViewById(R.id.Row2_Text);
@@ -56,14 +57,14 @@ public class Screen_Layout {
 
 
             try {
+                    name.setText(c.getString(0) + c.getString(1));
+                    code.setText(c.getString(2) + c.getString(3));
+                    used.setText(c.getString(4));
+                    usaged.setText(c.getString(8));
+                    now.setText(c.getString(5));
+                    Row3_Text.setText(C_price.getString(0));
+                    Row3_2Text.setText(C_price.getString(1));
 
-                name.setText(c.getString(0) + c.getString(1));
-                code.setText(c.getString(2) + c.getString(3));
-                used.setText(c.getString(4));
-                usaged.setText(c.getString(8));
-                now.setText(c.getString(5));
-                Row3_Text.setText(C_price.getString(0));
-                Row3_2Text.setText(C_price.getString(1));
 
             }
             catch(IndexOutOfBoundsException e) {
