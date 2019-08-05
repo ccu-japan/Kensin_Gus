@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
 // *** インスタンス化　***
 //
 // -------------------------------------------------------------------------------------------------
-    static int COL_BAN = 0;
-
+   int COL_BAN = 0;
+    boolean check  = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
         COL_BAN++ ;
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
-        button_processing.Up_Down_Button(MainActivity.this,kenshin_db.db, COL_BAN ,values);
+        button_processing.Up_Down_Button(MainActivity.this,kenshin_db.db, COL_BAN );
+        Log.d("COL_BAN", String.valueOf(COL_BAN));
 
         //-------------------------------------------------------------------------------------------
         //
@@ -204,13 +205,13 @@ public class MainActivity extends AppCompatActivity {
 
                 tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN , now);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN, values);
+                button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN);
 
                 COL_BAN++ ;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
-                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN, values);
+                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
-                Log.d("button", String.valueOf(COL_BAN));
+                Log.d("COL_BAN", String.valueOf(COL_BAN));
 
             }
         });
@@ -230,14 +231,14 @@ public class MainActivity extends AppCompatActivity {
 
                 tokuif.Usaged(kenshin_db.db , Usaged_now , values , Usaged_now2 , COL_BAN , now);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this , kenshin_db.db , COL_BAN , values);
+                button_processing.Update_button(MainActivity.this , kenshin_db.db , COL_BAN );
 
                 COL_BAN--;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this , COL_BAN , kenshin_db.db);
 
-                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN , values);
+                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN );
 
-                Log.d("button", String.valueOf(COL_BAN));
+                Log.d("COL_BAN", String.valueOf(COL_BAN));
 
             }
         });
@@ -293,7 +294,8 @@ public class MainActivity extends AppCompatActivity {
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                button_processing.Update_button(MainActivity.this,kenshin_db.db, COL_BAN , values);
+
+               check =  button_processing.Check_task( Row1 , Check , Update ,check);
             }
         });
 

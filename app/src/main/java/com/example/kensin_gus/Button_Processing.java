@@ -10,7 +10,28 @@ import android.widget.EditText;
 
 public class Button_Processing {
 
-    public void Update_button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN ,ContentValues Values ) {
+    public  boolean Check_task(EditText Row1 ,Button check_button ,Button update_button ,boolean check){
+        if(!check) {
+            update_button.setText("済");
+            update_button.setBackgroundColor(Color.BLUE);
+            Row1.setEnabled(false);
+            check_button.setEnabled(true);
+            check = true;
+        }
+        else
+            {
+            update_button.setText("未");
+            update_button.setBackgroundColor(Color.RED);
+            Row1.setEnabled(true);
+            check_button.setEnabled(false);
+            check = false;
+        }
+
+        return check;
+    }
+
+    public void Update_button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN) {
+        ContentValues contentValues = new ContentValues();
         Cursor cursor = db.rawQuery("SELECT /*i:0*/ P_flag ,/*i:1*/ company ,/*i:2*/ customer , /*i:3*/ place , /*i:4*/T_T_pointer FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
         cursor.moveToFirst();
 
@@ -23,7 +44,7 @@ public class Button_Processing {
         if (cursor.getString(0).equals(TRUE))
         {
             Update_button.setText("済");
-            Values.put("P_flag", FALSE);
+            contentValues.put("P_flag", FALSE);
             Row1.setEnabled(false);
             Check_button.setEnabled(true);
 
@@ -31,12 +52,12 @@ public class Button_Processing {
         else if (cursor.getString(0).equals(FALSE))
         {
             Update_button.setText("未");
-            Values.put("P_flag", TRUE);
+            contentValues.put("P_flag", TRUE);
             Row1.setEnabled(true);
             Check_button.setEnabled(false);
         }
 
-        db.update("TOKUIF", Values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録
+        db.update("TOKUIF", contentValues, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録
         Log.d("P_flag", "P_flg : " + cursor.getString(0));
     }
 
@@ -46,8 +67,9 @@ public class Button_Processing {
 
     //
     //-----------------------------------------------------------------------------------------------
-    public void Up_Down_Button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN ,ContentValues Values )
+    public void Up_Down_Button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN )
     {
+        ContentValues contentValues = new ContentValues();
         Cursor cursor = db.rawQuery("SELECT /*i:0*/ P_flag ,/*i:1*/ company ,/*i:2*/ customer , /*i:3*/ place , /*i:4*/T_T_pointer FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
         cursor.moveToFirst();
 
@@ -60,7 +82,7 @@ public class Button_Processing {
         {
             Update_button.setBackgroundColor(Color.RED);
             Update_button.setText("未");
-            Values.put("P_flag", TRUE);
+            contentValues.put("P_flag", TRUE);
             Row1.setEnabled(true);
             Check_button.setEnabled(false);
 
@@ -69,13 +91,13 @@ public class Button_Processing {
         {
             Update_button.setBackgroundColor(Color.BLUE);
             Update_button.setText("済");
-            Values.put("P_flag", FALSE);
+            contentValues.put("P_flag", FALSE);
             Row1.setEnabled(false);
             Check_button.setEnabled(true);
 
         }
 
-        db.update("TOKUIF", Values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録
+        db.update("TOKUIF", contentValues, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録
 
     }
 }
