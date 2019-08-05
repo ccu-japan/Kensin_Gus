@@ -55,19 +55,19 @@ public class Screen_Layout {
             TextView Row3_Text = mainActivity.findViewById(R.id.Row3_Text);
             TextView Row3_2Text = mainActivity.findViewById(R.id.Row3_Text2);
 
-
             try {
-                String Row3_text = String.format("%,d",Integer.parseInt(C_price.getString(0)));
-                String Row3_text2 = String.format("%,d",Integer.parseInt(C_price.getString(1)));
+                String Row3_text = String.format("%,d", Integer.parseInt(C_price.getString(0)));
+                String Row3_text2 = String.format("%,d", Integer.parseInt(C_price.getString(1)));
+                //        String Row3_text = C_price.getString(0);
+                //        String Row3_text2 =C_price.getString(1);
 
-                    name.setText(c.getString(0) + c.getString(1));
-                    code.setText(c.getString(2) + c.getString(3));
-                    used.setText(c.getString(4));
-                    usaged.setText(c.getString(8));
-                    now.setText(c.getString(5));
-                    Row3_Text.setText(Row3_text);
-                    Row3_2Text.setText(Row3_text2);
-
+                name.setText(c.getString(0) + c.getString(1));
+                code.setText(c.getString(2) + c.getString(3));
+                used.setText(c.getString(4));
+                usaged.setText(c.getString(8));
+                now.setText(c.getString(5));
+                Row3_Text.setText(Row3_text);
+                Row3_2Text.setText(Row3_text2);
 
             }
             catch(IndexOutOfBoundsException e) {

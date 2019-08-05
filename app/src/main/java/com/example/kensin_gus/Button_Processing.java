@@ -3,6 +3,7 @@ package com.example.kensin_gus;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +40,12 @@ public class Button_Processing {
         Log.d("P_flag", "P_flg : " + cursor.getString(0));
     }
 
+    //-----------------------------------------------------------------------------------------------
+    //
+    // * Up,Downボタンの操作
 
+    //
+    //-----------------------------------------------------------------------------------------------
     public void Up_Down_Button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN ,ContentValues Values )
     {
         Cursor cursor = db.rawQuery("SELECT /*i:0*/ P_flag ,/*i:1*/ company ,/*i:2*/ customer , /*i:3*/ place , /*i:4*/T_T_pointer FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
@@ -52,17 +58,21 @@ public class Button_Processing {
         String FALSE = " ";
         if(Row1.getText().toString().equals("0"))
         {
+            Update_button.setBackgroundColor(Color.RED);
             Update_button.setText("未");
             Values.put("P_flag", TRUE);
             Row1.setEnabled(true);
             Check_button.setEnabled(false);
+
         }
         else
         {
+            Update_button.setBackgroundColor(Color.BLUE);
             Update_button.setText("済");
             Values.put("P_flag", FALSE);
             Row1.setEnabled(false);
             Check_button.setEnabled(true);
+
         }
 
         db.update("TOKUIF", Values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(1), cursor.getString(2), cursor.getString(3)});  //レコード登録

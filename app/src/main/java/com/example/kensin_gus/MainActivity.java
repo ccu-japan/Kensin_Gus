@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         final Button_Processing button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
 
+        final TextView date = findViewById(R.id.date_now);
         final EditText Row1 = findViewById(R.id.Row1_Text);
         final TextView Row2 = findViewById(R.id.Row2_Text);
         final TextView Row3 = findViewById(R.id.Row3_Text);
@@ -66,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         //
         //-------------------------------------------------------------------------------------------
         main_screen.Screen_Data(this);
+     //   kenshin_db.db.execSQL("DROP TABLE IF EXISTS TOKUIF");
+
         //-------------------------------------------------------------------------------------------
         //
         //*** データベースの存在確認　getDatabasePath
@@ -171,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                                         //--------------------------------------------------------------------------------
                                         COL_BAN = 1;
                                         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
+                                        Update.setBackgroundColor(Color.RED);
                                         Update.setText("未");
                                         Check.setEnabled(false);
 
@@ -195,14 +200,17 @@ public class MainActivity extends AppCompatActivity {
                 String Usaged_now2 = Row2.getText().toString();
                 String price = Row3.getText().toString();
                 String Tax = Row3_2.getText().toString();
+                String now = date.toString();
 
-                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
+                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN , now);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
                 button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN, values);
 
                 COL_BAN++ ;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN, values);
+
+                Log.d("button", String.valueOf(COL_BAN));
 
             }
         });
@@ -218,15 +226,18 @@ public class MainActivity extends AppCompatActivity {
                 String Usaged_now2 = Row2.getText().toString();
                 String price = Row3.getText().toString();
                 String Tax = Row3_2.getText().toString();
+                String now = date.toString();
 
-                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN);
+                tokuif.Usaged(kenshin_db.db , Usaged_now , values , Usaged_now2 , COL_BAN , now);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN, values);
+                button_processing.Update_button(MainActivity.this , kenshin_db.db , COL_BAN , values);
 
                 COL_BAN--;
-                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this , COL_BAN , kenshin_db.db);
 
-                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN, values);
+                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN , values);
+
+                Log.d("button", String.valueOf(COL_BAN));
 
             }
         });

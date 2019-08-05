@@ -12,6 +12,9 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Objects;
 
 public class TOKUIF {
 
@@ -222,17 +225,18 @@ public class TOKUIF {
                         e.printStackTrace();
                 }
         }
-        public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN) {
+        public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN , String now) {
 
                 @SuppressLint("Recycle") final Cursor c = db.rawQuery("SELECT /*i:0*/ company ,/*i:1*/ customer ,/* i:2*/ place ,/*i:3*/ T_T_usage  FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
                 c.moveToFirst();
 
                 try {
-
-                        values.put("T_T_pointer", Usaged_now);
+               //         values.put("T_T_kensin",now);
+                        values.put("T_T_pointer",Usaged_now);
                         values.put("T_T_usage", Usaged_now2);
-                        db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{c.getString(0), c.getString(1), c.getString(2)});  //レコード登録
-                }
+                        db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
+
+           }
                 catch (NumberFormatException e) {
                         Log.d("Number", "NumberFormatException");
                 }
@@ -240,6 +244,7 @@ public class TOKUIF {
 
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //***** TAX_PRICE (料金データ登録)******
+        //
         //1. G_T_rate : ガス消費税率  2. S_price   : 基本料金　    3.M_price     : マイコン料金　4.A_price : 警報機料金　
         //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
         //
@@ -250,21 +255,37 @@ public class TOKUIF {
                                                         "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  ,/*i:11*/P_flag " +
                                                         "FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
                 cursor.moveToFirst();
+
+                //-----------------------------------------------------------------------------------
+                // * 「,」３桁区切りを数値に変換
+                //-----------------------------------------------------------------------------------
+                int i_Price;
+                int i_Tax;
+
                 try {
-                        int price_only_GUS = (int) (Integer.parseInt(Price) - Integer.parseInt(cursor.getString(1)) - Float.parseFloat(cursor.getString(2)) - Float.parseFloat(cursor.getString(3)));
-                        int price_No_Tax   = Integer.parseInt(Price) - Integer.parseInt(Tax);
+                        Number number = NumberFormat.getInstance().parse(Price);
+                        Number number2 = NumberFormat.getInstance().parse(Tax);
+
+                        i_Price = Objects.requireNonNull(number).intValue();
+                        i_Tax = Objects.requireNonNull(number2).intValue();
+
+                        int price_only_GUS = (int) (i_Price - Integer.parseInt(cursor.getString(1)) - Float.parseFloat(cursor.getString(2)) - Float.parseFloat(cursor.getString(3)));
+                        int price_No_Tax   = i_Price - i_Tax;
+
                         String P_flag = "1";
 
                         values.put("G_price",price_only_GUS);
                         values.put("B_amount",price_No_Tax);
-                        values.put("G_C_tax",Integer.parseInt(Tax));
-                        values.put("T_T_Billing",Integer.parseInt(Price));
+                        values.put("G_C_tax",i_Tax);
+                        values.put("T_T_Billing",i_Price);
                         values.put("P_flag" , P_flag);
-                        db.update("TOKUIF", values, " company = ?  AND  customer = ?  AND place = ? ", new String[]{cursor.getString(8), cursor.getString(9), cursor.getString(10)});  //レコード登録
+                        db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
 
                 } catch (NumberFormatException e) {
                         Log.d("Number", "NumberFormatException");
+                } catch (ParseException e) {
+                        e.printStackTrace();
                 }
 
         }
