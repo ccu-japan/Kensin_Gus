@@ -27,5 +27,17 @@
     <string name="kotei17">点検</string>
     <string name="Tax">内消費税</string>
     <string name="mi">未</string>
+    <string name="Result1">〇〇〇〇〇〇</string>
+    <string name="Result2">〇〇〇〇〇〇</string>
+    <string name="Result3">〇〇〇〇〇〇</string>
+    <string name="Result4">〇〇〇〇〇〇</string>
+    <string name="Result5">〇〇〇〇〇〇</string>
+    <string name="Result6">〇〇〇〇〇〇</string>
+    <string name="Result7">〇〇〇〇〇〇</string>
+    <string name="Result8">〇〇〇〇〇〇</string>
+    <string name="Result9">〇〇〇〇〇〇</string>
+    <string name="Result10">〇〇〇〇〇〇</string>
+    <string name="Result11">〇〇〇〇〇〇</string>
+    <string name="Result12">〇〇〇〇〇〇</string>
 </resources>
 

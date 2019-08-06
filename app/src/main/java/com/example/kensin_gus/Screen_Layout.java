@@ -23,11 +23,16 @@ public class Screen_Layout {
         // *** 今日の日付　***
         //
         //------------------------------------------------------------------------------------------------------------
-        public void Screen_Data(MainActivity mainActivity) {
-            Date d = new Date();
+        public String Screen_Data(MainActivity mainActivity , String Date) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            TextView textView = mainActivity.findViewById(R.id.date_now);
-            textView.setText(sdf.format(d));
+            Date Date_now = new Date();
+            Date = sdf.format(Date_now);
+            TextView date = mainActivity.findViewById(R.id.date_now);
+            date.setText(Date);
+
+            Log.d("Date_now", " 今日:"+ Date);
+
+            return Date ;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -58,8 +63,6 @@ public class Screen_Layout {
             try {
                 String Row3_text = String.format("%,d", Integer.parseInt(C_price.getString(0)));
                 String Row3_text2 = String.format("%,d", Integer.parseInt(C_price.getString(1)));
-                //        String Row3_text = C_price.getString(0);
-                //        String Row3_text2 =C_price.getString(1);
 
                 name.setText(c.getString(0) + c.getString(1));
                 code.setText(c.getString(2) + c.getString(3));

@@ -3,6 +3,7 @@ package com.example.kensin_gus;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
 // *** インスタンス化　***
 //
 // -------------------------------------------------------------------------------------------------
-   int COL_BAN = 0;
+    int COL_BAN = 0;
     boolean check  = false;
+    String Date = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,19 +58,22 @@ public class MainActivity extends AppCompatActivity {
         final Button_Processing button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
 
-        final TextView date = findViewById(R.id.date_now);
-        final EditText Row1 = findViewById(R.id.Row1_Text);
+       final EditText Row1 = findViewById(R.id.Row1_Text);
         final TextView Row2 = findViewById(R.id.Row2_Text);
         final TextView Row3 = findViewById(R.id.Row3_Text);
         final TextView Row3_2 = findViewById(R.id.Row3_Text2);
 
         //-------------------------------------------------------------------------------------------
-        //
         //*** 今日の日付設定　
-        //
         //-------------------------------------------------------------------------------------------
-        main_screen.Screen_Data(this);
-     //   kenshin_db.db.execSQL("DROP TABLE IF EXISTS TOKUIF");
+
+        Date = main_screen.Screen_Data(this, Date);
+
+        //-------------------------------------------------------------------------------------------
+        //*** 全件削除を行いたい時に使う専用タスク
+        //-------------------------------------------------------------------------------------------
+
+        //kenshin_db.db.execSQL("DROP TABLE IF EXISTS TOKUIF");
 
         //-------------------------------------------------------------------------------------------
         //
@@ -178,8 +183,7 @@ public class MainActivity extends AppCompatActivity {
                                         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
                                         Update.setBackgroundColor(Color.RED);
                                         Update.setText("未");
-                                        Check.setEnabled(false);
-
+                                        Check.setEnabled(true);
                                     }
                                 }).show();
                     }
@@ -201,11 +205,12 @@ public class MainActivity extends AppCompatActivity {
                 String Usaged_now2 = Row2.getText().toString();
                 String price = Row3.getText().toString();
                 String Tax = Row3_2.getText().toString();
-                String now = date.toString();
 
-                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN , now);
+
+                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN , Date);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this, kenshin_db.db, COL_BAN);
+                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN );
+
 
                 COL_BAN++ ;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
@@ -227,11 +232,12 @@ public class MainActivity extends AppCompatActivity {
                 String Usaged_now2 = Row2.getText().toString();
                 String price = Row3.getText().toString();
                 String Tax = Row3_2.getText().toString();
-                String now = date.toString();
 
-                tokuif.Usaged(kenshin_db.db , Usaged_now , values , Usaged_now2 , COL_BAN , now);
+
+                tokuif.Usaged(kenshin_db.db , Usaged_now , values , Usaged_now2 , COL_BAN , Date);
                 tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Update_button(MainActivity.this , kenshin_db.db , COL_BAN );
+                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN );
+
 
                 COL_BAN--;
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this , COL_BAN , kenshin_db.db);
@@ -256,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     ((InputMethodManager) Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(textView.getWindowToken(), 0);
                     try {
+
                         final String Row1_text = Row1.getText().toString();
                         Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1_text), kenshin_db.db,COL_BAN));
                         handled = true;
@@ -281,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
                 // ***** 金額、内消費税　入力タスク *****
                 //
                 //-------------------------------------------------------------------------------------------------------
-                final String Row3_text = Row2.getText().toString();
-                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row3_text),kenshin_db.db ,COL_BAN , MainActivity.this);
+                final String Row2_text = Row2.getText().toString();
+                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row2_text),kenshin_db.db ,COL_BAN , MainActivity.this);
                 return handled;
             }
         });
@@ -294,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                check =  button_processing.Check_task( Row1 , Check , Update ,check);
             }
         });
@@ -306,6 +312,19 @@ public class MainActivity extends AppCompatActivity {
                 COL_BAN = 0;
                 finish();
             }
+        });
+        //--------------------------------------------------------------------------------------------------------
+        //
+        // ***** 点検ボタンタスク *****
+        //
+        //-------------------------------------------------------------------------------------------------------
+        Check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent check_activity = new Intent(MainActivity.this, Check2Activity.class);
+                startActivity(check_activity);
+            }
+
         });
     }
 }

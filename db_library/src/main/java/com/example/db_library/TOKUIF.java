@@ -1,7 +1,6 @@
 package com.example.db_library;
 
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -226,18 +225,12 @@ public class TOKUIF {
                 }
         }
         public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN , String now) {
-
-                @SuppressLint("Recycle") final Cursor c = db.rawQuery("SELECT /*i:0*/ company ,/*i:1*/ customer ,/* i:2*/ place ,/*i:3*/ T_T_usage  FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
-                c.moveToFirst();
-
                 try {
-               //         values.put("T_T_kensin",now);
-                        values.put("T_T_pointer",Usaged_now);
+                        values.put("T_T_kensin", now);
+                        values.put("T_T_pointer", Usaged_now);
                         values.put("T_T_usage", Usaged_now2);
                         db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
-
-           }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                         Log.d("Number", "NumberFormatException");
                 }
         }
@@ -262,7 +255,8 @@ public class TOKUIF {
                 int i_Price;
                 int i_Tax;
 
-                try {
+                try
+                {
                         Number number = NumberFormat.getInstance().parse(Price);
                         Number number2 = NumberFormat.getInstance().parse(Tax);
 
@@ -281,13 +275,14 @@ public class TOKUIF {
                         values.put("P_flag" , P_flag);
                         db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
-
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException e)
+                {
                         Log.d("Number", "NumberFormatException");
-                } catch (ParseException e) {
+                }
+                catch (ParseException e)
+                {
                         e.printStackTrace();
                 }
-
         }
-
 }
