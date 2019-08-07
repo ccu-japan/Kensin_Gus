@@ -39,5 +39,8 @@
     <string name="Result10">〇〇〇〇〇〇</string>
     <string name="Result11">〇〇〇〇〇〇</string>
     <string name="Result12">〇〇〇〇〇〇</string>
+    <string name="check_text">不具合箇所をチェック</string>
+    <string name="cancel">キャンセル</string>
+    <string name="onCheckboxClicked">onCheckboxClicked</string>
 </resources>
 

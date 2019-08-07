@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,10 +36,13 @@ public class MainActivity extends AppCompatActivity {
     int COL_BAN = 0;
     boolean check  = false;
     String Date = "";
+    int[] Check_Box = new int[12];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //-------------------------------------------------------------------------------------------
         //
         // *** インスタンス化　***
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         final Button_Processing button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
 
-       final EditText Row1 = findViewById(R.id.Row1_Text);
+        final EditText Row1 = findViewById(R.id.Row1_Text);
         final TextView Row2 = findViewById(R.id.Row2_Text);
         final TextView Row3 = findViewById(R.id.Row3_Text);
         final TextView Row3_2 = findViewById(R.id.Row3_Text2);
@@ -93,25 +97,21 @@ public class MainActivity extends AppCompatActivity {
         //
         //-------------------------------------------------------------------------------------------
         try {
-        Cursor cursor = kenshin_db.db.rawQuery("SELECT * FROM " + TOKUIF.DB_TABLE,null);
-            Log.d("data_low","データ有。新規読込をｷｬﾝｾﾙ");
-        }
-        catch (SQLiteException e)
-        {
+            Cursor cursor = kenshin_db.db.rawQuery("SELECT * FROM " + TOKUIF.DB_TABLE, null);
+            Log.d("data_low", "データ有。新規読込をｷｬﾝｾﾙ");
+        } catch (SQLiteException e) {
             tokuif.onCreate(kenshin_db.db);
             new TOKUIF().TOKUIF_CSV(kenshin_db.db, this);
-            Log.d("data_low","ファイルを読み込みました。");
+            Log.d("data_low", "ファイルを読み込みました。");
         }
 
-        try{
-        Cursor cursor1 = kenshin_db.db.rawQuery("SELECT * FROM "+ HYOF.DB_TABLE, null);
-            Log.d("data_low","データ有。新規読込をｷｬﾝｾﾙ");
-        }
-        catch (SQLiteException e)
-        {
+        try {
+            Cursor cursor1 = kenshin_db.db.rawQuery("SELECT * FROM " + HYOF.DB_TABLE, null);
+            Log.d("data_low", "データ有。新規読込をｷｬﾝｾﾙ");
+        } catch (SQLiteException e) {
             hyof.CreateTBL_HYOF(kenshin_db.db);
             new HYOF().HYOF_CSV(kenshin_db.db, this);
-            Log.d("data_low","ファイルを読み込みました。");
+            Log.d("data_low", "ファイルを読み込みました。");
         }
 
         //-------------------------------------------------------------------------------------------
@@ -120,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
         //
         //-------------------------------------------------------------------------------------------
 
-        COL_BAN++ ;
-        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
-        button_processing.Up_Down_Button(MainActivity.this,kenshin_db.db, COL_BAN );
+        COL_BAN++;
+        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+        button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
         Log.d("COL_BAN", String.valueOf(COL_BAN));
 
         //-------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Cursor", "データを消去します");
 
                         new TOKUIF().TOKUIF_CSV(kenshin_db.db, MainActivity.this);
-                        new HYOF().HYOF_CSV(kenshin_db.db,MainActivity.this);
+                        new HYOF().HYOF_CSV(kenshin_db.db, MainActivity.this);
 
                         Log.d("Cursor", "CSVを読み込みました");
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                                         //
                                         //--------------------------------------------------------------------------------
                                         COL_BAN = 1;
-                                        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
+                                        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
                                         Update.setBackgroundColor(Color.RED);
                                         Update.setText("未");
                                         Check.setEnabled(true);
@@ -198,8 +198,7 @@ public class MainActivity extends AppCompatActivity {
         //-----------------------------------------------------------------------------------------------------------------
         Down.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
 
                 String Usaged_now = Row1.getText().toString();
                 String Usaged_now2 = Row2.getText().toString();
@@ -207,13 +206,13 @@ public class MainActivity extends AppCompatActivity {
                 String Tax = Row3_2.getText().toString();
 
 
-                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2,COL_BAN , Date);
-                tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN );
+                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2, COL_BAN, Date);
+                tokuif.TAX_PRICE(price, Tax, values, kenshin_db.db, COL_BAN);
+                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
 
-                COL_BAN++ ;
-                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this,COL_BAN,kenshin_db.db);
+                COL_BAN++;
+                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
                 Log.d("COL_BAN", String.valueOf(COL_BAN));
@@ -234,15 +233,15 @@ public class MainActivity extends AppCompatActivity {
                 String Tax = Row3_2.getText().toString();
 
 
-                tokuif.Usaged(kenshin_db.db , Usaged_now , values , Usaged_now2 , COL_BAN , Date);
-                tokuif.TAX_PRICE(price , Tax , values ,kenshin_db.db , COL_BAN );
-                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN );
+                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2, COL_BAN, Date);
+                tokuif.TAX_PRICE(price, Tax, values, kenshin_db.db, COL_BAN);
+                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
 
                 COL_BAN--;
-                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this , COL_BAN , kenshin_db.db);
+                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
 
-                button_processing.Up_Down_Button(MainActivity.this , kenshin_db.db , COL_BAN );
+                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
                 Log.d("COL_BAN", String.valueOf(COL_BAN));
 
@@ -264,21 +263,20 @@ public class MainActivity extends AppCompatActivity {
                     try {
 
                         final String Row1_text = Row1.getText().toString();
-                        Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1_text), kenshin_db.db,COL_BAN));
+                        Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1_text), kenshin_db.db, COL_BAN));
                         handled = true;
 
-                    }
-                    catch (NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
                                 .setMessage("数字以外が入力されました")
                                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                    //--------------------------------------------------------------------------
-                                    //
-                                    //
-                                    //
-                                    //--------------------------------------------------------------------------
+                                        //--------------------------------------------------------------------------
+                                        //
+                                        //
+                                        //
+                                        //--------------------------------------------------------------------------
                                     }
                                 }).show();
                     }
@@ -289,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 //
                 //-------------------------------------------------------------------------------------------------------
                 final String Row2_text = Row2.getText().toString();
-                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row2_text),kenshin_db.db ,COL_BAN , MainActivity.this);
+                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row2_text), kenshin_db.db, COL_BAN, MainActivity.this);
                 return handled;
             }
         });
@@ -301,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               check =  button_processing.Check_task( Row1 , Check , Update ,check);
+                check = button_processing.Check_task(Row1, Check, Update, check);
             }
         });
 
@@ -321,10 +319,21 @@ public class MainActivity extends AppCompatActivity {
         Check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent check_activity = new Intent(MainActivity.this, Check2Activity.class);
-                startActivity(check_activity);
+                Check_Box = TOKUIF.Check_Result(kenshin_db.db, COL_BAN, Check_Box);
+                Intent check_activity = new Intent(getApplication(), Check2Activity.class);
+                check_activity.putExtra("CHECK_KEY", Check_Box);
+                int requestCode = 1000;
+                startActivityForResult(check_activity,requestCode);
             }
-
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(resultCode == RESULT_OK && null != intent) {
+            Check_Box = intent.getIntArrayExtra("CHECK_KEY");
+        }
+
     }
 }

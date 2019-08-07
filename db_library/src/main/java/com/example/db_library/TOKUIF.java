@@ -285,4 +285,23 @@ public class TOKUIF {
                         e.printStackTrace();
                 }
         }
+
+        public static int[] Check_Result( SQLiteDatabase db , int COL_BAN , int[] check) {
+            Cursor check_result = db.rawQuery("SELECT result1 , result2 ,result3 , result4 , result5 , result6 " +
+                    "       result7 , result8 ,result9 ,result10 ,result11 , result12 FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+
+            int result = 0;
+            while(true){
+                try {
+                        check[result] = Integer.parseInt(check_result.getString(result));
+                        result++;
+                }
+                catch (Exception e){
+                    break;
+                }
+            }
+
+
+            return check;
+        }
 }
