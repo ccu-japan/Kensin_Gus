@@ -287,21 +287,34 @@ public class TOKUIF {
         }
 
         public static int[] Check_Result( SQLiteDatabase db , int COL_BAN , int[] check) {
-            Cursor check_result = db.rawQuery("SELECT result1 , result2 ,result3 , result4 , result5 , result6 " +
-                    "       result7 , result8 ,result9 ,result10 ,result11 , result12 FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+                Cursor check_result = db.rawQuery("SELECT result1 , result2 ,result3 , result4 , result5 , result6 ," +
+                        "result7 , result8 ,result9 ,result10 ,result11 , result12 FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+                check_result.moveToLast();
 
-            int result = 0;
-            while(true){
-                try {
-                        check[result] = Integer.parseInt(check_result.getString(result));
-                        result++;
+
+                Log.d("math","result1 : "+ check_result.getColumnIndex("result1"));
+
+                Log.d("math","getCount() : "+ check_result.getColumnIndex("result12"));
+                Log.d("math", "10 :" + check_result.getInt(10));
+                Log.d("math", "11 :" + check_result.getInt(11));
+
+
+                for (int i = 0; i < check.length; i++) {
+                        check[i] = check_result.getInt(i);
                 }
-                catch (Exception e){
-                    break;
-                }
-            }
 
 
-            return check;
+                return check;
+        }
+
+        public void Check_Result_return(SQLiteDatabase db ,int COL_BAN , int[] check)
+        {
+              ContentValues values = new ContentValues();
+
+              for(int i=1; i<=check.length; i++){
+                      values.put("result"+i,check[i-1]);
+              }
+                db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
+
         }
 }

@@ -11,19 +11,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class Check2Activity extends AppCompatActivity {
-    final Intent main_activity = getIntent();
-    final int[] check = main_activity.getIntArrayExtra("CHECK_KEY");
-    int ban = 0;
+
+    Intent main_activity;
+    int[] check ;
+
+
+    Button Check_Cancel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check);
+
         //--------------------------------------------------------------------------------------------
         //
         // **インスタンス化
         //
         //--------------------------------------------------------------------------------------------
+        main_activity = getIntent();
+        check = main_activity.getIntArrayExtra("CHECK_KEY");
+        Check_Cancel = findViewById(R.id.Check_Cancel);
+
         Button Check_OK = findViewById(R.id.Check_OK);
         CheckBox Result1 = findViewById(R.id.Result1);
         CheckBox Result2 = findViewById(R.id.Result2);
@@ -38,7 +46,7 @@ public class Check2Activity extends AppCompatActivity {
         CheckBox Result11 = findViewById(R.id.Result11);
         CheckBox Result12 = findViewById(R.id.Result12);
 
-        ArrayList<CheckBox> Result = new ArrayList<CheckBox>();
+        ArrayList<CheckBox> Result = new ArrayList<>();
         Result.add(Result1);
         Result.add(Result2);
         Result.add(Result3);
@@ -52,21 +60,16 @@ public class Check2Activity extends AppCompatActivity {
         Result.add(Result11);
         Result.add(Result12);
 
-
-
-        while(true){
-            try{
-                if(check[ban] == 1){
-                    Result.get(ban).setChecked(true);
-                }else{
-                    Result.get(ban).setChecked(false);
-                }
-                ban++;
-            }catch (IndexOutOfBoundsException e){
-                break;
+        for (int i=0; i<check.length; i++) {
+            if(check[i] == 1){
+                Result.get(i).setChecked(true);
             }
-        }
+            else
+            {
+                Result.get(i).setChecked(false);
+            }
 
+        }
 
         Check_OK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +79,14 @@ public class Check2Activity extends AppCompatActivity {
                 finish();
             }
         });
+        Check_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+
     }
 
     public void onCheckboxClicked(View view) {
@@ -103,6 +114,16 @@ public class Check2Activity extends AppCompatActivity {
 
             case R.id.Result3 :
                 if(checked){
+                    check[2]=1;
+                }
+                else
+                {
+                    check[2]=0;
+                }
+                break;
+
+            case R.id.Result4 :
+                if(checked){
                     check[3]=1;
                 }
                 else
@@ -111,7 +132,7 @@ public class Check2Activity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.Result4 :
+            case R.id.Result5 :
                 if(checked){
                     check[4]=1;
                 }
@@ -119,41 +140,80 @@ public class Check2Activity extends AppCompatActivity {
                 {
                     check[4]=0;
                 }
-                break;
-
-            case R.id.Result5 :
 
                 break;
 
             case R.id.Result6 :
+                if(checked){
+                    check[5]=1;
+                }
+                else
+                {
+                    check[5]=0;
+                }
 
                 break;
 
             case R.id.Result7 :
+                if(checked){
+                    check[6]=1;
+                }
+                else
+                {
+                    check[6]=0;
+                }
 
                 break;
 
             case R.id.Result8 :
-
+                if(checked){
+                    check[7]=1;
+                }
+                else
+                {
+                    check[7]=0;
+                }
                 break;
 
             case R.id.Result9 :
-
+                if(checked){
+                    check[8]=1;
+                }
+                else
+                {
+                    check[8]=0;
+                }
                 break;
 
             case R.id.Result10:
-
+                if(checked){
+                    check[9]=1;
+                }
+                else
+                {
+                    check[9]=0;
+                }
                 break;
 
             case R.id.Result11 :
-
+                if(checked){
+                    check[10]=1;
+                }
+                else
+                {
+                    check[10]=0;
+                }
                 break;
 
             case R.id.Result12 :
-
+                if(checked){
+                    check[11]=1;
+                }
+                else
+                {
+                    check[11]=0;
+                }
                 break;
         }
-
-
     }
 }

@@ -1,5 +1,6 @@
 package com.example.kensin_gus;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
     boolean check  = false;
     String Date = "";
     int[] Check_Box = new int[12];
+    int requestCode = 1000;
+
+    TOKUIF tokuif = null;
+    Kenshin_DB kenshin_db = null;
+    Dialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         final Button End = findViewById(R.id.end_app);
         final Button Check = findViewById(R.id.Check_Button);
 
-        final Kenshin_DB kenshin_db = new Kenshin_DB(getApplicationContext());
-        final TOKUIF tokuif = new TOKUIF();
+        kenshin_db = new Kenshin_DB(getApplicationContext());
+        tokuif = new TOKUIF();
         final HYOF hyof = new HYOF();
         final Button_Processing button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         //*** データベースの存在確認　getDatabasePath
         //
         //-------------------------------------------------------------------------------------------
-        if (!this.getDatabasePath(kenshin_db.DB_NAME).exists()) {
+        if (!this.getDatabasePath(Kenshin_DB.DB_NAME).exists()) {
             new Kenshin_DB(this);
             Log.d("Database", "データベースを作成しました。");
         } else {
@@ -97,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         //
         //-------------------------------------------------------------------------------------------
         try {
-            Cursor cursor = kenshin_db.db.rawQuery("SELECT * FROM " + TOKUIF.DB_TABLE, null);
+            @SuppressLint("Recycle") Cursor cursor = kenshin_db.db.rawQuery("SELECT * FROM " + TOKUIF.DB_TABLE, null);
             Log.d("data_low", "データ有。新規読込をｷｬﾝｾﾙ");
         } catch (SQLiteException e) {
             tokuif.onCreate(kenshin_db.db);
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            Cursor cursor1 = kenshin_db.db.rawQuery("SELECT * FROM " + HYOF.DB_TABLE, null);
+            @SuppressLint("Recycle") Cursor cursor1 = kenshin_db.db.rawQuery("SELECT * FROM " + HYOF.DB_TABLE, null);
             Log.d("data_low", "データ有。新規読込をｷｬﾝｾﾙ");
         } catch (SQLiteException e) {
             hyof.CreateTBL_HYOF(kenshin_db.db);
@@ -291,6 +297,22 @@ public class MainActivity extends AppCompatActivity {
                 return handled;
             }
         });
+
+        //--------------------------------------------------------------------------------------------------------
+        //
+        // ***** 金額テキスト　詳細ダイアログタスク *****
+        //
+        //-------------------------------------------------------------------------------------------------------
+        Row3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+
+            }
+        });
+
+
+
         //--------------------------------------------------------------------------------------------------------
         //
         // ***** 確定・未入力変更ボタンタスク *****
@@ -319,10 +341,12 @@ public class MainActivity extends AppCompatActivity {
         Check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Check_Box = TOKUIF.Check_Result(kenshin_db.db, COL_BAN, Check_Box);
+                Check_Box = TOKUIF.Check_Result(kenshin_db.db , COL_BAN , Check_Box);
+
                 Intent check_activity = new Intent(getApplication(), Check2Activity.class);
-                check_activity.putExtra("CHECK_KEY", Check_Box);
-                int requestCode = 1000;
+
+                check_activity.putExtra("CHECK_KEY",Check_Box);
+                check_activity.setAction(Intent.ACTION_VIEW);
                 startActivityForResult(check_activity,requestCode);
             }
         });
@@ -333,7 +357,9 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if(resultCode == RESULT_OK && null != intent) {
             Check_Box = intent.getIntArrayExtra("CHECK_KEY");
-        }
+            tokuif.Check_Result_return(kenshin_db.db , COL_BAN , Check_Box);
 
+
+        }
     }
 }
