@@ -42,5 +42,10 @@
     <string name="check_text">不具合箇所をチェック</string>
     <string name="cancel">キャンセル</string>
     <string name="onCheckboxClicked">onCheckboxClicked</string>
+    <string name="dialog_text1">交換時使用量</string>
+    <string name="dialog_text2">前回使用量</string>
+    <string name="dialog_text3">基 本 料 金</string>
+    <string name="dialog_text4">単価</string>
+    <string name="blank">　　　　　　</string>
 </resources>
 

@@ -65,7 +65,7 @@ public class Screen_Layout {
                 String Row3_text2 = String.format("%,d", Integer.parseInt(C_price.getString(1)));
 
                 name.setText(c.getString(0) + c.getString(1));
-                code.setText(c.getString(2) + c.getString(3));
+                code.setText(c.getString(2) + " "  + c.getString(3));
                 used.setText(c.getString(4));
                 usaged.setText(c.getString(8));
                 now.setText(c.getString(5));

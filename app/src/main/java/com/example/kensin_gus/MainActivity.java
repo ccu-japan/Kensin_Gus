@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -42,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     TOKUIF tokuif = null;
     Kenshin_DB kenshin_db = null;
-    Dialog dialog = null;
+
+    EditText Row1 = null;
+    TextView Row3 = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +70,15 @@ public class MainActivity extends AppCompatActivity {
         final HYOF hyof = new HYOF();
         final Button_Processing button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
+        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final Dialog dialog = new Dialog();
 
-        final EditText Row1 = findViewById(R.id.Row1_Text);
+        Row1 = findViewById(R.id.Row1_Text);
+        Row1.setSelection(Row1.getText().length());
         final TextView Row2 = findViewById(R.id.Row2_Text);
-        final TextView Row3 = findViewById(R.id.Row3_Text);
+        Row3 = findViewById(R.id.Row3_Text);
         final TextView Row3_2 = findViewById(R.id.Row3_Text2);
+
 
         //-------------------------------------------------------------------------------------------
         //*** 今日の日付設定　
@@ -259,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
         // ***** 使用量計算 *****
         //
         //------------------------------------------------------------------------------------------------------------------
+
         Row1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
@@ -267,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     ((InputMethodManager) Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(textView.getWindowToken(), 0);
                     try {
-
                         final String Row1_text = Row1.getText().toString();
                         Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1_text), kenshin_db.db, COL_BAN));
                         handled = true;
@@ -296,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
                 Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row2_text), kenshin_db.db, COL_BAN, MainActivity.this);
                 return handled;
             }
+
         });
 
         //--------------------------------------------------------------------------------------------------------
@@ -306,12 +314,9 @@ public class MainActivity extends AppCompatActivity {
         Row3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
-
+                dialog.Dialog_SYOSAI(layoutInflater , MainActivity.this , kenshin_db.db , COL_BAN);
             }
         });
-
-
 
         //--------------------------------------------------------------------------------------------------------
         //
