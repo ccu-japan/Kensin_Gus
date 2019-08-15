@@ -48,7 +48,7 @@ public class Button_Processing {
         EditText Row1 = mainActivity.findViewById(R.id.Row1_Text);
         String TRUE = "1";
         String FALSE = " ";
-        if(Row1.getText().toString().equals("0"))
+        if(Row1.getText().toString().equals(" "))
         {
             Update_button.setBackgroundColor(Color.RED);
             Update_button.setText("未");

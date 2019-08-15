@@ -47,5 +47,12 @@
     <string name="dialog_text3">基 本 料 金</string>
     <string name="dialog_text4">単価</string>
     <string name="blank">　　　　　　</string>
+    <string name="name">名前</string>
+    <string name="code02">ｺｰﾄﾞ</string>
+    <string name="meter">ﾒｰﾀ</string>
+    <string name="BlanckData">未検針データ</string>
+    <string name="CustomerCode">得意先コード：</string>
+    <string name="GroupCode">群コード：</string>
+    <string name="search">検索</string>
 </resources>
 

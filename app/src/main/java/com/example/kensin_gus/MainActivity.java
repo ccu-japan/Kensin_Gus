@@ -40,15 +40,17 @@ public class MainActivity extends AppCompatActivity {
     String Date = "";
     int[] Check_Box = new int[12];
     int requestCode = 1000;
+    int root_search_Code = 2000;
 
     TOKUIF tokuif = null;
     Kenshin_DB kenshin_db = null;
+    Button_Processing button_processing = null;
 
     EditText Row1 = null;
     TextView Row3 = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -64,11 +66,13 @@ public class MainActivity extends AppCompatActivity {
         final Button Update = findViewById(R.id.Update);
         final Button End = findViewById(R.id.end_app);
         final Button Check = findViewById(R.id.Check_Button);
+        final Button root_search_button = findViewById(R.id.customer_Button);
 
         kenshin_db = new Kenshin_DB(getApplicationContext());
         tokuif = new TOKUIF();
+
         final HYOF hyof = new HYOF();
-        final Button_Processing button_processing = new Button_Processing();
+        button_processing = new Button_Processing();
         final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
         final LayoutInflater layoutInflater = LayoutInflater.from(this);
         final Dialog dialog = new Dialog();
@@ -136,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
         COL_BAN++;
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
         button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
-        Log.d("COL_BAN", String.valueOf(COL_BAN));
 
         //-------------------------------------------------------------------------------------------
         //
@@ -340,6 +343,21 @@ public class MainActivity extends AppCompatActivity {
         });
         //--------------------------------------------------------------------------------------------------------
         //
+        // ***** 道順ボタンタスク *****
+        //
+        //-------------------------------------------------------------------------------------------------------
+        root_search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent root_search = new Intent(getApplication(),Root_Search.class);
+                root_search.putExtra("ROOT_KEY",root_search_Code);
+                root_search.setAction(Intent.ACTION_VIEW);
+                startActivityForResult(root_search,root_search_Code);
+            }
+        });
+
+        //--------------------------------------------------------------------------------------------------------
+        //
         // ***** 点検ボタンタスク *****
         //
         //-------------------------------------------------------------------------------------------------------
@@ -348,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Check_Box = TOKUIF.Check_Result(kenshin_db.db , COL_BAN , Check_Box);
 
-                Intent check_activity = new Intent(getApplication(), Check2Activity.class);
+                Intent check_activity = new Intent(getApplication(), CheckActivity.class);
 
                 check_activity.putExtra("CHECK_KEY",Check_Box);
                 check_activity.setAction(Intent.ACTION_VIEW);
@@ -363,6 +381,15 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK && null != intent) {
             Check_Box = intent.getIntArrayExtra("CHECK_KEY");
             tokuif.Check_Result_return(kenshin_db.db , COL_BAN , Check_Box);
+
+        }
+        int Result_Root_Code = Objects.requireNonNull(intent).getIntExtra("ROOT_KEY2",0);
+
+        if(resultCode == RESULT_OK && root_search_Code == Result_Root_Code){
+            String Result_COL_BAN = intent.getStringExtra("ROOT_KEY");
+            COL_BAN =  Integer.parseInt(Result_COL_BAN);
+            COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+            button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
 
         }

@@ -10,8 +10,9 @@
         android:id="@+id/constraintLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/Update">
 
         <TableLayout
             android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/kotei"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/date_now"
@@ -38,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="@string/date"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </TableRow>
 
             <TableRow
@@ -50,18 +51,17 @@
                     android:id="@+id/kotei2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|end"
                     android:text="@string/kotei2"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     tools:ignore="RtlHardcoded" />
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="@string/c_name"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </TableRow>
 
             <TableRow
@@ -73,10 +73,9 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|end"
-                    android:gravity="start|end"
+                    android:gravity="start"
                     android:text="@string/kotei3"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     tools:ignore="RtlHardcoded" />
 
                 <TextView
@@ -84,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </TableRow>
 
         </TableLayout>
@@ -94,7 +93,7 @@
         android:id="@+id/tablelayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -122,11 +121,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:autofillHints=""
+                android:background="@drawable/frame_style"
                 android:clickable="false"
                 android:ellipsize="end"
                 android:ems="5"
                 android:focusable="true"
-                android:gravity="right"
+                android:gravity="end"
                 android:hint="数値を入力"
                 android:imeOptions="actionGo"
                 android:inputType="numberDecimal"
@@ -176,7 +176,7 @@
                 android:autofillHints=""
                 android:ems="5"
                 android:focusable="false"
-                android:gravity="right"
+                android:gravity="end"
                 android:textSize="24sp"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
@@ -247,14 +247,13 @@
         android:id="@+id/tableLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tablelayout2"
-        app:layout_constraintVertical_bias="0.07999998">
+        app:layout_constraintVertical_bias="1.0">
 
         <TableRow
             android:id="@+id/Button_table"
@@ -262,33 +261,37 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/Not_yet_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei9"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/customer_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei11"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/Group_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei12"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/Group_K_jun_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei13"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -297,6 +300,7 @@
                 android:id="@+id/end_app"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei14"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -306,13 +310,13 @@
             android:id="@+id/Button_table2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             tools:ignore="UselessParent">
 
             <Button
                 android:id="@+id/button6"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei15"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -321,6 +325,7 @@
                 android:id="@+id/button7"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei16"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -329,28 +334,31 @@
                 android:id="@+id/up"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:gravity="center|start|end"
+                android:background="@drawable/frame_style"
+                android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/up"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/down"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:gravity="center|start|end"
+                android:background="@drawable/frame_style"
+                android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/down"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/Check_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/frame_style"
                 android:text="@string/kotei17"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -361,7 +369,7 @@
 
     <Button
         android:id="@+id/Update"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:background="@android:color/background_dark"

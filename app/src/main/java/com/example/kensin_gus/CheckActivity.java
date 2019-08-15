@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class Check2Activity extends AppCompatActivity {
+public class CheckActivity extends AppCompatActivity {
 
     Intent main_activity;
     int[] check ;

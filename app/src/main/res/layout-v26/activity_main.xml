@@ -56,7 +56,7 @@
                     tools:ignore="RtlHardcoded" />
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -262,7 +262,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/Not_yet_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kotei9"
@@ -270,7 +270,7 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/customer_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kotei11"
@@ -278,7 +278,7 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/Group_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kotei12"
@@ -286,7 +286,7 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/Group_K_jun_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kotei13"

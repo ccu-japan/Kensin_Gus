@@ -51,7 +51,7 @@ public class Screen_Layout {
             c.moveToFirst();
             C_price.moveToFirst();
 
-            TextView name = mainActivity.findViewById(R.id.name);
+            TextView name = mainActivity.findViewById(R.id.Name);
             TextView code = mainActivity.findViewById(R.id.code);
 
             TextView used = mainActivity.findViewById(R.id.Row1_Text2);
