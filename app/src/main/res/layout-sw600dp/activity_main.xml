@@ -275,7 +275,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/Not_yet_Button"
+                android:id="@+id/Kensin_Button"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kotei9"
@@ -299,7 +299,7 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/Group_K_jun_Button"
+                android:id="@+id/Calender_Button"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kotei13"

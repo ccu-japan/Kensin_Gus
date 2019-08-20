@@ -1,5 +1,6 @@
 package com.example.kensin_gus;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,17 +8,19 @@ import android.graphics.Color;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class Button_Processing {
+@SuppressLint("Registered")
+public class Button_Processing{
 
     //----------------------------------------------------------------------------------------------------
     // ***
     //----------------------------------------------------------------------------------------------------
-    public  boolean Check_task(EditText Row1 ,Button check_button ,Button update_button ,boolean check){
+    public  boolean Check_task(EditText Row1 ,Button check_button ,Button update_button ,Button kensin_button ,boolean check){
         if(!check) {
             update_button.setText("済");
             update_button.setBackgroundColor(Color.BLUE);
             Row1.setEnabled(false);
             check_button.setEnabled(true);
+            kensin_button.setEnabled(false);
             check = true;
         }
         else
@@ -26,6 +29,7 @@ public class Button_Processing {
             update_button.setBackgroundColor(Color.RED);
             Row1.setEnabled(true);
             check_button.setEnabled(false);
+            kensin_button.setEnabled(true);
             check = false;
         }
 
@@ -45,28 +49,32 @@ public class Button_Processing {
 
         final Button Update_button = mainActivity.findViewById(R.id.Update);
         final Button Check_button = mainActivity.findViewById(R.id.Check_Button);
+        Button kensin_button = mainActivity.findViewById(R.id.Kensin_Button);
         EditText Row1 = mainActivity.findViewById(R.id.Row1_Text);
         String TRUE = "1";
-        String FALSE = " ";
-        if(Row1.getText().toString().equals(" "))
+        String FALSE = "";
+        if(Row1.getText().toString().equals("0"))
         {
             Update_button.setBackgroundColor(Color.RED);
             Update_button.setText("未");
-            contentValues.put("P_flag", TRUE);
+            contentValues.put("P_flag",FALSE);
             Row1.setEnabled(true);
             Check_button.setEnabled(false);
+            kensin_button.setEnabled(true);
         }
         else
         {
             Update_button.setBackgroundColor(Color.BLUE);
             Update_button.setText("済");
-            contentValues.put("P_flag", FALSE);
+            contentValues.put("P_flag",TRUE);
             Row1.setEnabled(false);
             Check_button.setEnabled(true);
+            kensin_button.setEnabled(false);
 
         }
 
         db.update("TOKUIF", contentValues, " ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
     }
+
 }

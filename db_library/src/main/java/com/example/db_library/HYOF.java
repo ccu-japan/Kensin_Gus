@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class HYOF {
-    public static final String DB_TABLE = "HYOF"
+    public static final String DB_TABLE = " HYOF "
             ;
     public static final String COL_STX = "stx";
     public static final String COL_TYPE = "type";
@@ -34,7 +34,7 @@ public class HYOF {
     public static final String COL_END_CODE = "end_code";
 
     public void CreateTBL_HYOF(SQLiteDatabase db) {
-        String CreateTbl = "CREATE TABLE " + DB_TABLE + "("
+        String CreateTbl = "CREATE TABLE " + HYOF.DB_TABLE + "("
                 + COL_STX + " TEXT ,"
                 + COL_TYPE + " TEXT ,"
                 + COL_COMPANY_CODE + " INTEGER ,"

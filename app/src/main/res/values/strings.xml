@@ -54,5 +54,20 @@
     <string name="CustomerCode">得意先コード：</string>
     <string name="GroupCode">群コード：</string>
     <string name="search">検索</string>
+    <string name="ten_key_one">1</string>
+    <string name="ten_key_two">2</string>
+    <string name="ten_key_thr">3</string>
+    <string name="ten_key_for">4</string>
+    <string name="ten_key_fiv">5</string>
+    <string name="ten_key_six">6</string>
+    <string name="ten_key_sev">7</string>
+    <string name="ten_key_eig">8</string>
+    <string name="ten_key_nin">9</string>
+    <string name="ten_key_zer">0</string>
+    <string name="ten_key_left">←</string>
+    <string name="ten_key_dot">.</string>
+    <string name="ten_key_OK">OK</string>
+
+
 </resources>
 

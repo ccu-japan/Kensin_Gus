@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,10 +26,11 @@ public class Root_Search extends AppCompatActivity {
     // BUTTON_SELECT_FLG    0 : 1 :
     //---------------------------------------------------------------------------------------------
     Kenshin_DB kenshin_db = null;
-    Cursor cursor = null ;
+    Cursor cursor = null;
+    Intent root_search;
 
     static final int TRUE_FLG = 0;
-    static final int FALSE_FLG =1;
+    static final int FALSE_FLG = 1;
     static final int EXCEPTION_FLG = 99;
     static final int SEARCH_FLG1 = 1;
     static final int SEARCH_FLG2 = 2;
@@ -44,27 +46,35 @@ public class Root_Search extends AppCompatActivity {
     int Array_Subscript_Size;
     String[][] cursor_data_input = null;
 
+    EditText customer_code ;
+    EditText G_code;
+    EditText Group_K_jun_C;
+    EditText Group_K_jun_G;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.root_search);
 
-        final Intent root_search = getIntent();
-        final int root_search_Code = root_search.getIntExtra("ROOT_KEY",0);
+        root_search = getIntent();
 
         kenshin_db = new Kenshin_DB(this);
 
-        final Button Not_yet_Button     = findViewById(R.id.Not_yet_Button);
-        final Button customer_Button    = findViewById(R.id.customer_Button);
-        final Button Group_Button       = findViewById(R.id.Group_Button);
-        final Button Group_K_jun_Button = findViewById(R.id.Group_K_jun_Button);
-        final Button Up_Button          = findViewById(R.id.Up);
-        final Button Down_Button        = findViewById(R.id.Down);
-        final Button OK_Button          = findViewById(R.id.OK);
+        final Button Not_yet_Button = findViewById(R.id.Kensin_Button);
+        final Button customer_Button = findViewById(R.id.customer_Button);
+        final Button Group_Button = findViewById(R.id.Group_Button);
+        final Button Group_K_jun_Button = findViewById(R.id.Calender_Button);
+        final Button Up_Button = findViewById(R.id.Up);
+        final Button Down_Button = findViewById(R.id.Down);
+        final Button OK_Button = findViewById(R.id.OK);
 
-        cursor = kenshin_db.db.rawQuery( "SELECT * FROM TOKUIF ",null);
-        cursor_data_input = new String[cursor.getCount()][6];
+        cursor = kenshin_db.db.rawQuery("SELECT * FROM TOKUIF ", null);
+        cursor_data_input = new String[cursor.getCount()][7];
         cursor = null;
 
+        customer_code = findViewById(R.id.customercode);
+        G_code         = findViewById(R.id.Code01);
+        Group_K_jun_C = findViewById(R.id.Code02);
+        Group_K_jun_G = findViewById(R.id.Code03);
 
         //---------------------------------------------------------------------------------------------
         // *** Root_Search 道順タスク　***
@@ -79,46 +89,127 @@ public class Root_Search extends AppCompatActivity {
         //
         // ***  Not_yet_Button  クラス  ***
         //
+        // BUTTON_SELECT_FLG = 1
+        //
         // ---------------------------------------------------------------------------------------------
         Not_yet_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG1;
                 Select_Cursor();
-                Cursor_VIEW();
-
+                if (cursor_data_input[0][0] != null) {
+                    Cursor_VIEW();
+                }
+            }
+        });
+        //---------------------------------------------------------------------------------------------
+        //
+        // ***  G_code_Button クラス  ***
+        //
+        // BUTTON_SELECT_FLG = 2
+        //
+        // ---------------------------------------------------------------------------------------------
+        Group_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BUTTON_SELECT_FLG = SEARCH_FLG3;
+                Select_Cursor();
+                if (cursor_data_input[0][0] != null) {
+                    Cursor_VIEW();
+                }
             }
         });
 
-        Up_Button.setOnClickListener(new View.OnClickListener() {
+        //---------------------------------------------------------------------------------------------
+        //
+        // ***  customer_Button クラス  ***
+        //
+        // BUTTON_SELECT_FLG = 3
+        //
+        // ---------------------------------------------------------------------------------------------
+        customer_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BUTTON_SELECT_FLG = SEARCH_FLG2;
+                Select_Cursor();
+                if (cursor_data_input[0][0] != null) {
+                    Cursor_VIEW();
+                }
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------
+        //
+        // ***  Group_K_jun_Button クラス  ***
+        //
+        // BUTTON_SELECT_FLG = 4
+        //
+        // ---------------------------------------------------------------------------------------------
+        Group_K_jun_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BUTTON_SELECT_FLG = SEARCH_FLG4;
+                Select_Cursor();
+                if (cursor_data_input[0][0] != null) {
+                    Cursor_VIEW();
+                }
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------
+        //
+        // ***  Up_Button クラス  ***
+        //
+        // ---------------------------------------------------------------------------------------------
+        Up_Button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view)
             {
                 Array_Subscript_Vertical++;
-               Cursor_VIEW();
+                Cursor_VIEW();
             }
         });
 
-        Down_Button.setOnClickListener(new View.OnClickListener() {
+        //---------------------------------------------------------------------------------------------
+        //
+        // ***  Down_Button クラス  ***
+        //
+        // ---------------------------------------------------------------------------------------------
+        Down_Button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Array_Subscript_Vertical--;
                 Cursor_VIEW();
             }
         });
 
 
-
-        OK_Button.setOnClickListener(new View.OnClickListener() {
+        OK_Button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                root_search.putExtra("ROOT_KEY2",root_search_Code);
-                root_search.putExtra("ROOT_KEY",cursor.getString(6));
-                setResult(RESULT_OK,root_search);
-                finish();
+            public void onClick(View view)
+            {
+                try {
+                    int cursor_data = Integer.parseInt(cursor_data_input[Array_Subscript_Vertical][6]);
+                    root_search.putExtra("ROOT_KEY", cursor_data);
+                    setResult(RESULT_OK, root_search);
+                    finish();
+                }catch (NullPointerException e)
+                {
+                    finish();
+                }
+                catch (NumberFormatException e)
+                {
+                    finish();
+                }
             }
         });
     }
+
+
     //---------------------------------------------------------------------------------------------
     //
     // *** 検索ボタン　Cursor選択クラス  ***
@@ -127,20 +218,19 @@ public class Root_Search extends AppCompatActivity {
     public void Select_Cursor() {
         switch (BUTTON_SELECT_FLG) {
             case SEARCH_FLG1:
-                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? ", new String[]{" "});
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? ", new String[]{""});
                 break;
 
             case SEARCH_FLG2:
-
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND customer = ? ", new String[]{"", customer_code.getText().toString()});
                 break;
 
-
             case SEARCH_FLG3:
-
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? ", new String[]{"", G_code.getText().toString()});
                 break;
 
             case SEARCH_FLG4:
-
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? AND customer = ? ", new String[]{"", Group_K_jun_C.getText().toString(), Group_K_jun_G.getText().toString()});
                 break;
 
             case EXCEPTION_FLG:
@@ -148,14 +238,13 @@ public class Root_Search extends AppCompatActivity {
         }
 
         if ((cursor.moveToFirst())) {
-            Log.d("First",cursor.getString(2));
 
             Array_Subscript_Vertical = 0;
             Array_Subscript_Size = 0;
 
             do {
 
-                for (Array_Subscript_Size = 0; Array_Subscript_Size < cursor.getColumnCount()-1; Array_Subscript_Size++) {
+                for (Array_Subscript_Size = 0; Array_Subscript_Size < cursor.getColumnCount(); Array_Subscript_Size++) {
                     cursor_data_input[Array_Subscript_Vertical][Array_Subscript_Size] = cursor.getString(Array_Subscript_Size);
                 }
                 Array_Subscript_Vertical++;
@@ -163,13 +252,8 @@ public class Root_Search extends AppCompatActivity {
             Array_Subscript_Vertical = 0;
         }
         SUBSCRIPT_LENGTH = cursor_data_input.length;
-        Log.d("math", String.valueOf(cursor_data_input.length));
 
     }
-
-
-
-
 
     //---------------------------------------------------------------------------------------------
     //
@@ -185,28 +269,32 @@ public class Root_Search extends AppCompatActivity {
         final TextView CustomCode = findViewById(R.id.CustomCode);
         final TextView P_name = findViewById(R.id.P_name);
 
-
-        if (Array_Subscript_Vertical > SUBSCRIPT_LENGTH)
-        {
-            Array_Subscript_Vertical = SUBSCRIPT_LENGTH;
-        } else if (Array_Subscript_Vertical < 0)
-        {
+        if (Array_Subscript_Vertical < 0) {
             Array_Subscript_Vertical = 0;
         }
-        else {
+        else
+            {
             try {
-                G_code.setText(cursor_data_input[Array_Subscript_Vertical][0]);
-                K_jun.setText(cursor_data_input[Array_Subscript_Vertical][1]);
-                Name.setText(cursor_data_input[Array_Subscript_Vertical][2] + cursor_data_input[Array_Subscript_Vertical][3]);
-                CustomCode.setText(cursor_data_input[Array_Subscript_Vertical][4]);
-                P_name.setText(cursor_data_input[Array_Subscript_Vertical][5]);
+                if (cursor_data_input[Array_Subscript_Vertical][0] == null) {
+                    Array_Subscript_Vertical--;
 
-                Log.d("math"," Name :" + cursor_data_input[0][2] + cursor_data_input[0][3]);
-                Log.d("math"," Name :" + cursor_data_input[Array_Subscript_Vertical][2] + cursor_data_input[Array_Subscript_Vertical][3]);
-
-            }catch (ArrayIndexOutOfBoundsException e){
-                Log.d("","配列外にでました");
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Array_Subscript_Vertical--;
             }
+        }
+        Log.d("math", "" + Array_Subscript_Vertical);
+
+
+        try {
+            G_code.setText(cursor_data_input[Array_Subscript_Vertical][0]);
+            K_jun.setText(cursor_data_input[Array_Subscript_Vertical][1]);
+            Name.setText(cursor_data_input[Array_Subscript_Vertical][2] + cursor_data_input[Array_Subscript_Vertical][3]);
+            CustomCode.setText(cursor_data_input[Array_Subscript_Vertical][4]);
+            P_name.setText(cursor_data_input[Array_Subscript_Vertical][5]);
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.d("", "配列外にでました");
         }
     }
 }

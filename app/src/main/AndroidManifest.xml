@@ -11,9 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".CheckActivity" />
+        <activity android:name=".CheckActivity"/>
         <activity android:name=".Root_Search" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Ten_key_Process"/>
+        <activity android:name=".Calendar_Select"/>
+        <activity android:name=".MainActivity"
+                   android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

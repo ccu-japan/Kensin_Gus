@@ -10,6 +10,7 @@ public class Kenshin_DB extends SQLiteOpenHelper {
     public final static int DB_VER = 1;  				// データベースのバージョン
     public SQLiteDatabase db;
 
+
     public Kenshin_DB(Context context) {
         super(context, DB_NAME, null, DB_VER);
         db = this.getWritableDatabase();
@@ -37,6 +38,7 @@ public class Kenshin_DB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         new TOKUIF().onCreate(db);
+        new HYOF().CreateTBL_HYOF(db);
     }
 
     @Override

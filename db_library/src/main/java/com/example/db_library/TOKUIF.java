@@ -15,12 +15,13 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Objects;
 
-public class TOKUIF {
-
+public class TOKUIF{
         //---------------------------------------------------------------------------------------------------------------------
+        //
         // 　カラム名定義
+        //
         //---------------------------------------------------------------------------------------------------------------------
-        public final static String DB_TABLE = "TOKUIF";
+        public final static String DB_TABLE = " TOKUIF ";
 
         public final String COL_BAN = "ban";
         public final String COL_STX = "stx";
@@ -78,12 +79,13 @@ public class TOKUIF {
         public final String COL_TERMINAL_ID = "T_id";
         public final String COL_ETX = "ETX";
         public final String COL_END_CODE = "E_code";
+
         //---------------------------------------------------------------------------------------------------------------------
         //　/カラム名定義
         //---------------------------------------------------------------------------------------------------------------------
 
         public void onCreate(SQLiteDatabase db) {
-                String createTbl = "CREATE TABLE " + DB_TABLE + " ("
+                String createTbl = "CREATE TABLE " + TOKUIF.DB_TABLE + " ("
                         + COL_BAN + " TEXT ,"
                         + COL_STX + "  TEXT ,"
                         + COL_TYPE + "  TEXT ,"
@@ -145,6 +147,7 @@ public class TOKUIF {
                 db.execSQL(createTbl);
         }
 
+
         public void TOKUIF_CSV(SQLiteDatabase db, Context context) {
                 //-----------------------------------------------------------------------------------------------------------------------
                 //
@@ -161,7 +164,7 @@ public class TOKUIF {
                         while ((line = buffer.readLine()) != null) {
                                 String[] columnData = line.split("\t", -1);
 
-                                contentValues.put(COL_BAN,columnData[0]);
+                                contentValues.put(COL_BAN, columnData[0]);
                                 contentValues.put(COL_STX, columnData[1]);
                                 contentValues.put(COL_TYPE, columnData[2]);
                                 contentValues.put(COL_COMPANY_CODE, columnData[3]);
@@ -224,12 +227,14 @@ public class TOKUIF {
                         e.printStackTrace();
                 }
         }
-        public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN , String now) {
+
+
+        public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN, String now) {
                 try {
                         values.put("T_T_kensin", now);
                         values.put("T_T_pointer", Usaged_now);
                         values.put("T_T_usage", Usaged_now2);
-                        db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
+                        db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
                 } catch (NumberFormatException e) {
                         Log.d("Number", "NumberFormatException");
                 }
@@ -242,11 +247,11 @@ public class TOKUIF {
         //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
         //
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public void TAX_PRICE(String Price , String Tax , ContentValues values , SQLiteDatabase db , int COL_BAN) {
+        public void TAX_PRICE(String Price, String Tax, ContentValues values, SQLiteDatabase db, int COL_BAN) {
                 Cursor cursor = db.rawQuery("SELECT/*i:0*/ G_T_rate ,/*i:1*/ S_price  , /*i:2*/M_C_price   ,/*i:3*/ A_price ," +
-                                                        "/*i:4*/  G_price ,/*i:5*/  B_amount ,/*i:6*/ T_T_Billing ,/*i:7*/ G_C_tax ," +
-                                                        "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  ,/*i:11*/P_flag " +
-                                                        "FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+                        "/*i:4*/  G_price ,/*i:5*/  B_amount ,/*i:6*/ T_T_Billing ,/*i:7*/ G_C_tax ," +
+                        "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  ,/*i:11*/P_flag " +
+                        "FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
                 cursor.moveToFirst();
 
                 //-----------------------------------------------------------------------------------
@@ -255,8 +260,7 @@ public class TOKUIF {
                 int i_Price;
                 int i_Tax;
 
-                try
-                {
+                try {
                         Number number = NumberFormat.getInstance().parse(Price);
                         Number number2 = NumberFormat.getInstance().parse(Tax);
 
@@ -264,57 +268,43 @@ public class TOKUIF {
                         i_Tax = Objects.requireNonNull(number2).intValue();
 
                         int price_only_GUS = (int) (i_Price - Integer.parseInt(cursor.getString(1)) - Float.parseFloat(cursor.getString(2)) - Float.parseFloat(cursor.getString(3)));
-                        int price_No_Tax   = i_Price - i_Tax;
+                        int price_No_Tax = i_Price - i_Tax;
 
                         String P_flag = "1";
 
-                        values.put("G_price",price_only_GUS);
-                        values.put("B_amount",price_No_Tax);
-                        values.put("G_C_tax",i_Tax);
-                        values.put("T_T_Billing",i_Price);
-                        values.put("P_flag" , P_flag);
-                        db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
+                        values.put("G_price", price_only_GUS);
+                        values.put("B_amount", price_No_Tax);
+                        values.put("G_C_tax", i_Tax);
+                        values.put("T_T_Billing", i_Price);
+                        values.put("P_flag", P_flag);
+                        db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
-                }
-                catch (NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                         Log.d("Number", "NumberFormatException");
-                }
-                catch (ParseException e)
-                {
+                } catch (ParseException e) {
                         e.printStackTrace();
                 }
         }
 
-        public static int[] Check_Result( SQLiteDatabase db , int COL_BAN , int[] check) {
+        public static int[] Check_Result(SQLiteDatabase db, int COL_BAN, int[] check) {
                 Cursor check_result = db.rawQuery("SELECT result1 , result2 ,result3 , result4 , result5 , result6 ," +
                         "result7 , result8 ,result9 ,result10 ,result11 , result12 FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
                 check_result.moveToLast();
 
-
-                Log.d("math","result1 : "+ check_result.getColumnIndex("result1"));
-
-                Log.d("math","getCount() : "+ check_result.getColumnIndex("result12"));
-                Log.d("math", "10 :" + check_result.getInt(10));
-                Log.d("math", "11 :" + check_result.getInt(11));
-
-
                 for (int i = 0; i < check.length; i++) {
                         check[i] = check_result.getInt(i);
                 }
-
-
                 return check;
         }
 
-        public void Check_Result_return(SQLiteDatabase db ,int COL_BAN , int[] check)
-        {
-              ContentValues values = new ContentValues();
+        public void Check_Result_return(SQLiteDatabase db, int COL_BAN, int[] check) {
+                ContentValues values = new ContentValues();
 
-              for(int i=1; i<=check.length; i++){
-                      values.put("result"+i,check[i-1]);
-              }
-                db.update("TOKUIF", values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
+                for (int i = 1; i <= check.length; i++) {
+                        values.put("result" + i, check[i - 1]);
+                }
+                db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
         }
 }
+
