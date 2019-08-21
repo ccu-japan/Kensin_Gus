@@ -50,7 +50,7 @@ public class Calc_class {
 
         int usage_integer_minutes_C = (int) Math.floor(row);
         String s = String.valueOf(row);
-        Matcher matcher = (Matcher) p.matcher(s);
+        Matcher matcher = p.matcher(s);
 
         if (matcher.matches()) {
             int row1 = (int) (row % 1.0 * 10);

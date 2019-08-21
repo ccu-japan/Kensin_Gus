@@ -1,6 +1,7 @@
 package com.example.kensin_gus;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -14,20 +15,23 @@ import java.util.Locale;
 public class Calendar_Select extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
 
     private TextView textView;
-
+    Intent CALENDAR_INTENT;
+    String str ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_layout);
 
         textView = findViewById(R.id.days);
+        CALENDAR_INTENT = new Intent();
+
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-        String str = String.format(Locale.US, "%d/%d/%d",year, monthOfYear+1, dayOfMonth);
-        textView.setText( str );
+        str = String.format(Locale.US, "%d/%d/%d", year, monthOfYear + 1, dayOfMonth);
+        textView.setText(str);
 
     }
 
@@ -36,4 +40,14 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
         newFragment.show(getSupportFragmentManager(), "datePicker");
 
     }
+
+    public void OK(View v) {
+        CALENDAR_INTENT.putExtra("CALENDAR_KEY",textView.getText().toString());
+        setResult(RESULT_OK,CALENDAR_INTENT);
+        finish();
+    }
+    public void Cancel(View v){
+        finish();
+    }
+
 }

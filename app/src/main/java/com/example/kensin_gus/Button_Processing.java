@@ -52,7 +52,7 @@ public class Button_Processing{
         Button kensin_button = mainActivity.findViewById(R.id.Kensin_Button);
         EditText Row1 = mainActivity.findViewById(R.id.Row1_Text);
         String TRUE = "1";
-        String FALSE = "";
+        String FALSE = " ";
         if(Row1.getText().toString().equals("0"))
         {
             Update_button.setBackgroundColor(Color.RED);

@@ -125,7 +125,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/ten_key_left"
+                android:id="@+id/ten_key_delete"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:background="@drawable/frame_draw"

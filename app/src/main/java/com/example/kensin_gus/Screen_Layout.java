@@ -45,33 +45,39 @@ public class Screen_Layout {
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
         static int SELECT_COM(MainActivity mainActivity, int COL_BAN , SQLiteDatabase db) {
 
-            Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+            Cursor c = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban ,/*i:10*/T_T_kensin  FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
             Cursor C_price  = db.rawQuery("SELECT /*i:0*/T_T_Billing ,/*i:1*/ G_C_tax FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
 
             c.moveToFirst();
             C_price.moveToFirst();
 
-            TextView name = mainActivity.findViewById(R.id.Name);
-            TextView code = mainActivity.findViewById(R.id.code);
+            TextView name1 = mainActivity.findViewById(R.id.Name1);
+            TextView name2 = mainActivity.findViewById(R.id.Name2);
+            TextView code1 = mainActivity.findViewById(R.id.code);
 
             TextView used = mainActivity.findViewById(R.id.Row1_Text2);
             EditText now  = mainActivity.findViewById(R.id.Row1_Text);
             TextView usaged = mainActivity.findViewById(R.id.Row2_Text);
             TextView Row3_Text = mainActivity.findViewById(R.id.Row3_Text);
             TextView Row3_2Text = mainActivity.findViewById(R.id.Row3_Text2);
+            TextView Date_now = mainActivity.findViewById(R.id.date_now);
 
             try {
                 String Row3_text = String.format("%,d", Integer.parseInt(C_price.getString(0)));
                 String Row3_text2 = String.format("%,d", Integer.parseInt(C_price.getString(1)));
 
-                name.setText(c.getString(0) + c.getString(1));
-                code.setText(c.getString(2) + " "  + c.getString(3));
+                name1.setText(c.getString(0));
+                name2.setText(c.getString(1));
+                code1.setText(c.getString(2) + " "  + c.getString(3));
                 used.setText(c.getString(4));
                 usaged.setText(c.getString(8));
                 now.setText(c.getString(5));
                 Row3_Text.setText(Row3_text);
                 Row3_2Text.setText(Row3_text2);
 
+                if(!c.getString(10).equals("0000/00/00")) {
+                    Date_now.setText(c.getString(10));
+                }
             }
             catch(IndexOutOfBoundsException e) {
                 if(COL_BAN < 1) {

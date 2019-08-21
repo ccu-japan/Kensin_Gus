@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class Kenshin_DB extends SQLiteOpenHelper {
-    public final static String DB_NAME = "Kensin_Gus.db";  // データベース名
+    public final static String DB_NAME = "Kensin.db";  // データベース名
     public final static int DB_VER = 1;  				// データベースのバージョン
     public SQLiteDatabase db;
 

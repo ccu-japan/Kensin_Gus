@@ -1,16 +1,20 @@
 package com.example.kensin_gus;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.db_library.Kenshin_DB;
 
@@ -25,6 +29,9 @@ public class Root_Search extends AppCompatActivity {
     // IndexOut_Flg         0 : 最初のデータを指す　1 : 最後のデータを指す 99 : 初期値
     // BUTTON_SELECT_FLG    0 : 1 :
     //---------------------------------------------------------------------------------------------
+    ConstraintLayout constraintLayout;
+    InputMethodManager inputMethodManager;
+
     Kenshin_DB kenshin_db = null;
     Cursor cursor = null;
     Intent root_search;
@@ -75,6 +82,9 @@ public class Root_Search extends AppCompatActivity {
         G_code         = findViewById(R.id.Code01);
         Group_K_jun_C = findViewById(R.id.Code02);
         Group_K_jun_G = findViewById(R.id.Code03);
+
+        constraintLayout =findViewById(R.id.root_search_layout);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         //---------------------------------------------------------------------------------------------
         // *** Root_Search 道順タスク　***
@@ -216,21 +226,22 @@ public class Root_Search extends AppCompatActivity {
     //
     //---------------------------------------------------------------------------------------------
     public void Select_Cursor() {
+
         switch (BUTTON_SELECT_FLG) {
             case SEARCH_FLG1:
-                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? ", new String[]{""});
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? ", new String[]{" "});
                 break;
 
             case SEARCH_FLG2:
-                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND customer = ? ", new String[]{"", customer_code.getText().toString()});
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND customer = ? ", new String[]{" ", customer_code.getText().toString()});
                 break;
 
             case SEARCH_FLG3:
-                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? ", new String[]{"", G_code.getText().toString()});
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? ", new String[]{" ", G_code.getText().toString()});
                 break;
 
             case SEARCH_FLG4:
-                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? AND customer = ? ", new String[]{"", Group_K_jun_C.getText().toString(), Group_K_jun_G.getText().toString()});
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? AND customer = ? ", new String[]{" ", Group_K_jun_C.getText().toString(), Group_K_jun_G.getText().toString()});
                 break;
 
             case EXCEPTION_FLG:
@@ -265,7 +276,8 @@ public class Root_Search extends AppCompatActivity {
 
         final TextView G_code = findViewById(R.id.G_code);
         final TextView K_jun = findViewById(R.id.K_jun);
-        final TextView Name = findViewById(R.id.Name);
+        final TextView Name1 = findViewById(R.id.Name1);
+        final TextView Name2 = findViewById(R.id.Name2);
         final TextView CustomCode = findViewById(R.id.CustomCode);
         final TextView P_name = findViewById(R.id.P_name);
 
@@ -289,12 +301,19 @@ public class Root_Search extends AppCompatActivity {
         try {
             G_code.setText(cursor_data_input[Array_Subscript_Vertical][0]);
             K_jun.setText(cursor_data_input[Array_Subscript_Vertical][1]);
-            Name.setText(cursor_data_input[Array_Subscript_Vertical][2] + cursor_data_input[Array_Subscript_Vertical][3]);
+            Name1.setText(cursor_data_input[Array_Subscript_Vertical][2]);
+            Name2.setText(cursor_data_input[Array_Subscript_Vertical][3]);
             CustomCode.setText(cursor_data_input[Array_Subscript_Vertical][4]);
             P_name.setText(cursor_data_input[Array_Subscript_Vertical][5]);
 
         } catch (ArrayIndexOutOfBoundsException e) {
             Log.d("", "配列外にでました");
         }
+    }
+    public  boolean onTouchEvent(MotionEvent event){
+        inputMethodManager.hideSoftInputFromWindow(constraintLayout.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        constraintLayout.requestFocus();
+
+        return false;
     }
 }

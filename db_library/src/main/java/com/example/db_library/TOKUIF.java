@@ -156,7 +156,7 @@ public class TOKUIF{
                 //-----------------------------------------------------------------------------------------------------------------------
                 AssetManager assetManager = context.getResources().getAssets();
                 try {
-                        InputStream inputStream = assetManager.open("TOKUIF_3.TSV");
+                        InputStream inputStream = assetManager.open("TOKUIF.TSV");
                         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                         BufferedReader buffer = new BufferedReader(inputStreamReader);
                         ContentValues contentValues = new ContentValues();
@@ -176,7 +176,7 @@ public class TOKUIF{
                                 contentValues.put(COL_CUSTOMER_NAME1, columnData[9]);
                                 contentValues.put(COL_CUSTOMER_NAME2, columnData[10]);
                                 contentValues.put(COL_GAS_PRICE_SECTION, columnData[11]);
-                                contentValues.put(COL_GAS_PRICE, columnData[12]);
+                                contentValues.put(COL_GAS_PRICE_TABLE, columnData[12]);
                                 contentValues.put(COL_UNIT_PRICE, Double.parseDouble(columnData[13]));
                                 contentValues.put(COL_STANDARD_USAGE, Double.parseDouble(columnData[14]));
                                 contentValues.put(COL_LAST_TIME_KENSIN, columnData[15]);
@@ -247,7 +247,7 @@ public class TOKUIF{
         //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
         //
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public void TAX_PRICE(String Price, String Tax, ContentValues values, SQLiteDatabase db, int COL_BAN) {
+        public void TAX_PRICE(String Price, String Tax, ContentValues values, SQLiteDatabase db, int COL_BAN , String T_kensin) {
                 Cursor cursor = db.rawQuery("SELECT/*i:0*/ G_T_rate ,/*i:1*/ S_price  , /*i:2*/M_C_price   ,/*i:3*/ A_price ," +
                         "/*i:4*/  G_price ,/*i:5*/  B_amount ,/*i:6*/ T_T_Billing ,/*i:7*/ G_C_tax ," +
                         "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  ,/*i:11*/P_flag " +
@@ -259,6 +259,7 @@ public class TOKUIF{
                 //-----------------------------------------------------------------------------------
                 int i_Price;
                 int i_Tax;
+
 
                 try {
                         Number number = NumberFormat.getInstance().parse(Price);
@@ -277,6 +278,7 @@ public class TOKUIF{
                         values.put("G_C_tax", i_Tax);
                         values.put("T_T_Billing", i_Price);
                         values.put("P_flag", P_flag);
+                        values.put("T_T_kensin",T_kensin);
                         db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
                 } catch (NumberFormatException e) {

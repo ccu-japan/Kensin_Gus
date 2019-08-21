@@ -14,50 +14,55 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.db_library.HYOF;
 import com.example.db_library.Kenshin_DB;
 import com.example.db_library.TOKUIF;
-
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    //---------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //
 // *** インスタンス化　***
 //
 // -------------------------------------------------------------------------------------------------
-    int COL_BAN = 0;
-    boolean check = false;
-    String Date = "";
-    int[] Check_Box = new int[12];
-    int RequestCode = 1000;
-    int root_search_Code = 2000;
-    int TEN_KEY_RESULT = 3000;
-    int CALENDAR_RESULT = 4000;
+    int[]   MULTIPLE_CHECKBOX   = new int[12];
+    int     CHECKBOX_RESULT     = 1000;
+    int     ROOT_SEARCH_RESULT  = 2000;
+    int     TEN_KEY_RESULT      = 3000;
+    int     CALENDAR_RESULT     = 4000;
+    int     COL_BAN              = 0;
 
-    TOKUIF tokuif = null;
-    Kenshin_DB kenshin_db = null;
-    Button_Processing button_processing ;
+    String TODAY    ;
+    boolean CHECK_FLG = false   ;
+
+    TOKUIF tokuif;
+    Kenshin_DB kenshin_db;
     Ten_key_Process ten_key_process;
+    Button_Processing button_processing ;
+    Screen_Layout.Main_Screen main_screen;
 
-    Button kensin_button ;
-    Button Down;
-    Button Up;
-    Button Update;
-    Button End;
-    Button Check;
-    Button root_search_button;
-    Button Calender_select;
+    LayoutInflater layoutInflater;
+    ContentValues VALUES;
+
+    Button KENSIN_BUTTON ;
+    Button DOWN_BUTTON;
+    Button UP_BUTTON;
+    Button FIXED_UNFIXED_BUTTON;
+    Button END_BUTTON;
+    Button CHECK_BUTTON;
+    Button ROOT_SEARCH_BUTTON;
+    Button CALENDER_SELECT_BUTTON;
+    Button OUT_PUT_BUTTON;
+    Button TSV_IMPORT_BUTTON;
 
 
-    EditText Row1 ;
-    TextView Row2 ;
-    TextView Row3 ;
+    EditText INPUT_NUMBER_EDIT;
+    TextView CURRENCT_USAGE_TEXT;
+    TextView CURRENCT_AMOUNT_TEXT;
+    TextView DAYS ;
 
 
     @Override
@@ -70,39 +75,40 @@ public class MainActivity extends AppCompatActivity {
         // *** インスタンス化　***
         //
         //-------------------------------------------------------------------------------------------
-        final ContentValues values = new ContentValues();
-        Button tsv_Import = findViewById(R.id.button6);
-        Down = findViewById(R.id.down);
-        Up = findViewById(R.id.up);
-        Update = findViewById(R.id.Update);
-        End = findViewById(R.id.end_app);
-        Check = findViewById(R.id.Check_Button);
-        root_search_button = findViewById(R.id.customer_Button);
-        kensin_button = findViewById(R.id.Kensin_Button);
-        Calender_select = findViewById(R.id.Calender_Button);
+        VALUES = new ContentValues();
+
+        DOWN_BUTTON   = findViewById(R.id.down);
+        UP_BUTTON      = findViewById(R.id.up);
+        END_BUTTON     = findViewById(R.id.end_app);
+        CHECK_BUTTON   = findViewById(R.id.Check_Button);
+        ROOT_SEARCH_BUTTON = findViewById(R.id.customer_Button);
+        TSV_IMPORT_BUTTON = findViewById(R.id.button6);
+        KENSIN_BUTTON       = findViewById(R.id.Kensin_Button);
+        CALENDER_SELECT_BUTTON     = findViewById(R.id.Calender_Button);
+        FIXED_UNFIXED_BUTTON = findViewById(R.id.Update);
+        OUT_PUT_BUTTON      = findViewById(R.id.OUT_PUT_BUTTON);
 
         kenshin_db = new Kenshin_DB(getApplicationContext());
         tokuif = new TOKUIF();
         ten_key_process = new Ten_key_Process();
 
-        final HYOF hyof = new HYOF();
         button_processing = new Button_Processing();
-        final Screen_Layout.Main_Screen main_screen = new Screen_Layout.Main_Screen();
-        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+        main_screen = new Screen_Layout.Main_Screen();
+        layoutInflater = LayoutInflater.from(this);
         final Dialog dialog = new Dialog();
 
-        Row1 = findViewById(R.id.Row1_Text);
-        Row1.setSelection(Row1.getText().length());
-        Row2 = findViewById(R.id.Row2_Text);
-        Row3 = findViewById(R.id.Row3_Text);
+        INPUT_NUMBER_EDIT = findViewById(R.id.Row1_Text);
+        INPUT_NUMBER_EDIT.setSelection(INPUT_NUMBER_EDIT.getText().length());
+        CURRENCT_USAGE_TEXT = findViewById(R.id.Row2_Text);
+        CURRENCT_AMOUNT_TEXT = findViewById(R.id.Row3_Text);
         final TextView Row3_2 = findViewById(R.id.Row3_Text2);
-
+        DAYS = findViewById(R.id.date_now);
 
         //-------------------------------------------------------------------------------------------
         //*** 今日の日付設定　
         //-------------------------------------------------------------------------------------------
 
-        Date = main_screen.Screen_Data(this, Date);
+        TODAY = main_screen.Screen_Data(this, TODAY);
 
         //-------------------------------------------------------------------------------------------
         //*** 全件削除を行いたい時に使う専用タスク
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         //テーブルが存在する場合　削除後　作成　（重複を防ぐため）
         //
         //-------------------------------------------------------------------------------------------
-        tsv_Import.setOnClickListener(new View.OnClickListener() {
+        TSV_IMPORT_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(MainActivity.this)
@@ -214,18 +220,18 @@ public class MainActivity extends AppCompatActivity {
         //COL_BAN = TOKUIFの連番と連動　COLBAN = 1 の時　TOKUIF.ban = 1 の人を指す
         //
         //-----------------------------------------------------------------------------------------------------------------
-        Down.setOnClickListener(new View.OnClickListener() {
+        DOWN_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String Usaged_now = Row1.getText().toString();
-                String Usaged_now2 = Row2.getText().toString();
-                String price = Row3.getText().toString();
+                String Usaged_now = INPUT_NUMBER_EDIT.getText().toString();
+                String Usaged_now2 = CURRENCT_USAGE_TEXT.getText().toString();
+                String price = CURRENCT_AMOUNT_TEXT.getText().toString();
                 String Tax = Row3_2.getText().toString();
 
 
-                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2, COL_BAN, Date);
-                tokuif.TAX_PRICE(price, Tax, values, kenshin_db.db, COL_BAN);
+                tokuif.Usaged(kenshin_db.db, Usaged_now, VALUES, Usaged_now2, COL_BAN, TODAY);
+                tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN,DAYS.getText().toString());
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
 
@@ -242,17 +248,17 @@ public class MainActivity extends AppCompatActivity {
         // *** UP : 選択ボタン判定 ***
         //
         //-----------------------------------------------------------------------------------------------------------------
-        Up.setOnClickListener(new View.OnClickListener() {
+        UP_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Usaged_now = Row1.getText().toString();
-                String Usaged_now2 = Row2.getText().toString();
-                String price = Row3.getText().toString();
+                String Usaged_now = INPUT_NUMBER_EDIT.getText().toString();
+                String Usaged_now2 = CURRENCT_USAGE_TEXT.getText().toString();
+                String price = CURRENCT_AMOUNT_TEXT.getText().toString();
                 String Tax = Row3_2.getText().toString();
 
 
-                tokuif.Usaged(kenshin_db.db, Usaged_now, values, Usaged_now2, COL_BAN, Date);
-                tokuif.TAX_PRICE(price, Tax, values, kenshin_db.db, COL_BAN);
+                tokuif.Usaged(kenshin_db.db, Usaged_now, VALUES, Usaged_now2, COL_BAN, TODAY);
+                tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN , DAYS.getText().toString());
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
                 COL_BAN--;
@@ -271,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         //
         //------------------------------------------------------------------------------------------------------------------
 
-        Row1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        INPUT_NUMBER_EDIT.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -279,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     ((InputMethodManager) Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(textView.getWindowToken(), 0);
                     try {
-                        Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1.getText().toString()), kenshin_db.db, COL_BAN));
+                        CURRENCT_USAGE_TEXT.setText(Calc_class.Calc_Used(Float.parseFloat(INPUT_NUMBER_EDIT.getText().toString()), kenshin_db.db, COL_BAN));
                         handled = true;
 
                     } catch (NumberFormatException e) {
@@ -303,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                 //
                 //-------------------------------------------------------------------------------------------------------
 
-                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row2.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
+                Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
                 return handled;
             }
 
@@ -314,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
         // ***** 金額テキスト　詳細ダイアログタスク *****
         //
         //-------------------------------------------------------------------------------------------------------
-        Row3.setOnClickListener(new View.OnClickListener() {
+        CURRENCT_AMOUNT_TEXT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.Dialog_SYOSAI(layoutInflater, MainActivity.this, kenshin_db.db, COL_BAN);
@@ -326,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         // ***** 検針ボタン　タスク *****
         //
         //-------------------------------------------------------------------------------------------------------
-        kensin_button.setOnClickListener(new View.OnClickListener() {
+        KENSIN_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                Intent TEN_KEY_INTENT = new Intent(getApplication(),Ten_key_Process.class);
@@ -340,14 +346,14 @@ public class MainActivity extends AppCompatActivity {
         // ***** 確定・未入力変更ボタンタスク *****
         //
         //-------------------------------------------------------------------------------------------------------
-        Update.setOnClickListener(new View.OnClickListener() {
+        FIXED_UNFIXED_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                check = button_processing.Check_task(Row1, Check, Update, kensin_button ,check);
+                CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON ,CHECK_FLG);
             }
         });
 
-        End.setOnClickListener(new View.OnClickListener() {
+        END_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 kenshin_db.close();
@@ -360,13 +366,13 @@ public class MainActivity extends AppCompatActivity {
         // ***** 道順ボタンタスク *****
         //
         //-------------------------------------------------------------------------------------------------------
-        root_search_button.setOnClickListener(new View.OnClickListener() {
+        ROOT_SEARCH_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     Intent root_search = new Intent(getApplication(), Root_Search.class);
                     root_search.setAction(Intent.ACTION_VIEW);
-                    startActivityForResult(root_search, root_search_Code);
+                    startActivityForResult(root_search, ROOT_SEARCH_RESULT);
                 } catch (RuntimeException e) {
                     Log.d("", "error");
                 }
@@ -380,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
         // ***** 日付ボタンタスク *****
         //
         //-------------------------------------------------------------------------------------------------------
-        Calender_select.setOnClickListener(new View.OnClickListener() {
+        CALENDER_SELECT_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent calender_intent = new Intent(getApplication(),Calendar_Select.class);
@@ -396,40 +402,60 @@ public class MainActivity extends AppCompatActivity {
         // ***** 点検ボタンタスク *****
         //
         //-------------------------------------------------------------------------------------------------------
-        Check.setOnClickListener(new View.OnClickListener() {
+        CHECK_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Check_Box = TOKUIF.Check_Result(kenshin_db.db, COL_BAN, Check_Box);
+                MULTIPLE_CHECKBOX = TOKUIF.Check_Result(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX);
 
                 Intent check_activity = new Intent(getApplication(), CheckActivity.class);
 
-                check_activity.putExtra("CHECK_KEY", Check_Box);
+                check_activity.putExtra("CHECK_KEY", MULTIPLE_CHECKBOX);
                 check_activity.setAction(Intent.ACTION_VIEW);
-                startActivityForResult(check_activity, RequestCode);
+                startActivityForResult(check_activity, CHECKBOX_RESULT);
             }
         });
+
+        //--------------------------------------------------------------------------------------------------------
+        //
+        // ***** 出力ボタンタスク *****
+        //
+        //--------------------------------------------------------------------------------------------------------
+        OUT_PUT_BUTTON.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
+    protected void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(REQUEST_CODE, resultCode, intent);
 
-        if (resultCode == RESULT_OK && requestCode == RequestCode && null != intent) {
-            Check_Box = intent.getIntArrayExtra("CHECK_KEY");
-            tokuif.Check_Result_return(kenshin_db.db, COL_BAN, Check_Box);
+        if (resultCode == RESULT_OK && REQUEST_CODE ==  CHECKBOX_RESULT  && null != intent) {
+            MULTIPLE_CHECKBOX = intent.getIntArrayExtra("CHECK_KEY");
+            tokuif.Check_Result_return(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX);
 
         }
 
-        if (resultCode== RESULT_OK && requestCode == root_search_Code && null != intent) {
+        if (resultCode== RESULT_OK && REQUEST_CODE == ROOT_SEARCH_RESULT && null != intent) {
             COL_BAN = intent.getIntExtra("ROOT_KEY", 0);
             COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
             button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
         }
 
-        if(resultCode == RESULT_OK && requestCode == TEN_KEY_RESULT && null != intent){
-            Row1.setText(intent.getStringExtra("RESULT_KEY"));
-            Row2.setText(Calc_class.Calc_Used(Float.parseFloat(Row1.getText().toString()), kenshin_db.db, COL_BAN));
-            Calc_class.Calc_HYOF_PRICE(Float.parseFloat(Row2.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
+        if(resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent){
+            INPUT_NUMBER_EDIT.setText(intent.getStringExtra("RESULT_KEY"));
+            CURRENCT_USAGE_TEXT.setText(Calc_class.Calc_Used(Float.parseFloat(INPUT_NUMBER_EDIT.getText().toString()), kenshin_db.db, COL_BAN));
+            Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
+
+        }
+
+        if(resultCode == RESULT_OK && REQUEST_CODE == CALENDAR_RESULT && null != intent){
+            TODAY = intent.getStringExtra("CALENDAR_KEY");
+            DAYS.setText(TODAY);
 
         }
     }

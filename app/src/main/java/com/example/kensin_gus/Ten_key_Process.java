@@ -14,7 +14,9 @@ public class Ten_key_Process extends AppCompatActivity {
     EditText ten_key_edit;
     Button button;
     Button ten_key_OK;
+    Button DELETE_KEY;
     Intent TEN_KEY_INTENT;
+    StringBuilder stringBuilder;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class Ten_key_Process extends AppCompatActivity {
         ten_key_edit = findViewById(R.id.ten_key_edit);
         button = findViewById(R.id.button);
         ten_key_OK = findViewById(R.id.ten_key_OK);
+        DELETE_KEY = findViewById(R.id.ten_key_delete);
 
         findViewById(R.id.ten_key_one).setOnClickListener(buttonNumberListener);
         findViewById(R.id.ten_key_two).setOnClickListener(buttonNumberListener);
@@ -52,6 +55,19 @@ public class Ten_key_Process extends AppCompatActivity {
             }
         });
 
+        DELETE_KEY.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
+                    stringBuilder.setLength(stringBuilder.length() - 1);
+                    ten_key_edit.setText(stringBuilder);
+                }catch (StringIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     View.OnClickListener buttonNumberListener = new View.OnClickListener() {
@@ -60,7 +76,17 @@ public class Ten_key_Process extends AppCompatActivity {
             Button button = (Button) view;
 
             ten_key_edit.append(button.getText());
+            if(ten_key_edit.length() == 1 && ten_key_edit.getText().toString().equals("0")) {
+                try {
+                    stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
+                    stringBuilder.setLength(stringBuilder.length() - 1);
+                    ten_key_edit.setText(stringBuilder);
+                }catch (StringIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+            }
         }
     };
+
 
 }

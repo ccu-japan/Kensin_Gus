@@ -6,97 +6,80 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/kotei"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Update"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Update">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:id="@+id/date_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/date"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/Name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/kotei2"
+        app:layout_constraintStart_toEndOf="@+id/kotei2"
+        app:layout_constraintTop_toTopOf="@+id/kotei2" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/kotei"
-                    android:textSize="24sp" />
+    <TextView
+        android:id="@+id/kotei2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/kotei2"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="RtlHardcoded" />
 
-                <TextView
-                    android:id="@+id/date_now"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/date"
-                    android:textSize="24sp" />
-            </TableRow>
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 
-            <TableRow
-                android:id="@+id/table2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/kotei2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/kotei2"
-                    android:textSize="24sp"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/Name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/c_name"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/table3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="@string/kotei3"
-                    android:textSize="24sp"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textSize="24sp" />
-            </TableRow>
-
-        </TableLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
+        android:text="@string/kotei3"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/kotei2"
+        app:layout_constraintTop_toBottomOf="@+id/Name2"
+        tools:ignore="RtlHardcoded" />
 
     <TableLayout
         android:id="@+id/tablelayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/code"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/code">
 
         <TableRow
             android:id="@+id/Row1"
@@ -121,13 +104,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:autofillHints=""
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:clickable="false"
                 android:ellipsize="end"
                 android:ems="5"
                 android:focusable="true"
                 android:gravity="end"
-                android:hint="数値を入力"
+                android:hint="数値を入力 "
                 android:imeOptions="actionGo"
                 android:inputType="numberDecimal"
                 android:maxLength="8"
@@ -143,7 +126,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:autofillHints=""
-                android:ems="5"
+                android:ems="4"
                 android:focusable="false"
                 android:gravity="center"
                 android:textSize="24sp"
@@ -188,7 +171,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:autofillHints=""
-                android:ems="5"
+                android:ems="4"
                 android:focusable="false"
                 android:text="@string/Tax"
                 android:textSize="24sp"
@@ -233,7 +216,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:autofillHints=""
-                android:ems="5"
+                android:ems="4"
                 android:focusable="false"
                 android:gravity="center"
                 android:textSize="24sp"
@@ -247,7 +230,7 @@
         android:id="@+id/tableLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.512"
@@ -264,7 +247,7 @@
                 android:id="@+id/Kensin_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei9"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -273,7 +256,7 @@
                 android:id="@+id/customer_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei11"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -282,7 +265,7 @@
                 android:id="@+id/Group_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei12"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -291,7 +274,7 @@
                 android:id="@+id/Calender_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei13"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -300,7 +283,7 @@
                 android:id="@+id/end_app"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei14"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -316,16 +299,16 @@
                 android:id="@+id/button6"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei15"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/OUT_PUT_BUTTON"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei16"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -334,7 +317,7 @@
                 android:id="@+id/up"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/up"
@@ -346,7 +329,7 @@
                 android:id="@+id/down"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/down"
@@ -358,7 +341,7 @@
                 android:id="@+id/Check_Button"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_style"
+                android:background="@drawable/frame_draw"
                 android:text="@string/kotei17"
                 android:textSize="20sp"
                 tools:ignore="ButtonStyle" />
@@ -369,7 +352,7 @@
 
     <Button
         android:id="@+id/Update"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:background="@android:color/background_dark"
@@ -378,5 +361,15 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/Name1"
+        app:layout_constraintStart_toEndOf="@+id/kotei2"
+        app:layout_constraintTop_toBottomOf="@+id/Name1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
