@@ -1,21 +1,36 @@
 package com.example.db_library;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Objects;
 
-public class TOKUIF{
+public class TOKUIF {
+
+        private File file;
+         private File path;
+         private String fileName = "TOKUIF.TSV";
+         private String OUT_OUT_FILE_NAME = "RCV_TOKUIF.TSV";
+
+
         //---------------------------------------------------------------------------------------------------------------------
         //
         // 　カラム名定義
@@ -148,16 +163,27 @@ public class TOKUIF{
         }
 
 
+        @SuppressLint("UseCheckPermission")
         public void TOKUIF_CSV(SQLiteDatabase db, Context context) {
                 //-----------------------------------------------------------------------------------------------------------------------
                 //
                 // *** CSV読込 ***
                 //
                 //-----------------------------------------------------------------------------------------------------------------------
-                AssetManager assetManager = context.getResources().getAssets();
-                try {
-                        InputStream inputStream = assetManager.open("TOKUIF.TSV");
-                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+                try{
+                        if(Build.VERSION.SDK_INT >=29) {
+                                path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+                        }else {
+                                path = Environment.getExternalStorageDirectory();
+                                Log.d("file_path","API29以下です");
+                        }
+                        file = new File(path, fileName);
+
+                        FileInputStream fileInputStream = new FileInputStream(file);
+
+
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
                         BufferedReader buffer = new BufferedReader(inputStreamReader);
                         ContentValues contentValues = new ContentValues();
                         String line;
@@ -288,6 +314,9 @@ public class TOKUIF{
                 }
         }
 
+
+
+
         public static int[] Check_Result(SQLiteDatabase db, int COL_BAN, int[] check) {
                 Cursor check_result = db.rawQuery("SELECT result1 , result2 ,result3 , result4 , result5 , result6 ," +
                         "result7 , result8 ,result9 ,result10 ,result11 , result12 FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
@@ -299,6 +328,9 @@ public class TOKUIF{
                 return check;
         }
 
+
+
+
         public void Check_Result_return(SQLiteDatabase db, int COL_BAN, int[] check) {
                 ContentValues values = new ContentValues();
 
@@ -308,5 +340,51 @@ public class TOKUIF{
                 db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
         }
-}
 
+
+
+
+
+
+        public void OUT_PUT_TSV(SQLiteDatabase db ){
+
+
+                Cursor cursor = db.rawQuery("SELECT * FROM TOKUIF WHERE  P_flag = ? ", new String[]{"1"});
+                String[][] RCV = new String[cursor.getCount()][cursor.getColumnCount()];
+                int com_count;
+                int hum_count2=0;
+                try {
+                        file = new File(path,OUT_OUT_FILE_NAME);
+                        //file.delete();
+                        FileOutputStream fileOutputStream = new FileOutputStream(file,true);
+                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+                        BufferedWriter RCV_TOKUIF = new BufferedWriter(outputStreamWriter);
+
+
+                        if (cursor.moveToLast()) {
+                                do {
+                                        Log.d("math", String.valueOf(cursor.getColumnCount()));
+                                        for (com_count = 0; com_count < cursor.getColumnCount(); com_count++) {
+                                                RCV[hum_count2][com_count] = cursor.getString(com_count);
+                                                RCV_TOKUIF.write(RCV[hum_count2][com_count]);
+                                                Log.d("math",RCV[hum_count2][com_count]);
+                                                if(com_count < RCV.length){
+                                                     //   RCV_TOKUIF.write(RCV[hum_count2][com_count]);
+                                                }
+                                        }
+                                        RCV_TOKUIF.newLine();
+                                        hum_count2++;
+
+                                } while (cursor.moveToNext());
+                                RCV_TOKUIF.flush();
+
+                        }
+                }catch (SQLException e){
+                        e.printStackTrace();
+                }catch (IOException e){
+                        e.printStackTrace();
+                }
+
+
+        }
+}

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     int     COL_BAN              = 0;
 
     String TODAY    ;
+    String TABLE_COUNT;
     boolean CHECK_FLG = false   ;
 
     TOKUIF tokuif;
@@ -111,12 +112,6 @@ public class MainActivity extends AppCompatActivity {
         TODAY = main_screen.Screen_Data(this, TODAY);
 
         //-------------------------------------------------------------------------------------------
-        //*** 全件削除を行いたい時に使う専用タスク
-        //-------------------------------------------------------------------------------------------
-
-        //kenshin_db.db.execSQL("DROP TABLE IF EXISTS TOKUIF");
-
-        //-------------------------------------------------------------------------------------------
         //
         //*** データベースの存在確認　getDatabasePath
         //
@@ -134,11 +129,8 @@ public class MainActivity extends AppCompatActivity {
         //*** 起動後、データがない場合、ファイル読込
         //
         //-------------------------------------------------------------------------------------------
-        if (!this.getDatabasePath(Kenshin_DB.DB_NAME).exists()) {
-            kenshin_db.db.execSQL("DROP TABLE IF EXISTS TOKUIF");
-            kenshin_db.db.execSQL("DROP TABLE IF EXISTS HYOF");
-            kenshin_db.onCreate(kenshin_db.db);
-        }
+        TABLE_COUNT ="SELECT TABLECOUNT(*) FROM TOKUIF";
+
 
         //-------------------------------------------------------------------------------------------
         //
@@ -423,6 +415,43 @@ public class MainActivity extends AppCompatActivity {
         OUT_PUT_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("確認ダイアログ")
+                        .setMessage("CSVを出力しますか？")
+                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int idx) {
+                                new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
+                                        .setMessage("CSVの取込をｷｬﾝｾﾙしました")
+                                        .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                //---------------------------------------------------------------------
+                                                // *取込キャンセル後の判定
+                                                //---------------------------------------------------------------------
+                                            }
+                                        }).show();
+
+                            }
+                        }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //-----------------------------------------------------------------------------------------------
+                        // *** TSV出力タスク
+                        //-----------------------------------------------------------------------------------------------
+                        tokuif.OUT_PUT_TSV(kenshin_db.db);
+
+                        new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
+                                .setMessage("CSVを出力しました")
+                                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                }).show();
+                    }
+                }).show();
 
             }
         });
