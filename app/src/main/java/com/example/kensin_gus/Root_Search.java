@@ -2,6 +2,7 @@ package com.example.kensin_gus;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -107,34 +109,29 @@ public class Root_Search extends AppCompatActivity {
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG1;
                 Select_Cursor();
-                if (cursor_data_input[0][0] != null) {
-                    Cursor_VIEW();
-                }
-            }
-        });
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  G_code_Button クラス  ***
-        //
-        // BUTTON_SELECT_FLG = 2
-        //
-        // ---------------------------------------------------------------------------------------------
-        Group_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BUTTON_SELECT_FLG = SEARCH_FLG3;
-                Select_Cursor();
-                if (cursor_data_input[0][0] != null) {
-                    Cursor_VIEW();
-                }
-            }
-        });
 
+                if(cursor_data_input.length > 0) {
+                    if (cursor_data_input[0][0] != null) {
+                        Cursor_VIEW();
+                    }
+                }
+                else{
+                    new AlertDialog.Builder(Root_Search.this)
+                            .setTitle("未検針データダイアログ")
+                            .setMessage("\nデータがありません")
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                }
+            }
+        });
         //---------------------------------------------------------------------------------------------
         //
         // ***  customer_Button クラス  ***
         //
-        // BUTTON_SELECT_FLG = 3
+        // BUTTON_SELECT_FLG = 2
         //
         // ---------------------------------------------------------------------------------------------
         customer_Button.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +139,51 @@ public class Root_Search extends AppCompatActivity {
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG2;
                 Select_Cursor();
-                if (cursor_data_input[0][0] != null) {
-                    Cursor_VIEW();
+                if(cursor_data_input.length > 0) {
+                    if (cursor_data_input[0][0] != null) {
+                        Cursor_VIEW();
+                    }
+                }
+                else{
+                    new AlertDialog.Builder(Root_Search.this)
+                            .setTitle("得意先コードダイアログ")
+                            .setMessage("\nデータがありません")
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                }
+            }
+        });
+
+
+        //---------------------------------------------------------------------------------------------
+        //
+        // ***  Group_Button クラス  ***
+        //
+        // BUTTON_SELECT_FLG = 3
+        //
+        // ---------------------------------------------------------------------------------------------
+        Group_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BUTTON_SELECT_FLG = SEARCH_FLG3;
+                Select_Cursor();
+                if(cursor_data_input.length > 0) {
+                    if (cursor_data_input[0][0] != null) {
+                        Cursor_VIEW();
+                    }
+                }
+                else{
+                    new AlertDialog.Builder(Root_Search.this)
+                            .setTitle("群コードダイアログ")
+                            .setMessage("\nデータがありません")
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
                 }
             }
         });
@@ -160,8 +200,20 @@ public class Root_Search extends AppCompatActivity {
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG4;
                 Select_Cursor();
-                if (cursor_data_input[0][0] != null) {
-                    Cursor_VIEW();
+                if(cursor_data_input.length > 0) {
+                    if (cursor_data_input[0][0] != null) {
+                        Cursor_VIEW();
+                    }
+                }
+                else{
+                    new AlertDialog.Builder(Root_Search.this)
+                            .setTitle("群コード・得意先コードダイアログ")
+                            .setMessage("\nデータがありません")
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
                 }
             }
         });
@@ -200,19 +252,20 @@ public class Root_Search extends AppCompatActivity {
         OK_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 try {
-                    int cursor_data = Integer.parseInt(cursor_data_input[Array_Subscript_Vertical][6]);
-                    root_search.putExtra("ROOT_KEY", cursor_data);
-                    setResult(RESULT_OK, root_search);
+                    if (cursor_data_input.length == 0) {
+                        finish();
+                    }
+                    else {
+                        int cursor_data = Integer.parseInt(cursor_data_input[Array_Subscript_Vertical][6]);
+                        root_search.putExtra("ROOT_KEY", cursor_data);
+                        setResult(RESULT_OK, root_search);
+                        finish();
+                    }
+                } catch (NullPointerException e) {
                     finish();
-                }catch (NullPointerException e)
-                {
-                    finish();
-                }
-                catch (NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     finish();
                 }
             }

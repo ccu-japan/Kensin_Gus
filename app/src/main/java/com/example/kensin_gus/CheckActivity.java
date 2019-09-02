@@ -59,17 +59,22 @@ public class CheckActivity extends AppCompatActivity {
         Result.add(Result10);
         Result.add(Result11);
         Result.add(Result12);
+;
 
         for (int i=0; i<check.length; i++) {
-            if(check[i] == 1){
-                Result.get(i).setChecked(true);
+            if (Result.get(i).getText().toString().equals("")) {
+                Result.get(i).setEnabled(false);
+            } else {
+                if (check[i] == 1) {
+                    Result.get(i).setChecked(true);
+                } else {
+                    Result.get(i).setChecked(false);
+                }
             }
-            else
-            {
-                Result.get(i).setChecked(false);
-            }
-
         }
+
+
+
 
         Check_OK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +90,7 @@ public class CheckActivity extends AppCompatActivity {
                 finish();
             }
         });
+
 
 
     }

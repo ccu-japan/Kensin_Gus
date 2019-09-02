@@ -4,34 +4,38 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 public class HYOF {
-    public static final String DB_TABLE = " HYOF "
+    private static final String DB_TABLE = " HYOF "
             ;
-    public static final String COL_STX = "stx";
-    public static final String COL_TYPE = "type";
-    public static final String COL_COMPANY_CODE = "company_code";
-    public static final String COL_PRICE_LIST_CODE = "price_list_code";
-    public static final String COL_USAGE_INTEGER_MINUTES = "usage_integer_minutes";
-    public static final String COL_C_POINT_0 = "c_point_0";
-    public static final String COL_C_POINT_1 = "c_point_1";
-    public static final String COL_C_POINT_2 = "c_point_2";
-    public static final String COL_C_POINT_3 = "c_point_3";
-    public static final String COL_C_POINT_4 = "c_point_4";
-    public static final String COL_C_POINT_5 = "c_point_5";
-    public static final String COL_C_POINT_6 = "c_point_6";
-    public static final String COL_C_POINT_7 = "c_point_7";
-    public static final String COL_C_POINT_8 = "c_point_8";
-    public static final String COL_C_POINT_9 = "c_point_9";
-    public static final String COL_R_VALUE_MAX = "r_value_max";
-    public static final String COL_ADD_MONEY = "add_money";
-    public static final String COL_FILLER = "feller";
-    public static final String COL_ETX = "etx";
-    public static final String COL_END_CODE = "end_code";
+    private static final String COL_STX = "stx";
+    private static final String COL_TYPE = "type";
+    private static final String COL_COMPANY_CODE = "company_code";
+    private static final String COL_PRICE_LIST_CODE = "price_list_code";
+    private static final String COL_USAGE_INTEGER_MINUTES = "usage_integer_minutes";
+    private static final String COL_C_POINT_0 = "c_point_0";
+    private static final String COL_C_POINT_1 = "c_point_1";
+    private static final String COL_C_POINT_2 = "c_point_2";
+    private static final String COL_C_POINT_3 = "c_point_3";
+    private static final String COL_C_POINT_4 = "c_point_4";
+    private static final String COL_C_POINT_5 = "c_point_5";
+    private static final String COL_C_POINT_6 = "c_point_6";
+    private static final String COL_C_POINT_7 = "c_point_7";
+    private static final String COL_C_POINT_8 = "c_point_8";
+    private static final String COL_C_POINT_9 = "c_point_9";
+    private static final String COL_R_VALUE_MAX = "r_value_max";
+    private static final String COL_ADD_MONEY = "add_money";
+    private static final String COL_FILLER = "feller";
+    private static final String COL_ETX = "etx";
+    private static final String COL_END_CODE = "end_code";
 
     public void CreateTBL_HYOF(SQLiteDatabase db) {
         String CreateTbl = "CREATE TABLE " + HYOF.DB_TABLE + "("
@@ -65,9 +69,20 @@ public class HYOF {
         // *** CSV読込 ***
         //-----------------------------------------------------------------------------------------------------------------------
         AssetManager assetManager = context.getResources().getAssets();
+        File path;
         try {
-            InputStream inputStream = assetManager.open("HYOF.TSV");
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            if (Build.VERSION.SDK_INT >= 29) {
+                path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+            } else {
+                path = Environment.getExternalStorageDirectory();
+
+                Log.d("file_path", "API29以下です");
+        }
+            String fileName = "HYOF.TSV";
+            File file = new File(path,fileName);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader buffer = new BufferedReader(inputStreamReader);
             ContentValues contentValues = new ContentValues();
             String line;

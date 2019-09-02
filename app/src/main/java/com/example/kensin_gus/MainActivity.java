@@ -1,11 +1,14 @@
 package com.example.kensin_gus;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,41 +17,59 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.db_library.HYOF;
 import com.example.db_library.Kenshin_DB;
 import com.example.db_library.TOKUIF;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-//--------------------------------------------------------------------------------------------------
-//
-// *** インスタンス化　***
-//
-// -------------------------------------------------------------------------------------------------
-    int[]   MULTIPLE_CHECKBOX   = new int[12];
-    int     CHECKBOX_RESULT     = 1000;
-    int     ROOT_SEARCH_RESULT  = 2000;
-    int     TEN_KEY_RESULT      = 3000;
-    int     CALENDAR_RESULT     = 4000;
-    int     COL_BAN              = 0;
 
-    String TODAY    ;
-    String TABLE_COUNT;
-    boolean CHECK_FLG = false   ;
+    //--------------------------------------------------------------------------------------------------
+    //
+    // *** パーミッション制御　***
+    //
+    // -------------------------------------------------------------------------------------------------
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    //--------------------------------------------------------------------------------------------------
+    //
+    // *** インスタンス化　***
+    //
+    // -------------------------------------------------------------------------------------------------
+    int[] MULTIPLE_CHECKBOX = new int[12];
+    int CHECKBOX_RESULT     = 1000;
+    int ROOT_SEARCH_RESULT = 2000;
+    int TEN_KEY_RESULT = 3000;
+    int CALENDAR_RESULT = 4000;
+    int COL_BAN = 0;
+
+    String TODAY;
+    boolean CHECK_FLG = false;
+    Cursor cursor;
 
     TOKUIF tokuif;
+    HYOF hyof;
     Kenshin_DB kenshin_db;
     Ten_key_Process ten_key_process;
-    Button_Processing button_processing ;
+    Button_Processing button_processing;
     Screen_Layout.Main_Screen main_screen;
 
     LayoutInflater layoutInflater;
     ContentValues VALUES;
 
-    Button KENSIN_BUTTON ;
+    Button KENSIN_BUTTON;
     Button DOWN_BUTTON;
     Button UP_BUTTON;
     Button FIXED_UNFIXED_BUTTON;
@@ -59,11 +80,10 @@ public class MainActivity extends AppCompatActivity {
     Button OUT_PUT_BUTTON;
     Button TSV_IMPORT_BUTTON;
 
-
     EditText INPUT_NUMBER_EDIT;
     TextView CURRENCT_USAGE_TEXT;
     TextView CURRENCT_AMOUNT_TEXT;
-    TextView DAYS ;
+    TextView DAYS;
 
 
     @Override
@@ -78,16 +98,16 @@ public class MainActivity extends AppCompatActivity {
         //-------------------------------------------------------------------------------------------
         VALUES = new ContentValues();
 
-        DOWN_BUTTON   = findViewById(R.id.down);
-        UP_BUTTON      = findViewById(R.id.up);
-        END_BUTTON     = findViewById(R.id.end_app);
-        CHECK_BUTTON   = findViewById(R.id.Check_Button);
+        DOWN_BUTTON = findViewById(R.id.down);
+        UP_BUTTON = findViewById(R.id.up);
+        END_BUTTON = findViewById(R.id.end_app);
+        CHECK_BUTTON = findViewById(R.id.Check_Button);
         ROOT_SEARCH_BUTTON = findViewById(R.id.customer_Button);
         TSV_IMPORT_BUTTON = findViewById(R.id.button6);
-        KENSIN_BUTTON       = findViewById(R.id.Kensin_Button);
-        CALENDER_SELECT_BUTTON     = findViewById(R.id.Calender_Button);
+        KENSIN_BUTTON = findViewById(R.id.Kensin_Button);
+        CALENDER_SELECT_BUTTON = findViewById(R.id.Calender_Button);
         FIXED_UNFIXED_BUTTON = findViewById(R.id.Update);
-        OUT_PUT_BUTTON      = findViewById(R.id.OUT_PUT_BUTTON);
+        OUT_PUT_BUTTON = findViewById(R.id.OUT_PUT_BUTTON);
 
         kenshin_db = new Kenshin_DB(getApplicationContext());
         tokuif = new TOKUIF();
@@ -105,42 +125,54 @@ public class MainActivity extends AppCompatActivity {
         final TextView Row3_2 = findViewById(R.id.Row3_Text2);
         DAYS = findViewById(R.id.date_now);
 
+
+        //-------------------------------------------------------------------------------------------
+        //
+        // *** パーミッション制御　***
+        //
+        // ------------------------------------------------------------------------------------------
+        int i=0;
+            int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            }
+
         //-------------------------------------------------------------------------------------------
         //*** 今日の日付設定　
         //-------------------------------------------------------------------------------------------
 
-        TODAY = main_screen.Screen_Data(this, TODAY);
+        TODAY = main_screen.Screen_Data(this);
 
         //-------------------------------------------------------------------------------------------
         //
         //*** データベースの存在確認　getDatabasePath
         //
         //-------------------------------------------------------------------------------------------
+        // deleteDatabase(Kenshin_DB.DB_NAME);
         if (!this.getDatabasePath(Kenshin_DB.DB_NAME).exists()) {
             new Kenshin_DB(this);
-            Log.d("Database", "データベースを作成しました。");
-        } else {
-            Log.d("Database", "既に存在しています");
         }
-
-
-        //-------------------------------------------------------------------------------------------
-        //
-        //*** 起動後、データがない場合、ファイル読込
-        //
-        //-------------------------------------------------------------------------------------------
-        TABLE_COUNT ="SELECT TABLECOUNT(*) FROM TOKUIF";
-
 
         //-------------------------------------------------------------------------------------------
         //
         //*** メイン画面、テキスト出力(COL_BAN : 1 )
         //
         //-------------------------------------------------------------------------------------------
+        cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ",null);       //TOKUIFテーブルのデータを取得
 
-        COL_BAN++;
-        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-        button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+        if(cursor.getCount() > 0) {     //データがあればレイアウト入力　ない場合はスルー
+            cursor.moveToFirst();
+            COL_BAN = Integer.parseInt(cursor.getString(0));
+            COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
+            button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+
+        }
+        else{
+            INPUT_NUMBER_EDIT.setEnabled(false);
+            KENSIN_BUTTON.setEnabled(false);
+            CHECK_BUTTON.setEnabled(false);
+
+        }
 
         //-------------------------------------------------------------------------------------------
         //
@@ -156,12 +188,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("確認ダイアログ")
-                        .setMessage("CSVを取り込みますか？")
+                        .setMessage("TSVを取り込みますか？")
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int idx) {
                                 new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
-                                        .setMessage("CSVの取込をｷｬﾝｾﾙしました")
+                                        .setMessage("TSVの取込をｷｬﾝｾﾙしました")
                                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -179,15 +211,13 @@ public class MainActivity extends AppCompatActivity {
                         //-----------------------------------------------------------------------------------------------
                         kenshin_db.allDelete("TOKUIF");
                         kenshin_db.allDelete("HYOF");
-                        Log.d("Cursor", "データを消去します");
 
                         tokuif.TOKUIF_CSV(kenshin_db.db, MainActivity.this);
                         new HYOF().HYOF_CSV(kenshin_db.db, MainActivity.this);
 
-                        Log.d("Cursor", "CSVを読み込みました");
 
                         new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
-                                .setMessage("CSVを取り込みました")
+                                .setMessage("TSVを取り込みました")
                                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -196,7 +226,9 @@ public class MainActivity extends AppCompatActivity {
                                         //*** 取り込んだ後のテキスト処理 ***
                                         //
                                         //--------------------------------------------------------------------------------
-                                        COL_BAN = 1;
+                                        cursor = kenshin_db.db.rawQuery(" SELECT ban FROM TOKUIF ",null);
+                                        cursor.moveToFirst();
+                                        COL_BAN = Integer.parseInt(cursor.getString(0));
                                         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
                                         button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
@@ -221,17 +253,25 @@ public class MainActivity extends AppCompatActivity {
                 String price = CURRENCT_AMOUNT_TEXT.getText().toString();
                 String Tax = Row3_2.getText().toString();
 
-
                 tokuif.Usaged(kenshin_db.db, Usaged_now, VALUES, Usaged_now2, COL_BAN, TODAY);
-                tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN,DAYS.getText().toString());
+                tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN, DAYS.getText().toString());
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
-
-                COL_BAN++;
+                cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ",null);       //TOKUIFテーブルのデータを取得
+                cursor.moveToFirst();
+                        while (COL_BAN != cursor.getInt(0)) {
+                        cursor.moveToNext();
+                    }
+                    cursor.moveToNext();
+                try {
+                    COL_BAN = cursor.getInt(0);
+                }
+                catch (IndexOutOfBoundsException e)
+                {
+                    COL_BAN = COL_BAN + 1;
+                }
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
-
-                Log.d("COL_BAN", String.valueOf(COL_BAN));
 
             }
         });
@@ -248,17 +288,24 @@ public class MainActivity extends AppCompatActivity {
                 String price = CURRENCT_AMOUNT_TEXT.getText().toString();
                 String Tax = Row3_2.getText().toString();
 
-
                 tokuif.Usaged(kenshin_db.db, Usaged_now, VALUES, Usaged_now2, COL_BAN, TODAY);
-                tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN , DAYS.getText().toString());
+                tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN, DAYS.getText().toString());
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
-                COL_BAN--;
+                cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ",null);
+                cursor.moveToFirst();
+                    while (COL_BAN != Integer.parseInt(cursor.getString(0))){
+                        cursor.moveToNext();
+                    }
+                cursor.moveToPrevious();
+                try {
+                    COL_BAN = Integer.parseInt(cursor.getString(0));
+
+                }catch (IndexOutOfBoundsException e){
+                    COL_BAN = -1;
+                }
                 COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-
                 button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
-
-                Log.d("COL_BAN", String.valueOf(COL_BAN));
 
             }
         });
@@ -271,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
         INPUT_NUMBER_EDIT.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
+            @SuppressLint("NewApi")
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean handled = false;
@@ -327,9 +375,9 @@ public class MainActivity extends AppCompatActivity {
         KENSIN_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent TEN_KEY_INTENT = new Intent(getApplication(),Ten_key_Process.class);
-               TEN_KEY_INTENT.setAction(Intent.ACTION_VIEW);
-               startActivityForResult(TEN_KEY_INTENT,TEN_KEY_RESULT);
+                Intent TEN_KEY_INTENT = new Intent(getApplication(), Ten_key_Process.class);
+                TEN_KEY_INTENT.setAction(Intent.ACTION_VIEW);
+                startActivityForResult(TEN_KEY_INTENT, TEN_KEY_RESULT);
             }
         });
 
@@ -341,9 +389,15 @@ public class MainActivity extends AppCompatActivity {
         FIXED_UNFIXED_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON ,CHECK_FLG);
+                CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON, CHECK_FLG);
             }
         });
+
+        //--------------------------------------------------------------------------------------------------------
+        //
+        // ***** 終了ボタンタスク *****
+        //
+        //-------------------------------------------------------------------------------------------------------
 
         END_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
                     root_search.setAction(Intent.ACTION_VIEW);
                     startActivityForResult(root_search, ROOT_SEARCH_RESULT);
                 } catch (RuntimeException e) {
-                    Log.d("", "error");
+                    e.printStackTrace();
                 }
 
             }
@@ -381,12 +435,11 @@ public class MainActivity extends AppCompatActivity {
         CALENDER_SELECT_BUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent calender_intent = new Intent(getApplication(),Calendar_Select.class);
+                Intent calender_intent = new Intent(getApplication(), Calendar_Select.class);
                 calender_intent.setAction(Intent.ACTION_VIEW);
-                startActivityForResult(calender_intent,CALENDAR_RESULT);
+                startActivityForResult(calender_intent, CALENDAR_RESULT);
             }
         });
-
 
 
         //--------------------------------------------------------------------------------------------------------
@@ -417,13 +470,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("確認ダイアログ")
-                        .setMessage("CSVを出力しますか？")
+                        .setMessage("TSVを出力しますか？")
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int idx) {
                                 new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
-                                        .setMessage("CSVの取込をｷｬﾝｾﾙしました")
+                                        .setMessage("TSVの取込をｷｬﾝｾﾙしました")
                                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -441,10 +494,10 @@ public class MainActivity extends AppCompatActivity {
                         //-----------------------------------------------------------------------------------------------
                         // *** TSV出力タスク
                         //-----------------------------------------------------------------------------------------------
-                        tokuif.OUT_PUT_TSV(kenshin_db.db);
+                        tokuif.OUT_PUT_TSV(kenshin_db.db, MainActivity.this);
 
                         new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
-                                .setMessage("CSVを出力しました")
+                                .setMessage("TSVを出力しました")
                                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -452,10 +505,8 @@ public class MainActivity extends AppCompatActivity {
                                 }).show();
                     }
                 }).show();
-
             }
         });
-
 
     }
 
@@ -463,30 +514,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(REQUEST_CODE, resultCode, intent);
 
-        if (resultCode == RESULT_OK && REQUEST_CODE ==  CHECKBOX_RESULT  && null != intent) {
+        if (resultCode == RESULT_OK && REQUEST_CODE == CHECKBOX_RESULT && null != intent) {
             MULTIPLE_CHECKBOX = intent.getIntArrayExtra("CHECK_KEY");
-            tokuif.Check_Result_return(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX);
+            tokuif.Check_Result_return(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX, TODAY);
 
         }
 
-        if (resultCode== RESULT_OK && REQUEST_CODE == ROOT_SEARCH_RESULT && null != intent) {
+        if (resultCode == RESULT_OK && REQUEST_CODE == ROOT_SEARCH_RESULT && null != intent) {
             COL_BAN = intent.getIntExtra("ROOT_KEY", 0);
             COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
             button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
         }
 
-        if(resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent){
+        if (resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent) {
             INPUT_NUMBER_EDIT.setText(intent.getStringExtra("RESULT_KEY"));
             CURRENCT_USAGE_TEXT.setText(Calc_class.Calc_Used(Float.parseFloat(INPUT_NUMBER_EDIT.getText().toString()), kenshin_db.db, COL_BAN));
             Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
 
         }
 
-        if(resultCode == RESULT_OK && REQUEST_CODE == CALENDAR_RESULT && null != intent){
+        if (resultCode == RESULT_OK && REQUEST_CODE == CALENDAR_RESULT && null != intent) {
             TODAY = intent.getStringExtra("CALENDAR_KEY");
             DAYS.setText(TODAY);
 
         }
     }
+
 
 }

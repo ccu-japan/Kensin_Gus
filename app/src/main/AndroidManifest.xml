@@ -16,15 +16,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".CheckActivity"/>
-        <activity android:name=".Root_Search" />
-        <activity android:name=".Ten_key_Process"/>
-        <activity android:name=".Calendar_Select"/>
+
+        <activity android:name=".CheckActivity"
+            android:screenOrientation="portrait"/>           <!-- 点検項目アクティビティ -->
+
+        <activity android:name=".Root_Search"
+            android:screenOrientation="portrait"/>           <!-- 未検針検索アクティビティ -->
+
+        <activity android:name=".Ten_key_Process"
+            android:screenOrientation="portrait"/>           <!--１０キー入力アクティビティ -->
+
+        <activity android:name=".Calendar_Select"
+            android:screenOrientation="portrait"/>              <!-- 日付変更アクティビティ -->
+
         <activity android:name=".MainActivity"
-                   android:launchMode="singleTop">
+                   android:launchMode="singleTop"
+                   android:screenOrientation="portrait">     <!-- メインアクティビティ -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

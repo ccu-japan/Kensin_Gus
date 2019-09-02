@@ -17,10 +17,13 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     private TextView textView;
     Intent CALENDAR_INTENT;
     String str ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_layout);
+
+
 
         textView = findViewById(R.id.days);
         CALENDAR_INTENT = new Intent();
@@ -30,7 +33,7 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-        str = String.format(Locale.US, "%d/%d/%d", year, monthOfYear + 1, dayOfMonth);
+        str = String.format(Locale.US, "%d/%02d/%d", year, monthOfYear + 1, dayOfMonth);
         textView.setText(str);
 
     }
@@ -42,9 +45,14 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     }
 
     public void OK(View v) {
-        CALENDAR_INTENT.putExtra("CALENDAR_KEY",textView.getText().toString());
-        setResult(RESULT_OK,CALENDAR_INTENT);
-        finish();
+        if(!textView.getText().toString().equals("")) {
+            CALENDAR_INTENT.putExtra("CALENDAR_KEY", String.valueOf(textView));
+            setResult(RESULT_OK, CALENDAR_INTENT);
+            finish();
+        }
+        else{
+            finish();
+        }
     }
     public void Cancel(View v){
         finish();

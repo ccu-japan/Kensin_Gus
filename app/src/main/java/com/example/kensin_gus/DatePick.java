@@ -1,5 +1,6 @@
 package com.example.kensin_gus;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 public class DatePick extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
+    @SuppressLint("NewApi")
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {

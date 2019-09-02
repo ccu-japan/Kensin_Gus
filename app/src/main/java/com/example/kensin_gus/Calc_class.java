@@ -3,7 +3,6 @@ package com.example.kensin_gus;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.regex.Matcher;
@@ -45,12 +44,10 @@ public class Calc_class {
         float price = 0;
         double TAX = 0;
         float Row2 = Float.parseFloat(Row2_Text.getText().toString());
-
-
-
         int usage_integer_minutes_C = (int) Math.floor(row);
         String s = String.valueOf(row);
         Matcher matcher = p.matcher(s);
+
 
         if (matcher.matches()) {
             int row1 = (int) (row % 1.0 * 10);
@@ -119,19 +116,12 @@ public class Calc_class {
             case "B":
                 if (Row2 >= 0) {
                     price = (int) (Row2 * Integer.parseInt(cursor_TOKUIF.getString(7)) / Float.parseFloat(cursor_TOKUIF.getString(8)));
-                    Log.d("Math", Row2 + " * " + cursor_TOKUIF.getString(7) + " / " + cursor_TOKUIF.getString(8) + " = " + price);
                 }
                 break;
         }
 
         price = price + Float.parseFloat(cursor_TOKUIF.getString(1)) + Float.parseFloat(cursor_TOKUIF.getString(2)) + Float.parseFloat(cursor_TOKUIF.getString(3));
         TAX = price * Float.parseFloat(cursor_TOKUIF.getString(0)) / 100;
-
-
-        Log.d("Math", "Price : " + price);
-        Log.d("Math", "TAX : " + TAX);
-
-        Log.d("Math","cursor_TOKUIF.getString(9) : " + cursor_TOKUIF.getString(9));
 
         switch (cursor_TOKUIF.getString(9)){
             case "0" :

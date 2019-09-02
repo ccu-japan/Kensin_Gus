@@ -16,7 +16,8 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/Update"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/date_now"
@@ -27,7 +28,8 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/Name1"
@@ -96,7 +98,7 @@
                 android:gravity="right|end"
                 android:text="@string/kotei4"
                 android:textSize="24sp"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlCompat,RtlHardcoded" />
 
             <EditText
                 android:id="@+id/Row1_Text"
@@ -115,7 +117,7 @@
                 android:inputType="numberDecimal"
                 android:maxLength="8"
                 android:textSize="24sp"
-                tools:ignore="HardcodedText,LabelFor,RtlHardcoded"
+                tools:ignore="HardcodedText,LabelFor,RtlCompat,RtlHardcoded"
                 tools:targetApi="o" />
 
 
@@ -149,7 +151,7 @@
                 android:gravity="right|end"
                 android:text="@string/kotei5"
                 android:textSize="24sp"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlCompat,RtlHardcoded" />
 
             <TextView
                 android:id="@+id/Row2_Text"
@@ -161,7 +163,7 @@
                 android:focusable="false"
                 android:gravity="end"
                 android:textSize="24sp"
-                tools:ignore="LabelFor"
+                tools:ignore="LabelFor,RtlCompat"
                 tools:targetApi="o" />
 
             <TextView
@@ -194,7 +196,7 @@
                 android:gravity="right|end"
                 android:text="@string/kotei8"
                 android:textSize="24sp"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlCompat,RtlHardcoded" />
 
             <TextView
                 android:id="@+id/Row3_Text"
@@ -204,9 +206,9 @@
                 android:autofillHints=""
                 android:ems="5"
                 android:focusable="false"
-                android:gravity="right"
+                android:gravity="end"
                 android:textSize="24sp"
-                tools:ignore="LabelFor"
+                tools:ignore="LabelFor,RtlCompat"
                 tools:targetApi="o" />
 
             <TextView
@@ -360,7 +362,8 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/Name2"

@@ -7,6 +7,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -26,9 +28,10 @@ import java.util.Objects;
 public class TOKUIF {
 
         private File file;
-         private File path;
-         private String fileName = "TOKUIF.TSV";
-         private String OUT_OUT_FILE_NAME = "RCV_TOKUIF.TSV";
+        private File path;
+        private String fileName = "TOKUIF.TSV";
+        private String OUT_PUT_FILE_NAME = "RCV_TOKUIF.TSV";
+
 
 
         //---------------------------------------------------------------------------------------------------------------------
@@ -106,54 +109,54 @@ public class TOKUIF {
                         + COL_TYPE + "  TEXT ,"
                         + COL_COMPANY_CODE + "  TEXT ,"
                         + COL_CUSTOMER_CODE + "  TEXT  ,"
-                        + COL_PLACE_CODE + "  INTEGER ,"
+                        + COL_PLACE_CODE + "  REAL ,"
                         + COL_PLACE_NAME + "  TEXT ,"
-                        + COL_KENSIN + "  INTEGER ,"
-                        + COL_KENSINJUN + "  INTEGER ,"
+                        + COL_KENSIN + "  REAL ,"
+                        + COL_KENSINJUN + "  REAL ,"
                         + COL_CUSTOMER_NAME1 + "  TEXT ,"
                         + COL_CUSTOMER_NAME2 + "  TEXT ,"
                         + COL_GAS_PRICE_SECTION + "  TEXT ,"
                         + COL_GAS_PRICE_TABLE + "  TEXT ,"
-                        + COL_UNIT_PRICE + "  INTEGER ,"
-                        + COL_STANDARD_USAGE + "  INTEGER ,"
+                        + COL_UNIT_PRICE + "  REAL ,"
+                        + COL_STANDARD_USAGE + "  REAL ,"
                         + COL_LAST_TIME_KENSIN + " BLOB  ,"
-                        + COL_LAST_TIME_POINTER + "  INTEGER,"
-                        + COL_LAST_TIME_USAGE + "  INTEGER ,"
+                        + COL_LAST_TIME_POINTER + "  REAL,"
+                        + COL_LAST_TIME_USAGE + "  REAL ,"
                         + COL_THIS_TIME_KENSIN + "  BLOB ,"
-                        + COL_THIS_TIME_POINTER + "  INTEGER ,"
-                        + COL_THIS_TIME_USAGE + "  INTEGER ,"
-                        + COL_GAS_PRICE + "  INTEGER ,"
-                        + COL_STANDARD_PRICE + "  INTEGER ,"
-                        + COL_MICRO_COMPUTER_PRICE + "  INTEGER ,"
-                        + COL_ALARM_PRICE + "  INTEGER ,"
-                        + COL_BILLING_AMOUNT + "  INTEGER ,"
-                        + COL_GAS_CONSUMPTION_TAX + "  INTEGER ,"
-                        + COL_GAS_TAX_RATE + "  INTEGER ,"
-                        + COL_THIS_TIME_BILLING + "  INTEGER ,"
+                        + COL_THIS_TIME_POINTER + "  REAL ,"
+                        + COL_THIS_TIME_USAGE + "  REAL ,"
+                        + COL_GAS_PRICE + "  REAL ,"
+                        + COL_STANDARD_PRICE + "  REAL ,"
+                        + COL_MICRO_COMPUTER_PRICE + "  REAL ,"
+                        + COL_ALARM_PRICE + "  REAL ,"
+                        + COL_BILLING_AMOUNT + "  REAL ,"
+                        + COL_GAS_CONSUMPTION_TAX + "  REAL ,"
+                        + COL_GAS_TAX_RATE + "  REAL ,"
+                        + COL_THIS_TIME_BILLING + "  REAL ,"
                         + COL_MATER_EXCHANGE_FLAG + "  TEXT ,"
                         + COL_MATER_EXCHANGE_DATE + "  BLOB ,"
-                        + COL_MATER_EXCHANGE_USAGE + "  INTEGER ,"
-                        + COL_TENKEN_RESULT01 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT02 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT03 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT04 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT05 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT06 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT07 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT08 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT09 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT10 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT11 + "  INTEGER ,"
-                        + COL_TENKEN_RESULT12 + "  INTEGER ,"
+                        + COL_MATER_EXCHANGE_USAGE + "  REAL ,"
+                        + COL_TENKEN_RESULT01 + "  REAL ,"
+                        + COL_TENKEN_RESULT02 + "  REAL ,"
+                        + COL_TENKEN_RESULT03 + "  REAL ,"
+                        + COL_TENKEN_RESULT04 + "  REAL ,"
+                        + COL_TENKEN_RESULT05 + "  REAL ,"
+                        + COL_TENKEN_RESULT06 + "  REAL ,"
+                        + COL_TENKEN_RESULT07 + "  REAL ,"
+                        + COL_TENKEN_RESULT08 + "  REAL ,"
+                        + COL_TENKEN_RESULT09 + "  REAL ,"
+                        + COL_TENKEN_RESULT10 + "  REAL ,"
+                        + COL_TENKEN_RESULT11 + "  REAL ,"
+                        + COL_TENKEN_RESULT12 + "  REAL ,"
                         + COL_TANTOUSYA + "  TEXT ,"
                         + COL_GROUP_CODE + "  TEXT ,"
                         + COL_TAX_CALCULATION_TABLE + "  TEXT ,"
                         + COL_FILLER + "  TEXT ,"
                         + COL_PROBED_FLAG + "  TEXT ,"
-                        + COL_LAST_TIME__BILLING_REMAINDER + " INTEGER ,"
-                        + COL_LAST_TIME__BILLING_REMAINDER_tax + " INTEGER ,"
-                        + COL_OTHER_SALES + "  INTEGER ,"
-                        + COL_OTHER_SALES_TAX + "  INTEGER ,"
+                        + COL_LAST_TIME__BILLING_REMAINDER + " REAL ,"
+                        + COL_LAST_TIME__BILLING_REMAINDER_tax + " REAL ,"
+                        + COL_OTHER_SALES + "  REAL ,"
+                        + COL_OTHER_SALES_TAX + "  REAL ,"
                         + COL_TERMINAL_ID + "  TEXT ,"
                         + COL_ETX + " TEXT ,"
                         + COL_END_CODE + "  TEXT ,"
@@ -171,12 +174,13 @@ public class TOKUIF {
                 //
                 //-----------------------------------------------------------------------------------------------------------------------
 
-                try{
-                        if(Build.VERSION.SDK_INT >=29) {
+                try {
+                        if (Build.VERSION.SDK_INT >= 29) {
                                 path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-                        }else {
-                                path = Environment.getExternalStorageDirectory();
-                                Log.d("file_path","API29以下です");
+                        } else {
+                                path = new File(Environment.getExternalStorageDirectory().getPath());
+                                Log.d("file_path", "API29以下です");
+                                Log.d("fill_path", String.valueOf(path));
                         }
                         file = new File(path, fileName);
 
@@ -254,7 +258,6 @@ public class TOKUIF {
                 }
         }
 
-
         public void Usaged(SQLiteDatabase db, String Usaged_now, ContentValues values, String Usaged_now2, int COL_BAN, String now) {
                 try {
                         values.put("T_T_kensin", now);
@@ -273,7 +276,8 @@ public class TOKUIF {
         //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
         //
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public void TAX_PRICE(String Price, String Tax, ContentValues values, SQLiteDatabase db, int COL_BAN , String T_kensin) {
+        @SuppressLint("NewApi")
+        public void TAX_PRICE(String Price, String Tax, ContentValues values, SQLiteDatabase db, int COL_BAN, String T_kensin) {
                 Cursor cursor = db.rawQuery("SELECT/*i:0*/ G_T_rate ,/*i:1*/ S_price  , /*i:2*/M_C_price   ,/*i:3*/ A_price ," +
                         "/*i:4*/  G_price ,/*i:5*/  B_amount ,/*i:6*/ T_T_Billing ,/*i:7*/ G_C_tax ," +
                         "/*i:8*/  company,/*i:9*/ customer , /*i:10*/  place  ,/*i:11*/P_flag " +
@@ -285,7 +289,6 @@ public class TOKUIF {
                 //-----------------------------------------------------------------------------------
                 int i_Price;
                 int i_Tax;
-
 
                 try {
                         Number number = NumberFormat.getInstance().parse(Price);
@@ -304,7 +307,7 @@ public class TOKUIF {
                         values.put("G_C_tax", i_Tax);
                         values.put("T_T_Billing", i_Price);
                         values.put("P_flag", P_flag);
-                        values.put("T_T_kensin",T_kensin);
+                        values.put("T_T_kensin", T_kensin);
                         db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
 
                 } catch (NumberFormatException e) {
@@ -313,9 +316,6 @@ public class TOKUIF {
                         e.printStackTrace();
                 }
         }
-
-
-
 
         public static int[] Check_Result(SQLiteDatabase db, int COL_BAN, int[] check) {
                 Cursor check_result = db.rawQuery("SELECT result1 , result2 ,result3 , result4 , result5 , result6 ," +
@@ -328,63 +328,78 @@ public class TOKUIF {
                 return check;
         }
 
-
-
-
-        public void Check_Result_return(SQLiteDatabase db, int COL_BAN, int[] check) {
+        public void Check_Result_return(SQLiteDatabase db, int COL_BAN, int[] check , String TODAY) {
                 ContentValues values = new ContentValues();
 
                 for (int i = 1; i <= check.length; i++) {
                         values.put("result" + i, check[i - 1]);
                 }
+                values.put("M_E_date",TODAY);
                 db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
-
         }
 
-
-
-
-
-
-        public void OUT_PUT_TSV(SQLiteDatabase db ){
-
+        //-------------------------------------------------------------------------------------------------------------------------
+        //      ***   TSVファイル出力タスク   ***
+        //
+        //
+        //
+        //-------------------------------------------------------------------------------------------------------------------------
+        public void OUT_PUT_TSV(SQLiteDatabase db, Context context) {
 
                 Cursor cursor = db.rawQuery("SELECT * FROM TOKUIF WHERE  P_flag = ? ", new String[]{"1"});
+                Log.d("cursor", " : " + cursor.getCount());
+                Log.d("cursor", " : " + cursor.getColumnCount());
+
                 String[][] RCV = new String[cursor.getCount()][cursor.getColumnCount()];
                 int com_count;
                 int hum_count2=0;
                 try {
-                        file = new File(path,OUT_OUT_FILE_NAME);
-                        //file.delete();
-                        FileOutputStream fileOutputStream = new FileOutputStream(file,true);
+                        if (Build.VERSION.SDK_INT >= 29) {
+                                path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+                        } else {
+                                path = Environment.getExternalStorageDirectory();
+                                Log.d("file_path", "API29以下です");
+                        }
+
+                        file = new File(path, OUT_PUT_FILE_NAME);
+                        file.delete();
+
+                        FileOutputStream fileOutputStream = new FileOutputStream(file, true);
                         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
                         BufferedWriter RCV_TOKUIF = new BufferedWriter(outputStreamWriter);
 
-
-                        if (cursor.moveToLast()) {
+                        if (cursor.moveToFirst()) {
                                 do {
-                                        Log.d("math", String.valueOf(cursor.getColumnCount()));
-                                        for (com_count = 0; com_count < cursor.getColumnCount(); com_count++) {
-                                                RCV[hum_count2][com_count] = cursor.getString(com_count);
-                                                RCV_TOKUIF.write(RCV[hum_count2][com_count]);
-                                                Log.d("math",RCV[hum_count2][com_count]);
-                                                if(com_count < RCV.length){
-                                                     //   RCV_TOKUIF.write(RCV[hum_count2][com_count]);
-                                                }
-                                        }
+                                         for (com_count = 0; com_count < cursor.getColumnCount(); com_count++) {
+                                                 RCV[hum_count2][com_count] = cursor.getString(com_count);
+
+                                                 if (com_count == cursor.getColumnCount()-1) {
+                                                         RCV_TOKUIF.write(RCV[hum_count2][com_count]);
+                                                 } else {
+                                                         RCV_TOKUIF.write(RCV[hum_count2][com_count] + "\t");
+                                                 }
+                                         }
+
                                         RCV_TOKUIF.newLine();
                                         hum_count2++;
 
                                 } while (cursor.moveToNext());
                                 RCV_TOKUIF.flush();
 
+                                MediaScannerConnection.scanFile(context, new String[]{path + "/" + OUT_PUT_FILE_NAME}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                                        @Override
+                                        public void onScanCompleted(String s, Uri uri) {
+
+                                        }
+                                });
+
+
+
                         }
-                }catch (SQLException e){
+                } catch (SQLException e) {
                         e.printStackTrace();
-                }catch (IOException e){
+                } catch (IOException e) {
                         e.printStackTrace();
                 }
-
-
         }
 }
