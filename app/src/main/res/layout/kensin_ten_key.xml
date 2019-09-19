@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/frame_draw"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/ten_key_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/frame_draw"
+        android:cursorVisible="false"
+        android:ems="6"
+        android:enabled="false"
+        android:gravity="end"
+        android:importantForAutofill="no"
+        android:inputType=""
+        android:maxLength="8"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor"
+        tools:targetApi="o" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ten_key_edit">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ten_key_sev"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_column="1"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_sev"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_eig"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_eig"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_nin"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_nin"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ten_key_for"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_column="1"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_for"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_fiv"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_fiv"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_six"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_six"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ten_key_one"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_column="1"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_one"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_two"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_two"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_thr"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_thr"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ten_key_delete"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="DEL"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle,HardcodedText" />
+
+            <Button
+                android:id="@+id/ten_key_zer"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_zer"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_dot"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_dot"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/ten_key_OK"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/frame_draw"
+                android:text="@string/ten_key_OK"
+                android:textSize="36sp"
+                tools:ignore="ButtonStyle" />
+        </TableRow>
+    </TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

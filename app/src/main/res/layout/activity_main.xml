@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/kotei"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Update"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/date_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/date"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/Name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/kotei2"
+        app:layout_constraintStart_toEndOf="@+id/kotei2"
+        app:layout_constraintTop_toTopOf="@+id/kotei2" />
+
+    <TextView
+        android:id="@+id/kotei2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/kotei2"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
+        android:text="@string/kotei3"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/kotei2"
+        app:layout_constraintTop_toBottomOf="@+id/Name2"
+        tools:ignore="RtlHardcoded" />
+
+    <TableLayout
+        android:id="@+id/tablelayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/code"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/code">
+
+        <TableRow
+            android:id="@+id/Row1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/kotei6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="right|end"
+                android:text="@string/kotei4"
+                android:textSize="24sp"
+                tools:ignore="RtlCompat,RtlHardcoded" />
+
+
+            <EditText
+                android:id="@+id/Row1_Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/frame_draw"
+                android:cursorVisible="true"
+                android:ellipsize="end"
+                android:ems="5"
+                android:gravity="end"
+                android:maxLength="8"
+                android:onClick="number_form"
+                android:textSize="24sp"
+                tools:ignore="Autofill,HardcodedText,LabelFor,OnClick,RtlCompat,RtlHardcoded,TextFields"
+                tools:targetApi="o" >
+                <requestFocus/>
+            </EditText>
+
+            <TextView
+                android:id="@+id/Row1_Text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:autofillHints=""
+                android:ems="4"
+                android:focusable="false"
+                android:gravity="center"
+                android:textSize="24sp"
+                tools:ignore="LabelFor"
+                tools:targetApi="o" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/Row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/kotei7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="right|end"
+                android:text="@string/kotei5"
+                android:textSize="24sp"
+                tools:ignore="RtlCompat,RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/Row2_Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:autofillHints=""
+                android:ems="5"
+                android:focusable="false"
+                android:gravity="end"
+                android:onClick="Used_text"
+                android:textSize="24sp"
+                tools:ignore="LabelFor,RtlCompat"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/Tax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:autofillHints=""
+                android:ems="4"
+                android:focusable="false"
+                android:text="@string/Tax"
+                android:textSize="24sp"
+                tools:ignore="LabelFor"
+                tools:targetApi="o" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/Row3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/kotei8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="right|end"
+                android:text="@string/kotei8"
+                android:textSize="24sp"
+                tools:ignore="RtlCompat,RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/Row3_Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:autofillHints=""
+                android:ems="5"
+                android:focusable="false"
+                android:gravity="end"
+                android:textSize="24sp"
+                tools:ignore="LabelFor,RtlCompat"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/Row3_Text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:autofillHints=""
+                android:ems="4"
+                android:focusable="false"
+                android:gravity="center"
+                android:textSize="24sp"
+                tools:ignore="LabelFor"
+                tools:targetApi="o" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/tableLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tablelayout2"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TableRow
+            android:id="@+id/Button_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/Kensin_Button"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Kensin"
+                android:text="@string/kotei9"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/customer_Button"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Root_Search"
+                android:text="@string/kotei11"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/Printer_Button"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Printer"
+                android:text="@string/kotei12"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/Calender_Button"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Calendar"
+                android:text="@string/kotei13"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/end_app"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Finish"
+                android:text="@string/kotei14"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/Button_table2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <Button
+                android:id="@+id/button6"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Input"
+                android:text="@string/kotei15"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/OUT_PUT_BUTTON"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Output"
+                android:text="@string/kotei16"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/up"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:onClick="main_up"
+                android:text="@string/up"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/down"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:onClick="main_Down"
+                android:text="@string/down"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/Check_Button"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/frame_draw"
+                android:onClick="main_Check"
+                android:text="@string/kotei17"
+                android:textSize="20sp"
+                tools:ignore="ButtonStyle" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/Update"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/background_dark"
+        android:onClick="Fixed_UnFixed"
+        android:text="@string/mi"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/Name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/Name1"
+        app:layout_constraintStart_toEndOf="@+id/kotei2"
+        app:layout_constraintTop_toBottomOf="@+id/Name1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

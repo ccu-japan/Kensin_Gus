@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.kensin_gus">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon">
+
+        <activity android:name=".CheckActivity"
+            android:screenOrientation="portrait"/>           <!-- 点検項目アクティビティ -->
+
+        <activity android:name=".Root_Search"
+            android:screenOrientation="portrait"/>           <!-- 未検針検索アクティビティ -->
+
+        <activity android:name=".Ten_key_Process"
+            android:screenOrientation="portrait"/>           <!--１０キー入力アクティビティ -->
+
+        <activity android:name=".Calendar_Select"
+            android:screenOrientation="portrait"/>              <!-- 日付変更アクティビティ -->
+
+        <activity android:name=".MainActivity"
+                   android:launchMode="singleTop"
+                   android:screenOrientation="portrait">     <!-- メインアクティビティ -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Print_Search"
+            android:screenOrientation="portrait"/>
+
+    </application>
+
+</manifest>

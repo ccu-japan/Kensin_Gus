@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckActivity"
+    tools:layout_editor_absoluteY="89dp">
+
+    <CheckBox
+        android:id="@+id/Result1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:checked="false"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result1"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
+
+    <CheckBox
+        android:id="@+id/Result2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result2"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result1"
+        app:layout_constraintStart_toStartOf="@+id/Result1"
+        app:layout_constraintTop_toBottomOf="@+id/Result1" />
+
+    <CheckBox
+        android:id="@+id/Result3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result3"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="@+id/Result2"
+        app:layout_constraintTop_toBottomOf="@+id/Result2" />
+
+    <CheckBox
+        android:id="@+id/Result4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result4"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result2"
+        app:layout_constraintStart_toStartOf="@+id/Result3"
+        app:layout_constraintTop_toBottomOf="@+id/Result3" />
+
+    <CheckBox
+        android:id="@+id/Result5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result5"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result4"
+        app:layout_constraintStart_toStartOf="@+id/Result4"
+        app:layout_constraintTop_toBottomOf="@+id/Result4" />
+
+    <CheckBox
+        android:id="@+id/Result6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result6"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result5"
+        app:layout_constraintStart_toStartOf="@+id/Result5"
+        app:layout_constraintTop_toBottomOf="@+id/Result5" />
+
+    <CheckBox
+        android:id="@+id/Result7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result7"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Result1"
+        app:layout_constraintStart_toEndOf="@+id/Result1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
+
+    <CheckBox
+        android:id="@+id/Result8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result8"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result7"
+        app:layout_constraintStart_toStartOf="@+id/Result7"
+        app:layout_constraintTop_toBottomOf="@+id/Result7" />
+
+    <CheckBox
+        android:id="@+id/Result9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result9"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result8"
+        app:layout_constraintStart_toStartOf="@+id/Result8"
+        app:layout_constraintTop_toBottomOf="@+id/Result8" />
+
+    <CheckBox
+        android:id="@+id/Result10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result10"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result9"
+        app:layout_constraintStart_toStartOf="@+id/Result9"
+        app:layout_constraintTop_toBottomOf="@+id/Result9" />
+
+    <CheckBox
+        android:id="@+id/Result11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result11"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/Result10"
+        app:layout_constraintStart_toStartOf="@+id/Result10"
+        app:layout_constraintTop_toBottomOf="@+id/Result10" />
+
+    <CheckBox
+        android:id="@+id/Result12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/Result12"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="@+id/Result11"
+        app:layout_constraintTop_toBottomOf="@+id/Result11" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/check_text"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Result12" />
+
+    <Button
+        android:id="@+id/Check_OK"
+        android:layout_width="175dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@android:string/ok"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="@+id/Result6"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        tools:ignore="RtlCompat" />
+
+    <Button
+        android:id="@+id/Check_Cancel"
+        android:layout_width="175dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/cancel"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Check_OK"
+        app:layout_constraintEnd_toEndOf="@+id/Result12"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/Check_OK"
+        app:layout_constraintTop_toTopOf="@+id/Check_OK"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">Kensin_Gus</string>
+    <string name="yyyy_mm_dd">YYYY/MM/DD</string>
+    <string name="kotei">検針日付 →</string>
+    <string name="date">yyyy/mm/dd</string>
+    <string name="kotei2">名前 ：</string>
+    <string name="c_name" translatable="false">〇〇〇〇〇〇〇〇</string>
+    <string name="kotei3">コード：</string>
+    <string name="code1">〇〇〇〇</string>
+    <string name="code2">〇〇〇</string>
+    <string name="kotei4">　今回</string>
+    <string name="Form1">〇〇〇〇〇〇</string>
+    <string name="Form2">〇〇〇〇〇〇</string>
+    <string name="kotei5">使用量</string>
+    <string name="code">〇〇〇〇 〇〇〇</string>
+    <string name="up">↑</string>
+    <string name="down">↓</string>
+    <string name="kotei8">金額</string>
+    <string name="kotei10">その他</string>
+    <string name="kotei9">検針</string>
+    <string name="kotei11">道順</string>
+    <string name="kotei12">印刷</string>
+    <string name="kotei13">日付</string>
+    <string name="kotei14">終了</string>
+    <string name="kotei15">入力</string>
+    <string name="kotei16">出力</string>
+    <string name="kotei17">点検</string>
+    <string name="Tax">内消費税</string>
+    <string name="mi">未</string>
+    <string name="Result1">容器設置</string>
+    <string name="Result2">バルブ他</string>
+    <string name="Result3">調整器</string>
+    <string name="Result4">ﾎｰｽﾊﾞﾝﾄﾞ</string>
+    <string name="Result5">危険標識</string>
+    <string name="Result6">消費設備</string>
+    <string name="Result7"></string>
+    <string name="Result8"></string>
+    <string name="Result9"></string>
+    <string name="Result10"></string>
+    <string name="Result11"></string>
+    <string name="Result12">現金供給</string>
+    <string name="check_text">不具合箇所をチェック</string>
+    <string name="cancel">キャンセル</string>
+    <string name="onCheckboxClicked">onCheckboxClicked</string>
+    <string name="dialog_text1">交換時使用量</string>
+    <string name="dialog_text2">前回使用量</string>
+    <string name="dialog_text3">基 本 料 金</string>
+    <string name="dialog_text4">単価</string>
+    <string name="blank">　　　　　　</string>
+    <string name="name">名前</string>
+    <string name="code02">ｺｰﾄﾞ</string>
+    <string name="meter">ﾒｰﾀ</string>
+    <string name="BlanckData">未検針データ</string>
+    <string name="CustomerCode">得意先コード：</string>
+    <string name="GroupCode">群コード：</string>
+    <string name="search">検索</string>
+    <string name="ten_key_one">1</string>
+    <string name="ten_key_two">2</string>
+    <string name="ten_key_thr">3</string>
+    <string name="ten_key_for">4</string>
+    <string name="ten_key_fiv">5</string>
+    <string name="ten_key_six">6</string>
+    <string name="ten_key_sev">7</string>
+    <string name="ten_key_eig">8</string>
+    <string name="ten_key_nin">9</string>
+    <string name="ten_key_zer">0</string>
+    <string name="ten_key_left">←</string>
+    <string name="ten_key_dot">.</string>
+    <string name="ten_key_OK">OK</string>
+
+
+</resources>
+
