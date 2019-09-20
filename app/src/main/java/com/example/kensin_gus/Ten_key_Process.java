@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressLint("Registered")
 public class Ten_key_Process extends AppCompatActivity {
-    EditText ten_key_edit;
+    TextView ten_key_edit;
     Button button;
     Button ten_key_OK;
     Button DELETE_KEY;
@@ -19,7 +20,7 @@ public class Ten_key_Process extends AppCompatActivity {
     StringBuilder stringBuilder;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kensin_ten_key);
 

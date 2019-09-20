@@ -1,14 +1,14 @@
 <resources>
-    <string name="app_name">Kensin_Gus</string>
+    <string name="app_name">アンドロイド対応ガス検針</string>
     <string name="yyyy_mm_dd">YYYY/MM/DD</string>
-    <string name="kotei">検針日付 →</string>
+    <string name="kotei">検針日：</string>
     <string name="date">yyyy/mm/dd</string>
     <string name="kotei2">名前 ：</string>
     <string name="c_name" translatable="false">〇〇〇〇〇〇〇〇</string>
     <string name="kotei3">コード：</string>
     <string name="code1">〇〇〇〇</string>
     <string name="code2">〇〇〇</string>
-    <string name="kotei4">　今回</string>
+    <string name="kotei4">今回</string>
     <string name="Form1">〇〇〇〇〇〇</string>
     <string name="Form2">〇〇〇〇〇〇</string>
     <string name="kotei5">使用量</string>

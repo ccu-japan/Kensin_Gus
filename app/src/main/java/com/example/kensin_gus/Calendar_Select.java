@@ -23,8 +23,6 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_layout);
 
-
-
         textView = findViewById(R.id.days);
         CALENDAR_INTENT = new Intent();
 
@@ -46,7 +44,7 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
 
     public void OK(View v) {
         if(!textView.getText().toString().equals("")) {
-            CALENDAR_INTENT.putExtra("CALENDAR_KEY", String.valueOf(textView));
+            CALENDAR_INTENT.putExtra("CALENDAR_KEY", textView.getText().toString());
             setResult(RESULT_OK, CALENDAR_INTENT);
             finish();
         }
@@ -57,5 +55,4 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     public void Cancel(View v){
         finish();
     }
-
 }

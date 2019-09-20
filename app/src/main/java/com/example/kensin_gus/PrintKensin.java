@@ -4,14 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.hardware.camera2.params.MeteringRectangle;
-import android.os.Bundle;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
 
 import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
 
@@ -30,8 +27,6 @@ public class PrintKensin {
     private Byte mStatus = 0x00;                         // プリンタステータス
     String[] CHECK_BOX = null;
 
-   @SuppressLint("NewApi")
-    MeteringRectangle m = new MeteringRectangle(0, 0, 0, 0, 0);
 
     @SuppressLint({"NewApi", "DefaultLocale"})
     public void printKenshin(int COL_BAN, Context con) {
@@ -43,7 +38,7 @@ public class PrintKensin {
         Log.d("Result", String.valueOf(CHECK_BOX.length));
 
         patio.LengthUnitMode = PatioPrinter.UNIT_MODE.Millimeter;       //117
-        patio.PrintRect =  new MeteringRectangle(4, 0, 70, 117+check_result, 0);  //印刷範囲指定
+        patio.rect = new Rect(4,0,70,117 + check_result);
         patio.WriteMode = PatioPrinter.WRITE_MODE.IMMEDIATE_MODE;                                       //プリントモード
         patio.Font = PatioPrinter.FONT.GOSIC;                                                             //フォント指定
         patio.InitPage();                                                                                  //ページ作成

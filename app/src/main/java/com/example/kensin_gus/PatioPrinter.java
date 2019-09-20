@@ -1,14 +1,7 @@
 package com.example.kensin_gus;
 
 import android.annotation.SuppressLint;
-import android.hardware.camera2.params.MeteringRectangle;
-import android.os.Environment;
-
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import android.graphics.Rect;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
@@ -16,7 +9,6 @@ import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
 import static com.example.kensin_gus.PatioPrinter.FONT.GOSIC;
 
 public class PatioPrinter {
-    fhtUprt mPrint = new fhtUprt();
 
     private ArrayList<Byte> _write_buf;
 
@@ -31,15 +23,13 @@ public class PatioPrinter {
 
     public FONT_SIZE FontSize;
     public FONT Font;
-    public MeteringRectangle PrintRect; // 印刷領域（位置とサイズ、単位はミリ）
+    public Rect rect;
     public int PageLegth;
     public WRITE_MODE WriteMode;
     public UNIT_MODE LengthUnitMode;
     public boolean ZenkakuMode;
     public boolean Bold;
     public boolean LineMode;// 罫線印字用に追加 (2018/01/26)
-
-    //{ get; set; }
 
 
     @SuppressLint("NewApi")
@@ -48,7 +38,7 @@ public class PatioPrinter {
         Font = GOSIC;
         PageLegth = 0;
         WriteMode = WRITE_MODE.IMMEDIATE_MODE;
-        PrintRect = new MeteringRectangle(0, 0, 0, 0, 0);
+        rect = new Rect(0,0,0,0);
         LengthUnitMode = UNIT_MODE.Millimeter;
         Bold = false;
         _write_buf = new ArrayList<Byte>();
@@ -143,10 +133,10 @@ public class PatioPrinter {
 
         byte[] _init_code = {0x1B, 0x40, 0x1B, 0x4C, 0x1C, 0x43, 0x01, 0x1D, 0x45, 0x05};// [1B,40]プリンター初期化, [1B,4C]ページモード 、[1C, 43, 01]シフトＪＩＳモード
 //            byte[] _init_code = { 0x1B, 0x40, 0x1B, 0x28, 0x45, 0x04, 0x00, 0x05, 0x03, 0x04, 0x00, 0x1B, 0x4C, 0x1C, 0x43, 0x01 }; // [1B,40]プリンター初期化, [1B,4C]ページモード 、[1C, 43, 01]シフトＪＩＳモード
-        @SuppressLint({"NewApi", "LocalSuppress"}) int sx = ConvUnitX(PrintRect.getX());
-        @SuppressLint({"NewApi", "LocalSuppress"}) int sy = ConvUnitY(PrintRect.getY());
-        @SuppressLint({"NewApi", "LocalSuppress"}) int dx = ConvUnitX(PrintRect.getWidth());
-        @SuppressLint({"NewApi", "LocalSuppress"}) int dy = ConvUnitY(PrintRect.getHeight());
+        @SuppressLint({"NewApi", "LocalSuppress"}) int sx = ConvUnitX(rect.left);
+        @SuppressLint({"NewApi", "LocalSuppress"}) int sy = ConvUnitY(rect.top);
+        @SuppressLint({"NewApi", "LocalSuppress"}) int dx = ConvUnitX(rect.right);
+        @SuppressLint({"NewApi", "LocalSuppress"}) int dy = ConvUnitY(rect.bottom);
         WriteByte(_init_code);
 
         byte[] _set_print_area = {0x1B, 0x57};
@@ -162,13 +152,8 @@ public class PatioPrinter {
         bt[7] = (byte) (dy / 256);
         WriteByte(bt);
     }
-    //-------------------------------------------------------------------------------
-    //
-    //
-    //
-    //-------------------------------------------------------------------------------
 
-
+   //-------------------------------------------------------------------------------
     public byte[] PrintPage() {
         byte _flush_page = 0x0C;
         _write_buf.add(_flush_page);

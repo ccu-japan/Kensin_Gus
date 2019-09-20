@@ -240,14 +240,15 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK && REQUEST_CODE == PRINTER_RESULT && null != intent){               //印刷画面　戻り値
             RETURN_ADDRESS = intent.getStringExtra("PatioPrinter");
             PRINT_FLG = true;
-            main_Down(main_view);
             new PrintKensin().Print_Open(COL_BAN,MainActivity.this,RETURN_ADDRESS);
+            main_Down(main_view);
         }
     }
 
     //-------------------------------------------------------------------------------//
     //                                 使用量　タスク                                 //
     //-------------------------------------------------------------------------------//
+
     public void Used_text(View view){
         dialog.Dialog_SYOSAI(layoutInflater, MainActivity.this, kenshin_db.db, COL_BAN);
     }
@@ -255,13 +256,13 @@ public class MainActivity extends AppCompatActivity {
     //-------------------------------------------------------------------------------//
     //                                 未/済ボタンタスク                              //
     //-------------------------------------------------------------------------------//
+
     public void Fixed_UnFixed(View view ) {
         db_registration();  //データベース登録
 
         CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON, CHECK_FLG, PRINTER_BUTTON);
         if (CHECK_FLG) {
             main_Printer(view); //印刷タスク出力
-
 
         }
     }
@@ -289,15 +290,11 @@ public class MainActivity extends AppCompatActivity {
     //-------------------------------------------------------------------------------//
     //                                 道順　タスク                                   //
     //-------------------------------------------------------------------------------//
-    public void main_Root_Search(View view)
-    {
-        try {
-            Intent root_search = new Intent(getApplication(), Root_Search.class);
-            root_search.setAction(Intent.ACTION_VIEW);
-            startActivityForResult(root_search, ROOT_SEARCH_RESULT);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
+    public void main_Root_Search(View view) {
+        Intent root_search = new Intent(getApplication(), Root_Search.class);
+        root_search.setAction(Intent.ACTION_VIEW);
+        startActivityForResult(root_search, ROOT_SEARCH_RESULT);
+
     }
     //-------------------------------------------------------------------------------//
     //                                 印刷　タスク                                   //
@@ -319,9 +316,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent, PRINTER_RESULT);
                 } else {
                     PRINT_FLG = true;
-                    main_Down(view);
                     new PrintKensin().Print_Open(COL_BAN, getApplication(), RETURN_ADDRESS);
-
+                    main_Down(view);
                 }
             }
         }).show();
