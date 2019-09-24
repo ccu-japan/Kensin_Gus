@@ -14,8 +14,6 @@ import androidx.fragment.app.DialogFragment;
 
 public class Dialog extends DialogFragment {
     View view;
-   AlertDialog alertDialog;
-
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     public void Dialog_SYOSAI(LayoutInflater layoutInflater, Context context , SQLiteDatabase db , int COL_BAN) {
@@ -27,10 +25,6 @@ public class Dialog extends DialogFragment {
 
         //------------------------------------------------------------------------------------------
         // ***** Cursor TOKUIF rawQuery  ******
-        //
-        //*i=0　前回使用量 　 i=1 基本料金　　　　　 i=2　単価　i=3　メータ交換時使用量　
-        // i=4　ガス料金区分　i=5　メータ交換フラグ
-        //
         //------------------------------------------------------------------------------------------
         Cursor cursor = db.rawQuery("SELECT L_T_usage , S_price , U_price , M_E_usage , P_section , M_C_flag  FROM TOKUIF WHERE ban = ?", new String[]{String.valueOf(COL_BAN)});
         cursor.moveToFirst();

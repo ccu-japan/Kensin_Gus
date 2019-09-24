@@ -15,102 +15,106 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.example.db_library.HYOF;
 import com.example.db_library.Kenshin_DB;
 import com.example.db_library.TOKUIF;
 import com.fujitsufrontech.patioprinter.fhtuprt.SdcardLog;
-
-
 import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    //--------------------------------------------------------------------------------
-    //
-    // *** インスタンス化　***
-    //
-    // -------------------------------------------------------------------------------
-    int[] MULTIPLE_CHECKBOX = new int[12];
-    int CHECKBOX_RESULT     = 1000; //点検クラスの戻り値
-    int ROOT_SEARCH_RESULT = 2000;  //道順クラスの戻り値
-    int TEN_KEY_RESULT = 3000;  //Ten_key_Processクラスの戻り値
-    int CALENDAR_RESULT = 4000; //Calendar_Selectクラスの戻り値
-    int PRINTER_RESULT = 5000;  //PrintSearchクラスの戻り値
-    int COL_BAN = 0;             //DBの連番
-    private final int REQUEST_CODE = 1; //権限許可　
+    //―――――――――――――――――――――――――――――――――――――――//
+    //                            グローバル変数　  　　                        //
+    //―――――――――――――――――――――――――――――――――――――――//
+    String Number_Input;
+    String Usaged;
+    String price;
+    String Tax;
+    boolean DB_REG_FLG = false;              //db_registrationの出力判定
+    int COL_BAN = 0;                           //DBの連番
+    int[] MULTIPLE_CHECKBOX = new int[12];  //点検クラスのチェックボックス(1:入り 0:外す）
 
-
-    String RETURN_ADDRESS ="";  //BlueToothアドレスの格納変数
+    String RETURN_ADDRESS = "";  //使用するBlueToothアドレスの格納変数
     String TODAY;
+
     boolean CHECK_FLG = true;   //未/済ボタンフラグ　true:未　false:済
-    Cursor cursor;
 
-    TOKUIF tokuif;
-    Kenshin_DB kenshin_db;
-    Ten_key_Process ten_key_process;
-    Button_Processing button_processing;
-    Screen_Layout.Main_Screen main_screen;
+    //Activityの結果を取得ための整数コード(*整数のみ )
+    int CHECK_RESULT = 1;                                 //点検アクティビティ結果の取得
+    int ROOT_SEARCH_RESULT = 2;                          //道順アクティビティ結果の取得
+    int TEN_KEY_RESULT = 3;                               //10キーアクティビティ結果の取得
+    int CALENDAR_RESULT = 4;                              //カレンダーアクティビティ結果の取得
+    int PRINTER_RESULT = 5;                               //印刷アクティビティ結果の取得
 
+    int REQUEST_CODE = 1; //パーミッション許可
+
+
+    //―――――――――――――――――――――――――――――――――――――――//
+    //              メインアクティビティ内Widgetsのインスタンス                  //
+    //―――――――――――――――――――――――――――――――――――――――//
+    Button KENSIN_BUTTON;               //検針ボタン
+    Button DOWN_BUTTON;                 //DOWNボタン
+    Button UP_BUTTON;                   //UPボタン
+    Button FIXED_UNFIXED_BUTTON;      //済ボタン
+    Button END_BUTTON;                  //終了ボタン
+    Button CHECK_BUTTON;                //点検ボタン
+    Button ROOT_SEARCH_BUTTON;         //道順ボタン
+    Button CALENDER_SELECT_BUTTON;    //カレンダーボタン
+    Button OUT_PUT_BUTTON;              //TSV形式出力ボタン
+    Button TSV_IMPORT_BUTTON;           //TSV形式入力ボタン
+    Button PRINTER_BUTTON;              //印刷ボタン
+
+    EditText INPUT_NUMBER_EDIT;         //数値入力テキスト
+    TextView CURRENCT_USAGE_TEXT;       //使用量テキスト
+    TextView CURRENCT_AMOUNT_TEXT;      //金額テキスト
+    TextView DAYS;                        //日付テキスト
+    TextView TAX;                         //消費税分テキスト
+
+
+    //―――――――――――――――――――――――――――――――――――――――//
+    //                          グローバルインスタンス                          //
+    //―――――――――――――――――――――――――――――――――――――――//
+
+    TOKUIF tokuif;                              //TOKUIFクラス
+    Kenshin_DB kenshin_db;                      //検針DBクラス
+    Ten_key_Process ten_key_process;           //10キークラス
+    Button_Processing button_processing;       //済ボタンクラス
+    Screen_Layout.Main_Screen main_screen;      //表示値変更クラス
     LayoutInflater layoutInflater;
     ContentValues VALUES;
     View main_view;
+    Dialog dialog;
+    Cursor cursor;
 
-    Button KENSIN_BUTTON;
-    Button DOWN_BUTTON;
-    Button UP_BUTTON;
-    Button FIXED_UNFIXED_BUTTON;
-    Button END_BUTTON;
-    Button CHECK_BUTTON;
-    Button ROOT_SEARCH_BUTTON;
-    Button CALENDER_SELECT_BUTTON;
-    Button OUT_PUT_BUTTON;
-    Button TSV_IMPORT_BUTTON;
-    Button PRINTER_BUTTON;
 
-    EditText INPUT_NUMBER_EDIT;
-    TextView CURRENCT_USAGE_TEXT;
-    TextView CURRENCT_AMOUNT_TEXT;
-    TextView DAYS;
-    TextView Row3_2;
-
-     Dialog dialog;
-
-    String Usaged_now;
-    String Usaged_now2;
-    String price;
-    String Tax;
-    boolean PRINT_FLG = false;
-
+    //-------------------------------------------------------
+    //  一番最初に1回だけ呼ばれるメソッド
+    //-------------------------------------------------------
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); //メインアクティビティの生成
 
-        if(Build.VERSION.SDK_INT >= 23 ) {
+        //パーミッションの許可
+        if (Build.VERSION.SDK_INT >= 23) {  //***アンドロイド端末のSDKが23以上の場合許可が必要
             String[] permissions = {
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.READ_EXTERNAL_STORAGE,      //内部ストレージ(SDカード）の読取
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,     //内部ストレージ(SDカード)への書込
+                    Manifest.permission.ACCESS_FINE_LOCATION,       //GPSでの位置情報を取得
+                    Manifest.permission.ACCESS_COARSE_LOCATION      //ネットワークから位置情報を取得
             };
             checkPermission(permissions, REQUEST_CODE);
         }
 
-        //-------------------------------------------------------------------------------------------//
-        //                                                                                           //
-        // *** インスタンス化　***                                                                    //
-        //                                                                                           //
-        //-------------------------------------------------------------------------------------------//
-        VALUES = new ContentValues();
-
+        //-----------------------------------------------------------
+        //  グローバルインスタンスをインスタンス化
+        //-----------------------------------------------------------
         DOWN_BUTTON = findViewById(R.id.down);
         UP_BUTTON = findViewById(R.id.up);
         END_BUTTON = findViewById(R.id.end_app);
@@ -123,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
         OUT_PUT_BUTTON = findViewById(R.id.OUT_PUT_BUTTON);
         PRINTER_BUTTON = findViewById(R.id.Printer_Button);
 
+        INPUT_NUMBER_EDIT = findViewById(R.id.Row1_Text);
+        CURRENCT_USAGE_TEXT = findViewById(R.id.Row2_Text);
+        CURRENCT_AMOUNT_TEXT = findViewById(R.id.Row3_Text);
+        TAX = findViewById(R.id.Row3_Text2);
+        DAYS = findViewById(R.id.date_now);
+
         kenshin_db = new Kenshin_DB(getApplicationContext());
         tokuif = new TOKUIF();
         ten_key_process = new Ten_key_Process();
@@ -130,224 +140,248 @@ public class MainActivity extends AppCompatActivity {
         button_processing = new Button_Processing();
         main_screen = new Screen_Layout.Main_Screen();
         layoutInflater = LayoutInflater.from(this);
-         dialog = new Dialog();
+        dialog = new Dialog();
+        VALUES = new ContentValues();
 
-        INPUT_NUMBER_EDIT = findViewById(R.id.Row1_Text);
-        CURRENCT_USAGE_TEXT = findViewById(R.id.Row2_Text);
-        CURRENCT_AMOUNT_TEXT = findViewById(R.id.Row3_Text);
-        Row3_2 = findViewById(R.id.Row3_Text2);
-        DAYS = findViewById(R.id.date_now);
 
-        //―――――――――――――――――――――――――――――――――――――――――//
-        //                               今日の日付設定　                              //
-        //―――――――――――――――――――――――――――――――――――――――――//
+
+        //―――――――――――――――――――――――――――――――――――――――――
+        //  今日の日付設定
+        //―――――――――――――――――――――――――――――――――――――――――
 
         TODAY = main_screen.Screen_Data(this);
 
-        //―――――――――――――――――――――――――――――――――――――――――//
-        //                             データベースの存在確認　                         //
-        //―――――――――――――――――――――――――――――――――――――――――//
+        //―――――――――――――――――――――――――――――――――――――――――
+        //  データベースの存在確認
+        //―――――――――――――――――――――――――――――――――――――――――
 
         if (!this.getDatabasePath(Kenshin_DB.DB_NAME).exists()) {
-            new Kenshin_DB(this);         //起動時データベースがない場合に作成
+            //アプリ起動時データベースがない場合に作成
+            new Kenshin_DB(this);
         }
 
-        //----------------------------------------------------------------------------//
-        //                      メイン画面、テキスト出力(COL_BAN : 1 )                  //
-        //----------------------------------------------------------------------------//
+        //―――――――――――――――――――――――――――――――――――――――――
+        //  起動時のデータ出力
+        //―――――――――――――――――――――――――――――――――――――――――
 
-        cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ", null);     //TOKUIFテーブルのデータを取得
+        //TOKUIFテーブルのデータを取得
+        cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ", null);
 
-        if (cursor.getCount() > 0) {     //データがあればレイアウト入力　ない場合はスルー
+        //データがあればレイアウト入力
+        if (cursor.getCount() > 0) {
+            //TOKUIFテーブルの一番最初の人を出力
             cursor.moveToFirst();
             COL_BAN = Integer.parseInt(cursor.getString(0));
             COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
             button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
-        } else {
+        }
+        else
+        {//データがない場合は特定のボタンを選択できなくする
             KENSIN_BUTTON.setEnabled(false);
             CHECK_BUTTON.setEnabled(false);
             PRINTER_BUTTON.setEnabled(false);
         }
     }
-    //―――――――――――――――――――――――――――――――――――――――――――//
-    //                                  権限許可                                      //
-    //―――――――――――――――――――――――――――――――――――――――――――//
+
+    //―――――――――――――――――――――――――――――――――――――
+    //  パーミッションの許可申請メソッド
+    //―――――――――――――――――――――――――――――――――――――
+
     private void checkPermission(String[] permissions, int request_code) {
-        ActivityCompat.requestPermissions(this,permissions,request_code);
+        ActivityCompat.requestPermissions(this, permissions, request_code);
     }
-
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        if(requestCode == REQUEST_CODE){
-            for(int i=0;i<permissions.length; i++){
-                if(grantResults[i] == PackageManager.PERMISSION_GRANTED){
-                    //
-                    Log.d("Pemisson","許可されています");
-                }else{
-                    Log.d("Pemisson","許可されていません");
+    //パーミッション許可が下りているか確認
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Pemisson", "許可されています");
+                } else {
+                    Log.d("Pemisson", "許可されていません");
                 }
             }
         }
     }
 
+    //――――――――――――――――――――――――――――――――――――
+    //　メインアクティビティを破棄するときに起動するメソッド
+    //――――――――――――――――――――――――――――――――――――
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        //破棄するときに必要な物を保存する
         super.onSaveInstanceState(outState);
-
-       outState.putString("COL_BAN", String.valueOf(COL_BAN)) ;
-       SdcardLog.addLog("COL_BANの復帰");
-       outState.putString("PRINT_FLG", String.valueOf(PRINT_FLG));
-
+        outState.putString("COL_BAN", String.valueOf(COL_BAN));
+        outState.putString("DB_REG_FLG", String.valueOf(DB_REG_FLG));
     }
+
+    //――――――――――――――――――――――――――――――――――――
+    //　メインアクティビティを再生成する時に起動するメソッド
+    //――――――――――――――――――――――――――――――――――――
     @SuppressLint("NewApi")
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        //保存していたものを復元させる
         super.onRestoreInstanceState(savedInstanceState);
         COL_BAN = Integer.valueOf(Objects.requireNonNull(savedInstanceState.getString("COL_BAN")));
-        PRINT_FLG = Boolean.parseBoolean(savedInstanceState.getString("PRINT_FLG"));
+        DB_REG_FLG = Boolean.parseBoolean(savedInstanceState.getString("DB_REG_FLG"));
     }
 
-
+    //――――――――――――――――――――――――――――――――――――
+    //　別のアクティビティの結果を受け取るメソッド
+    //――――――――――――――――――――――――――――――――――――
     @Override
-    protected void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent intent) {        //Intent　戻り値
+    protected void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(REQUEST_CODE, resultCode, intent);
 
-        if (resultCode == RESULT_OK && REQUEST_CODE == CHECKBOX_RESULT && null != intent) {           //点検画面戻り値
+        //点検アクティビティからの結果を受け取る
+        if (resultCode == RESULT_OK && REQUEST_CODE == CHECK_RESULT && null != intent) {
             MULTIPLE_CHECKBOX = intent.getIntArrayExtra("CHECK_KEY");
             tokuif.Check_Result_return(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX, TODAY);
         }
 
-        if (resultCode == RESULT_OK && REQUEST_CODE == ROOT_SEARCH_RESULT && null != intent) {        //道順検索　戻り値
+        //道順アクティビティからの結果を受け取る
+        if (resultCode == RESULT_OK && REQUEST_CODE == ROOT_SEARCH_RESULT && null != intent) {
             COL_BAN = intent.getIntExtra("ROOT_KEY", 0);
             COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
             button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
         }
 
-        if (resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent) {             //10キー画面　戻り値
+        //テンキーアクティビティからの結果を受け取る
+        if (resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent) {
             INPUT_NUMBER_EDIT.setText(intent.getStringExtra("RESULT_KEY"));
             CURRENCT_USAGE_TEXT.setText(Calc_class.Calc_Used(Float.parseFloat(INPUT_NUMBER_EDIT.getText().toString()), kenshin_db.db, COL_BAN));
             Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
         }
 
-        if (resultCode == RESULT_OK && REQUEST_CODE == CALENDAR_RESULT && null != intent) {            //カレンダー画面　戻り値
+        //カレンダーアクティビティからの結果を受け取る
+        if (resultCode == RESULT_OK && REQUEST_CODE == CALENDAR_RESULT && null != intent) {
             TODAY = intent.getStringExtra("CALENDAR_KEY");
             DAYS.setText(TODAY);
         }
 
-        if(resultCode == RESULT_OK && REQUEST_CODE == PRINTER_RESULT && null != intent){               //印刷画面　戻り値
+        //印刷アクティビティからの結果を受け取る
+        if (resultCode == RESULT_OK && REQUEST_CODE == PRINTER_RESULT && null != intent) {
             RETURN_ADDRESS = intent.getStringExtra("PatioPrinter");
-            PRINT_FLG = true;
-            new PrintKensin().Print_Open(COL_BAN,MainActivity.this,RETURN_ADDRESS);
+            DB_REG_FLG = true;
+            new PrintKensin().Print_Open(COL_BAN, MainActivity.this, RETURN_ADDRESS);
             main_Down(main_view);
         }
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 使用量　タスク                                 //
-    //-------------------------------------------------------------------------------//
-
-    public void Used_text(View view){
+    //――――――――――――――――――――――――――――――――――――
+    //  使用量メソッド
+    //――――――――――――――――――――――――――――――――――――
+    public void Used_text(View view)
+    {
+        //使用量ダイアログの表示
         dialog.Dialog_SYOSAI(layoutInflater, MainActivity.this, kenshin_db.db, COL_BAN);
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 未/済ボタンタスク                              //
-    //-------------------------------------------------------------------------------//
-
-    public void Fixed_UnFixed(View view ) {
+    //――――――――――――――――――――――――――――――――――――
+    //  未/済ボタンメソッド
+    //――――――――――――――――――――――――――――――――――――
+    public void Fixed_UnFixed(View view) {
         db_registration();  //データベース登録
 
+        //　未済アクティビティに遷移 戻り値：Boolean型
         CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON, CHECK_FLG, PRINTER_BUTTON);
+        //CHECK_FLG　TRUE:済　FALSE:未
         if (CHECK_FLG) {
-            main_Printer(view); //印刷タスク出力
-
+            main_Printer(view); //印刷メソッド
         }
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 数値入力タスク                                 //
-    //-------------------------------------------------------------------------------//
-    public void number_form(View view )
-    {
+    //――――――――――――――――――――――――――――――――――――
+    //  数値入力メソッド
+    //――――――――――――――――――――――――――――――――――――
+    public void number_form(View view) {
+        //テンキーアクティビティに遷移
         Intent TEN_KEY_INTENT = new Intent(getApplication(), Ten_key_Process.class);
         TEN_KEY_INTENT.setAction(Intent.ACTION_VIEW);
         startActivityForResult(TEN_KEY_INTENT, TEN_KEY_RESULT);
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 検針　タスク                                   //
-    //-------------------------------------------------------------------------------//
-    public void main_Kensin(View view)
-    {
+    //――――――――――――――――――――――――――――――――――――
+    //  検針メソッド
+    //――――――――――――――――――――――――――――――――――――
+    public void main_Kensin(View view) {
+        //検針アクティビティに遷移
         Intent TEN_KEY_INTENT = new Intent(getApplication(), Ten_key_Process.class);
         TEN_KEY_INTENT.setAction(Intent.ACTION_VIEW);
         startActivityForResult(TEN_KEY_INTENT, TEN_KEY_RESULT);
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 道順　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  道順メソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_Root_Search(View view) {
+        //道順アクティビティに遷移
         Intent root_search = new Intent(getApplication(), Root_Search.class);
         root_search.setAction(Intent.ACTION_VIEW);
         startActivityForResult(root_search, ROOT_SEARCH_RESULT);
-
     }
-    //-------------------------------------------------------------------------------//
-    //                                 印刷　タスク                                   //
-    //-------------------------------------------------------------------------------//
-    public void main_Printer(final View view) {
+
+    //――――――――――――――――――――――――――――――――――――
+    //  印刷メソッド
+    //――――――――――――――――――――――――――――――――――――
+    public void main_Printer(View view) {
         main_view = view;
+        //印刷アクティビティに遷移
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("確認ダイアログ").setMessage("検針票を印刷しますか？")     //ダイアログ（タイトル・メッセージ）
+                .setTitle("確認ダイアログ").setMessage("検針票を印刷しますか？")
                 .setPositiveButton("No", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int idx) {   //キャンセルボタン　
-                        PRINT_FLG = false;
+                    public void onClick(DialogInterface dialogInterface, int idx) {
+                        DB_REG_FLG = false;
                     }
-                }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {    //出力ボタン
+                }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {                    //印刷処理
-                if (RETURN_ADDRESS.equals("")) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //RETURN_ADDRESSの中身が空かどうか判定
+                if (RETURN_ADDRESS.equals(""))
+                {// 空：印刷タスクに遷移
                     Intent intent = new Intent(MainActivity.this, Print_Search.class);
                     startActivityForResult(intent, PRINTER_RESULT);
-                } else {
-                    PRINT_FLG = true;
+                }
+                else
+                {// 有：選択したプリンタを継続して使用
+                    DB_REG_FLG = true;
                     new PrintKensin().Print_Open(COL_BAN, getApplication(), RETURN_ADDRESS);
-                    main_Down(view);
+                    main_Down(main_view);
                 }
             }
         }).show();
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 日付　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  カレンダーメソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_Calendar(View view) {
+        //カレンダーアクティビティに遷移
         Intent calender_intent = new Intent(getApplication(), Calendar_Select.class);
         calender_intent.setAction(Intent.ACTION_VIEW);
         startActivityForResult(calender_intent, CALENDAR_RESULT);
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 終了　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  終了メソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_Finish(View view) {
-        kenshin_db.close();
-        COL_BAN = 0;
+        kenshin_db.close(); //DBのクローズ
         finish();
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 入力　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  TSV形式入力メソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_Input(View view) {
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("確認ダイアログ").setMessage("TSVを取り込みますか？")     //ダイアログ（タイトル・メッセージ）
+                .setTitle("確認ダイアログ").setMessage("TSVを取り込みますか？")
                 .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    //No を選択時
                     @Override
                     public void onClick(DialogInterface dialogInterface, int idx) {
                         new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
@@ -355,22 +389,24 @@ public class MainActivity extends AppCompatActivity {
                                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                   }
-                                }).show();  //取込キャンセルボタン
+                                    }
+                                }).show();
                     }
-                }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {    //取込ボタン
+                }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
+            //Yes　を選択時
             public void onClick(DialogInterface dialogInterface, int i) {
                 kenshin_db.allDelete("TOKUIF"); //TOKUIFデータ削除
                 kenshin_db.allDelete("HYOF");   //HYOFデータ削除
 
-                tokuif.TOKUIF_CSV(kenshin_db.db, MainActivity.this);     //TOKUIF作成タスク
-                new HYOF().HYOF_CSV(kenshin_db.db, MainActivity.this);   //HYOF作成タスク
+                tokuif.TOKUIF_CSV(kenshin_db.db, MainActivity.this);     //TOKUIFの作成
+                new HYOF().HYOF_CSV(kenshin_db.db, MainActivity.this);   //HYOFの作成
 
                 new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVを取り込みました")
                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                             @Override
+                            //確認後、一番最初の人を出力する
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 cursor = kenshin_db.db.rawQuery(" SELECT ban FROM TOKUIF ", null);
                                 cursor.moveToFirst();
@@ -381,29 +417,33 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
             }
         }).show();
-
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 出力　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  TSV形式出力メソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_Output(View view) {
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("確認ダイアログ").setMessage("TSVを出力しますか？").setPositiveButton("No", new DialogInterface.OnClickListener() {
+                .setTitle("確認ダイアログ").setMessage("TSVを出力しますか？")
+                .setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
+            //No を選択時
             public void onClick(DialogInterface dialogInterface, int idx) {
                 new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVの取込をｷｬﾝｾﾙしました")
                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                             @Override
+                            //何もしない
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }
-                        }).show();  //取込キャンセルボタン
+                        }).show();
             }
-        }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {                               //取込ボタン
+        }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
+            //Yes を選択
             public void onClick(DialogInterface dialogInterface, int i) {
-                tokuif.OUT_PUT_TSV(kenshin_db.db, MainActivity.this);   //取込タスク
+                tokuif.OUT_PUT_TSV(kenshin_db.db, MainActivity.this);   //出力メソッド
+
                 new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVを出力しました")
                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
@@ -415,18 +455,18 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 戻る　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  戻るメソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_up(View view) {
-
-        db_registration();
-
+        db_registration();  //データベースの登録
         cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ", null);
         cursor.moveToFirst();
+        //  連番を検索
         while (COL_BAN != Integer.parseInt(cursor.getString(0))) {
             cursor.moveToNext();
         }
+        //  １つ前の人を出力する
         cursor.moveToPrevious();
         try {
             COL_BAN = Integer.parseInt(cursor.getString(0));
@@ -443,14 +483,16 @@ public class MainActivity extends AppCompatActivity {
     //-------------------------------------------------------------------------------//
     public void main_Down(View view) {
 
-        if(!PRINT_FLG) {    //未/済ボタン操作後じゃない場合　*登録
+        //　2重登録ではない場合
+        if (!DB_REG_FLG) {
             db_registration();
         }
-        cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ", null);       //TOKUIFテーブルのデータを取得
+        cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ", null);
         cursor.moveToFirst();
         while (COL_BAN != cursor.getInt(0)) {
             cursor.moveToNext();
         }
+        //１つ次の人を出力する
         cursor.moveToNext();
         try {
             COL_BAN = cursor.getInt(0);
@@ -460,30 +502,31 @@ public class MainActivity extends AppCompatActivity {
         COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
         button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
-        PRINT_FLG = false; //PRINT_FLGの初期化
+        DB_REG_FLG = false; //PRINT_FLGの初期化
     }
 
     //-------------------------------------------------------------------------------//
-    //                                 点検　タスク                                   //
+    //                                 点検　メソッド                                 //
     //-------------------------------------------------------------------------------//
     public void main_Check(View view) {
+        //点検アクティビティのチェック入を出力　戻り値：Int[]
         MULTIPLE_CHECKBOX = TOKUIF.Check_Result(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX);
 
+        //点検アクティビティに遷移
         Intent check_activity = new Intent(getApplication(), CheckActivity.class);
-
         check_activity.putExtra("CHECK_KEY", MULTIPLE_CHECKBOX);
         check_activity.setAction(Intent.ACTION_VIEW);
-        startActivityForResult(check_activity, CHECKBOX_RESULT);
-
+        startActivityForResult(check_activity, CHECK_RESULT);
     }
 
-    public void db_registration(){      //データベースに登録
-        Usaged_now = INPUT_NUMBER_EDIT.getText().toString();
-        Usaged_now2 = CURRENCT_USAGE_TEXT.getText().toString();
+    //データべースに登録する
+    public void db_registration() {
+        Number_Input = INPUT_NUMBER_EDIT.getText().toString();
+        Usaged = CURRENCT_USAGE_TEXT.getText().toString();
         price = CURRENCT_AMOUNT_TEXT.getText().toString();
-        Tax = Row3_2.getText().toString();
+        Tax = TAX.getText().toString();
 
-        tokuif.Usaged(kenshin_db.db, Usaged_now, VALUES, Usaged_now2, COL_BAN, TODAY);
+        tokuif.Usaged(kenshin_db.db, Number_Input, VALUES, Usaged, COL_BAN, TODAY);
         tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN, DAYS.getText().toString());
         button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
