@@ -9,13 +9,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-
 import androidx.fragment.app.DialogFragment;
 
 public class Dialog extends DialogFragment {
     View view;
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
+    //――――――――――――――――――――――――――――――
+    //  使用金額詳細ダイアログメソッド
+    //――――――――――――――――――――――――――――――
     public void Dialog_SYOSAI(LayoutInflater layoutInflater, Context context , SQLiteDatabase db , int COL_BAN) {
         view = layoutInflater.inflate(R.layout.dailog_layout, null);
         EditText dialog_edit1 = view.findViewById(R.id.dialog_edit1);
@@ -23,30 +25,29 @@ public class Dialog extends DialogFragment {
         EditText dialog_edit3 = view.findViewById(R.id.dialog_edit3);
         EditText dialog_edit4 = view.findViewById(R.id.dialog_edit4);
 
-        //------------------------------------------------------------------------------------------
-        // ***** Cursor TOKUIF rawQuery  ******
-        //------------------------------------------------------------------------------------------
         Cursor cursor = db.rawQuery("SELECT L_T_usage , S_price , U_price , M_E_usage , P_section , M_C_flag  FROM TOKUIF WHERE ban = ?", new String[]{String.valueOf(COL_BAN)});
         cursor.moveToFirst();
 
+        //メータ交換フラグの判定
         if("1".equals(cursor.getString(5))){
             dialog_edit1.setText(cursor.getString(3));
         }
+        //ガス料金区分の判定
         if("B".equals(cursor.getString(4))){
             dialog_edit4.setText(cursor.getString(2));
         }
+        //前回使用量
         dialog_edit2.setText(cursor.getString(0));
+        //基本料金
         dialog_edit3.setText(cursor.getString(1));
 
-
+        //MainActivityで出力
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
         builder.setView(view)
                 .setTitle("詳細")
                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
 
                     }
                 });

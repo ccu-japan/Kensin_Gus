@@ -11,24 +11,27 @@ import android.widget.EditText;
 @SuppressLint("Registered")
 public class Button_Processing{
 
-    //----------------------------------------------------------------------------------------------------
-    // ***
-    //----------------------------------------------------------------------------------------------------
-    public  boolean Check_task(EditText Row1 ,Button check_button ,Button update_button ,Button kensin_button ,boolean check ,Button printer_button){
+    //――――――――――――――――――――――――――――――――――――――――――
+    //  FIXED_UNFIXED_BUTTONの設定メソッド
+    //――――――――――――――――――――――――――――――――――――――――――
+    public boolean Check_task(EditText Input_number ,Button check_button ,Button update_button ,Button kensin_button ,boolean check ,Button printer_button){
+
+        //false：未　の場合
         if(!check) {
-            update_button.setText("済");
-            update_button.setBackgroundColor(Color.BLUE);
-            Row1.setEnabled(false);
-            check_button.setEnabled(false);
-            kensin_button.setEnabled(false);
-            printer_button.setEnabled(true);
+            update_button.setText("済");                     //ボタンテキスト
+            update_button.setBackgroundColor(Color.BLUE);    //バックグラウンドカラー
+            Input_number.setEnabled(false);                  //入力テキスト
+            check_button.setEnabled(false);     //点検ボタン
+            kensin_button.setEnabled(false);    //検針ボタン
+            printer_button.setEnabled(true);    //印刷ボタン
             check = true;
         }
+        //true : 済　の場合
         else
             {
             update_button.setText("未");
             update_button.setBackgroundColor(Color.RED);
-            Row1.setEnabled(true);
+            Input_number.setEnabled(true);
             check_button.setEnabled(true);
             kensin_button.setEnabled(true);
             printer_button.setEnabled(false);
@@ -38,11 +41,9 @@ public class Button_Processing{
         return check;
     }
 
-    //-----------------------------------------------------------------------------------------------
-    //
-    // * Up,Downボタンの操作
-    //
-    //-----------------------------------------------------------------------------------------------
+    //――――――――――――――――――――――――――――――――――――――――――
+    //  UP_DOWNキー押下時のFIXED_UNFIXEDボタンのレコード登録メソッド
+    //――――――――――――――――――――――――――――――――――――――――――
     public void Up_Down_Button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN )
     {
         ContentValues contentValues = new ContentValues();
@@ -53,9 +54,11 @@ public class Button_Processing{
         final Button Check_button = mainActivity.findViewById(R.id.Check_Button);
         final Button Printer_button = mainActivity.findViewById(R.id.Printer_Button);
         Button kensin_button = mainActivity.findViewById(R.id.Kensin_Button);
-        EditText Row1 = mainActivity.findViewById(R.id.Row1_Text);
-        String TRUE = "1";
-        String FALSE = " ";
+        EditText Row1 = mainActivity.findViewById(R.id.Input_number);
+        String TRUE = "1";  //ボタンが済の時
+        String FALSE = " "; //ボタンが未の時
+
+        //メインアクティビティの入力テキストの値が「0」の時
         if(Row1.getText().toString().equals("0"))
         {
             Update_button.setBackgroundColor(Color.RED);
@@ -66,6 +69,7 @@ public class Button_Processing{
             kensin_button.setEnabled(true);
             Printer_button.setEnabled(false);
         }
+        //「0」以外の時
         else
         {
             Update_button.setBackgroundColor(Color.BLUE);
@@ -77,9 +81,7 @@ public class Button_Processing{
             Printer_button.setEnabled(true);
 
         }
-
         db.update("TOKUIF", contentValues, " ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
-
     }
 
 }

@@ -18,30 +18,23 @@ public class Screen_Layout {
     @SuppressLint("Registered")
     public static class Main_Screen {
 
-        //------------------------------------------------------------------------------------------------------------
-        //
-        // *** 今日の日付　***
-        //
-        //------------------------------------------------------------------------------------------------------------
+        //―――――――――――――――――――――――――――――――――――――――
+        // 今日の日付を出力するメソッド
+        //―――――――――――――――――――――――――――――――――――――――
         public String Screen_Data(MainActivity mainActivity) {
+            //〇〇〇〇年〇〇月〇〇日　表記
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             Date Date_now   = new Date();
             String Date = sdf.format(Date_now);
             TextView date   = mainActivity.findViewById(R.id.date_now);
             date.setText(Date);
 
-            Log.d("Date_now", " 今日:"+ Date);
-
             return Date;
         }
 
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //***** 画面表示タスク　******
-        //
-        //
-        //5. G_price  : ガス料金　    6. B_amount  : ガス請求金額  7.T_T_Billing : 今回請求金額  8.G_C_tax : ガス消費税
-        //
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //―――――――――――――――――――――――――――――――――――――――
+        // 画面表示メソッド
+        //―――――――――――――――――――――――――――――――――――――――
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
         static int SELECT_COM(MainActivity mainActivity, int COL_BAN , SQLiteDatabase db) {
 
@@ -52,18 +45,20 @@ public class Screen_Layout {
             c.moveToFirst();
             C_price.moveToFirst();
 
+            //MainActivity出力
             TextView name1 = mainActivity.findViewById(R.id.Name1);
             TextView name2 = mainActivity.findViewById(R.id.Name2);
             TextView code1 = mainActivity.findViewById(R.id.code);
 
-            EditText now        = mainActivity.findViewById(R.id.Row1_Text);
-            TextView used       = mainActivity.findViewById(R.id.Row1_Text2);
-            TextView usaged     = mainActivity.findViewById(R.id.Row2_Text);
-            TextView Row3_Text  = mainActivity.findViewById(R.id.Row3_Text);
-            TextView Row3_2Text = mainActivity.findViewById(R.id.Row3_Text2);
+            EditText now        = mainActivity.findViewById(R.id.Input_number);
+            TextView used       = mainActivity.findViewById(R.id.zenkai_kensin_number);
+            TextView usaged     = mainActivity.findViewById(R.id.Used_number);
+            TextView Row3_Text  = mainActivity.findViewById(R.id.Using_Amount);
+            TextView Row3_2Text = mainActivity.findViewById(R.id.Tax);
             TextView Date_now   = mainActivity.findViewById(R.id.date_now);
 
             try {
+                //金額をカンマ区切りで表示
                 String Row3_text = String.format("%,d", Integer.parseInt(C_price.getString(0)));
                 String Row3_text2 = String.format("%,d", Integer.parseInt(C_price.getString(1)));
 
@@ -77,7 +72,8 @@ public class Screen_Layout {
                 Row3_Text.setText(Row3_text);
                 Row3_2Text.setText(Row3_text2);
 
-                if(!c.getString(10).equals("0000/00/00")) {
+                //登録データが0000/00/00 or 空白以外の時
+                if(!c.getString(10).equals("0000/00/00") || !c.getString(10).equals("")) {
                     Date_now.setText(c.getString(10));
                 }
             }
@@ -87,6 +83,7 @@ public class Screen_Layout {
                 cursor_ban.moveToLast();
                 int LAST_BAN = Integer.parseInt(cursor_ban.getString(0));
 
+                //連番が最小値より下回った場合
                 if(COL_BAN < FIRST_BAN) {
                     new AlertDialog.Builder(mainActivity).setTitle("確認ダイアログ")
                                                             .setMessage("このレコードは先頭です。")
@@ -95,7 +92,8 @@ public class Screen_Layout {
                                                                 public void onClick(DialogInterface dialogInterface, int idx) {
                                                                 }
                                                             }).show();
-                    COL_BAN = FIRST_BAN;
+                    COL_BAN = FIRST_BAN;    //最小値を入力
+                //最大値を上回った場合
                 } else{
                     new AlertDialog.Builder(mainActivity).setTitle("確認ダイアログ")
                             .setMessage("このレコードは最終です。")
@@ -104,15 +102,12 @@ public class Screen_Layout {
                                 public void onClick(DialogInterface dialogInterface, int idx) {
                                 }
                             }).show();
-                    COL_BAN = LAST_BAN;
+                    COL_BAN = LAST_BAN; //最大値を入力
                 }
             }catch (NumberFormatException e){
                 Log.d("number","数値以外があります");
             }
             return  COL_BAN;
         }
-
-
-
     }
 }

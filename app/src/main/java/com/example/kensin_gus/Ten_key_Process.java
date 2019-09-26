@@ -5,19 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressLint("Registered")
 public class Ten_key_Process extends AppCompatActivity {
-    TextView ten_key_edit;
+    TextView ten_key_edit;  //テキスト最大入力文字数　6ケタ(「.」も含める (例)123456 or 1234.5)
     Button button;
     Button ten_key_OK;
     Button DELETE_KEY;
     Intent TEN_KEY_INTENT;
-    StringBuilder stringBuilder;
+    StringBuilder stringBuilder; //「.」や桁数の調整
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +30,7 @@ public class Ten_key_Process extends AppCompatActivity {
         ten_key_OK = findViewById(R.id.ten_key_OK);
         DELETE_KEY = findViewById(R.id.ten_key_delete);
 
+        //オブジェクト生成
         findViewById(R.id.ten_key_one).setOnClickListener(buttonNumberListener);
         findViewById(R.id.ten_key_two).setOnClickListener(buttonNumberListener);
         findViewById(R.id.ten_key_thr).setOnClickListener(buttonNumberListener);
@@ -45,14 +45,20 @@ public class Ten_key_Process extends AppCompatActivity {
 
         ten_key_edit.setText("0");
 
+        //―――――――――――――――――――――――――――――――――――
+        // OKボタン押下時
+        //―――――――――――――――――――――――――――――――――――
         ten_key_OK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String ROW1_RESULT = ten_key_edit.getText().toString();
-                if (ROW1_RESULT.equals("")) {   //テキストが未入力の場合
+
+                //テキストが未入力の場合
+                if (ROW1_RESULT.equals("")) {
                     ROW1_RESULT = "0";
                 }
-                else if(String.valueOf(ROW1_RESULT.charAt(ROW1_RESULT.length() - 1)).equals(".")){  //テキストの最後の文字が「.」の場合
+                //テキストの最後の文字が「.」の場合
+                else if(String.valueOf(ROW1_RESULT.charAt(ROW1_RESULT.length() - 1)).equals(".")){
                     stringBuilder = new StringBuilder(ROW1_RESULT);
                     stringBuilder.setLength(stringBuilder.length()-1);  //末尾を削除
                     ROW1_RESULT = String.valueOf(stringBuilder);
@@ -64,25 +70,30 @@ public class Ten_key_Process extends AppCompatActivity {
             }
         });
 
+        //―――――――――――――――――――――――――――――――――――
+        //  消去ボタンメソッド
+        //―――――――――――――――――――――――――――――――――――
         DELETE_KEY.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-                int result = stringBuilder.indexOf(" ");    //空白がある場合は result >= 0 ない場合は -1　を返す
+                int result = stringBuilder.indexOf(" ");
 
+                //空白がある場合は result >= 0 ない場合は -1を返す
                 if(result != -1){
 
                     stringBuilder.replace(result,result+2,"");  //空白を詰める
                     ten_key_edit.setText(stringBuilder);
                 }
 
-                if(!ten_key_edit.getText().toString().equals("0")) {     //テキスト値が「0」以外のとき
+                //テキスト値が「0」以外のとき
+                if(!ten_key_edit.getText().toString().equals("0")) {
                     try {
-                        stringBuilder.setLength(stringBuilder.length() - 1);    //末尾を消去
+                        stringBuilder.setLength(stringBuilder.length() - 1); //末尾を消去
                         ten_key_edit.setText(stringBuilder);
 
-                        if(ten_key_edit.getText().toString().equals("")){        //全消去した場合
+                        //全消去した場合
+                        if(ten_key_edit.getText().toString().equals("")){
                             ten_key_edit.setText("0");
                         }
                     } catch (StringIndexOutOfBoundsException e) {
@@ -99,42 +110,52 @@ public class Ten_key_Process extends AppCompatActivity {
             Button button = (Button) view;
             int i = 0;
 
-
-            if(ten_key_edit.getText().toString().equals("0") && button.getId() != R.id.ten_key_dot){    //テキストに文字列「0」　かつ　テンキー「.」以外を押下したとき
+            //テキストに文字列「0」　かつ　テンキー「.」以外を押下したとき
+            if(ten_key_edit.getText().toString().equals("0") && button.getId() != R.id.ten_key_dot){
                 stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-                stringBuilder.setLength(stringBuilder.length() - 1);                                    //文字列の末尾を削除
+                stringBuilder.setLength(stringBuilder.length() - 1); //文字列の末尾を削除
                 ten_key_edit.setText(stringBuilder);
             }
 
-            if (button.getId() == R.id.ten_key_dot) {           //テンキー「.」を押下したとき
+            //テンキー「.」を押下したとき
+            if (button.getId() == R.id.ten_key_dot) {
                 stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-                String[] array = ten_key_edit.getText().toString().split("");
-                for (String s : array) {
-                    if (s.equals(".")) {    //テキストの文字列内に「.」があるか検索
+                String[] array = ten_key_edit.getText().toString().split(""); //split("")で1文字ずつ配列に入力
+
+                //テキストの文字列内に「.」があるか1個ずつ検索
+                for (String s : array) { //拡張for文
+                    if (s.equals(".")) {
                         i++;
                     }
                 }
+                //「.」がない場合は入力
                 if (i == 0) {
                     ten_key_edit.append(button.getText());
                 }
-            } else {
+            }
+            //テンキー0~9押下時
+            else {
                 ten_key_edit.append(button.getText());
 
-                if(ten_key_edit.getText().length() == 6){                                           //テキスト入力数を６桁にするために６桁目になった場合に処理
+                //テキスト入力数を６桁にするために６桁目になった時に処理
+                if(ten_key_edit.getText().length() == 6)
+                {
                     stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
                     String[] array = ten_key_edit.getText().toString().split("");
+
+                    //テキストの文字列内に「.」があるか検索
                     for (String s : array) {
-                        if (s.equals(".")) {                                                         //テキストの文字列内に「.」があるか検索
+                        if (s.equals(".")) {
                             i++;
                         }
                     }
+                    //テキストの最大入力数は8桁なので小数点がない場合は残り２桁を空白で埋める
                     if(i == 0){
-                        stringBuilder.insert(0," " + " ");                            //テキストの最大入力数は8桁なので小数点がない場合は残り２桁を空白で埋める
+                        stringBuilder.insert(0," " + " ");
                         ten_key_edit.setText(stringBuilder);
                     }
                 }
             }
-
         }
     };
 

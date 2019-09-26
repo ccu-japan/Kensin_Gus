@@ -99,7 +99,7 @@
                 tools:ignore="RtlHardcoded" />
 
             <EditText
-                android:id="@+id/Row1_Text"
+                android:id="@+id/Input_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -120,7 +120,7 @@
 
 
             <TextView
-                android:id="@+id/Row1_Text2"
+                android:id="@+id/zenkai_kensin_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -152,7 +152,7 @@
                 tools:ignore="RtlHardcoded" />
 
             <TextView
-                android:id="@+id/Row2_Text"
+                android:id="@+id/Used_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -165,7 +165,7 @@
                 tools:targetApi="o" />
 
             <TextView
-                android:id="@+id/Tax"
+                android:id="@+id/Tax_Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -197,7 +197,7 @@
                 tools:ignore="RtlHardcoded" />
 
             <TextView
-                android:id="@+id/Row3_Text"
+                android:id="@+id/Using_Amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -210,7 +210,7 @@
                 tools:targetApi="o" />
 
             <TextView
-                android:id="@+id/Row3_Text2"
+                android:id="@+id/Tax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

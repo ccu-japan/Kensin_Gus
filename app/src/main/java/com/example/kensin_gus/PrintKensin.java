@@ -1,14 +1,11 @@
 package com.example.kensin_gus;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 
 import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
 
@@ -23,25 +20,25 @@ public class PrintKensin {
     private byte[] sendbuf = null;						// 印刷データ用バッファ
     private String mOpenAddrs = "";						// オープンするBluetoothアドレス
     private int mComp = fhtUprt.PRT_DISABLE_COMPLETE;
-    private int mMode =0;									// 印刷=0 自動電源オフ=1
+    private int mMode = 0;                               // 印刷=0 自動電源オフ=1
     private Byte mStatus = 0x00;                         // プリンタステータス
     String[] CHECK_BOX = null;
 
-
+    //――――――――――――――――――――――――――――――――――――
+    // プリンタ出力メソッド
+    //――――――――――――――――――――――――――――――――――――
     @SuppressLint({"NewApi", "DefaultLocale"})
     public void printKenshin(int COL_BAN, Context con) {
         context = con;
         meter = new Meter().Meter_List(COL_BAN, context);
-        check_result = meter.RECTANGLE() * 4;
+        check_result = meter.CHECKBOX_COL() * 4;        //チェックボックス行　*4は行幅
         CHECK_BOX = meter.CHECK_BOX(context);
 
-        Log.d("Result", String.valueOf(CHECK_BOX.length));
-
-        patio.LengthUnitMode = PatioPrinter.UNIT_MODE.Millimeter;       //117
-        patio.rect = new Rect(4,0,70,117 + check_result);
-        patio.WriteMode = PatioPrinter.WRITE_MODE.IMMEDIATE_MODE;                                       //プリントモード
-        patio.Font = PatioPrinter.FONT.GOSIC;                                                             //フォント指定
-        patio.InitPage();                                                                                  //ページ作成
+        patio.LengthUnitMode = PatioPrinter.UNIT_MODE.Millimeter;
+        patio.rect = new Rect(4,0,70,117 + check_result);   //プリントサイズ
+        patio.WriteMode = PatioPrinter.WRITE_MODE.IMMEDIATE_MODE;                    //プリントモード
+        patio.Font = PatioPrinter.FONT.GOSIC;                                          //フォント指定
+        patio.InitPage();                                                                //ページ作成
 
         patio.Bold = false;
         patio.WriteString(28, 10, PatioPrinter.FONT_SIZE.size24, "ガス使用量のお知らせ");
@@ -57,13 +54,16 @@ public class PrintKensin {
 
         patio.ZenkakuMode = true;
 
+        //顧客名が10文字以上の場合
         if(meter.C_NAME().length() >= 10) {
             patio.FontSize = PatioPrinter.FONT_SIZE.size24;
         }
+        //顧客名が7以上9文字までの場合
         else if(meter.C_NAME().length() >=7)
         {
             patio.FontSize = PatioPrinter.FONT_SIZE.size32;
         }
+        //それ以外
         else
         {
             patio.FontSize = PatioPrinter.FONT_SIZE.size48;
@@ -144,7 +144,6 @@ public class PrintKensin {
         sendbuf = patio.PrintPage();
 
     }
-
 
     public void Print_Open(int return_col , Context con, String RETURN_ADDRESS){
         COL_BAN = return_col;

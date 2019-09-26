@@ -10,20 +10,20 @@ import static com.example.kensin_gus.PatioPrinter.FONT.GOSIC;
 
 public class PatioPrinter {
 
-    private ArrayList<Byte> _write_buf;
+    private ArrayList<Byte> _write_buf;  //文字列出力リスト
 
-    public enum FONT_SIZE {size16, size24, size32, size48, size64}
+    public enum FONT_SIZE {size16, size24, size32, size48, size64}  //フォントサイズ
 
-    public enum FONT {MINCHOU, GOSIC}
+    public enum FONT {MINCHOU, GOSIC}   //フォントタイプ
 
-    public enum WRITE_MODE {IMMEDIATE_MODE, ONFILE_MODE}
+    public enum WRITE_MODE {IMMEDIATE_MODE, ONFILE_MODE}    //IMMEDIATE_MODE :　直接プリント　ONFILE_MODE : ファイル作成
 
-    public enum UNIT_MODE {Millimeter, Dot}
+    public enum UNIT_MODE {Millimeter, Dot} //ドット変換
 
 
     public FONT_SIZE FontSize;
     public FONT Font;
-    public Rect rect;
+    public Rect rect;                   //出力範囲
     public int PageLegth;
     public WRITE_MODE WriteMode;
     public UNIT_MODE LengthUnitMode;
@@ -32,8 +32,12 @@ public class PatioPrinter {
     public boolean LineMode;// 罫線印字用に追加 (2018/01/26)
 
 
+    //――――――――――――――――――――――――――――――――――――
+    // PatioPrinter　メソッド
+    //――――――――――――――――――――――――――――――――――――
     @SuppressLint("NewApi")
     public PatioPrinter() {
+
         FontSize = FONT_SIZE.size16;
         Font = GOSIC;
         PageLegth = 0;
@@ -45,9 +49,11 @@ public class PatioPrinter {
 
     }
 
-    //文字列を表示する
+    //――――――――――――――――――――――――――――――――――――
+    // 文字列出力　メソッド
+    //――――――――――――――――――――――――――――――――――――
     public void WriteString(String str) {
-        byte[] line_f = {0x0A};
+        byte[] line_f = {0x0A}; //改行
         WriteFont();
         WriteFontSize();
         if (ZenkakuMode) {
@@ -70,7 +76,9 @@ public class PatioPrinter {
         WriteByte(line_f);
     }
 
-    // 長さの単位をdotに変換
+    //――――――――――――――――――――――――――――――――――――
+    // 長さの単位をdotに変換 x軸
+    //――――――――――――――――――――――――――――――――――――
     private int ConvUnitX(int n) {
         if (LengthUnitMode == UNIT_MODE.Millimeter) {
             return n * 80 / 10;
@@ -78,7 +86,9 @@ public class PatioPrinter {
         return n;
     }
 
-    // 長さの単位をdotに変換
+    //――――――――――――――――――――――――――――――――――――
+    // 長さの単位をdotに変換 y軸
+    //――――――――――――――――――――――――――――――――――――
     private int ConvUnitY(int n) {
         if (LengthUnitMode == UNIT_MODE.Millimeter) {
             return n * 84 / 10;
@@ -86,17 +96,19 @@ public class PatioPrinter {
         return n;
     }
 
-    //文字列を表示する
+    //――――――――――――――――――――――――――――――――――――
+    // 文字列を表示する
+    //――――――――――――――――――――――――――――――――――――
     public void WriteString(int x, int y, String str) {
-        byte[] _startx = {0x1B, 0x24};
-        byte[] _starty = {0x1D, 0x24};
+        byte[] _startx = {0x1B, 0x24};  //印字横方向絶対位置指定
+        byte[] _starty = {0x1D, 0x24};  //ページ印字モード縦方向絶対位置指定
         byte[] bt = new byte[2];
         int sx = ConvUnitX(x);
         int sy = ConvUnitY(y - 6);
 
         WriteByte(_startx);
-        bt[0] = (byte) (sx % 256);
-        bt[1] = (byte) (sx / 256);
+        bt[0] = (byte) (sx % 256);      // x軸
+        bt[1] = (byte) (sx / 256);      // y軸
         WriteByte(bt);
 
         WriteByte(_starty);
@@ -139,7 +151,7 @@ public class PatioPrinter {
         @SuppressLint({"NewApi", "LocalSuppress"}) int dy = ConvUnitY(rect.bottom);
         WriteByte(_init_code);
 
-        byte[] _set_print_area = {0x1B, 0x57};
+        byte[] _set_print_area = {0x1B, 0x57};  //ページ印字モード印字領域設定
         WriteByte(_set_print_area);
         byte[] bt = new byte[8];
         bt[0] = (byte) (sx % 256);
@@ -153,9 +165,11 @@ public class PatioPrinter {
         WriteByte(bt);
     }
 
-   //-------------------------------------------------------------------------------
+    //――――――――――――――――――――――――――――――――――――
+    //　改頁メソッド
+    //――――――――――――――――――――――――――――――――――――
     public byte[] PrintPage() {
-        byte _flush_page = 0x0C;
+        byte _flush_page = 0x0C;    //改ページ
         _write_buf.add(_flush_page);
         byte[] bt = new byte[_write_buf.size()];
         for (int i = 0; i < _write_buf.size(); i++) {
@@ -165,17 +179,19 @@ public class PatioPrinter {
 
     }
 
+    //――――――――――――――――――――――――――――――――――――
     //コマンドデータをバッファに出力
+    //――――――――――――――――――――――――――――――――――――
     private boolean WriteByte(byte[] bt) {
-
         for (byte b : bt) {
             _write_buf.add(b);
         }
-
         return true;
     }
 
+    //――――――――――――――――――――――――――――――――――――
     //フォントの設定
+    //――――――――――――――――――――――――――――――――――――
     private void WriteFont() {
         byte[] gosic = {0x1D, 0x43, 0x04};
         byte[] minchou = {0x1D, 0x43, 0x00};
@@ -190,7 +206,9 @@ public class PatioPrinter {
         }
     }
 
+    //――――――――――――――――――――――――――――――――――――
     //フォントサイズの設定
+    //――――――――――――――――――――――――――――――――――――
     private void WriteFontSize() {
         byte[] _16dot = {0x1B, 0x4D};
         byte[] _24dot = {0x1B, 0x50};
@@ -222,44 +240,50 @@ public class PatioPrinter {
         }
     }
 
+    //――――――――――――――――――――――――――――――――――――
     //全角モード
+    //――――――――――――――――――――――――――――――――――――
     private void WriteZenkakuMode() {
         byte[] _zenkaku = {0x1C, 0x26};
         WriteByte(_zenkaku);
     }
 
+    //――――――――――――――――――――――――――――――――――――
     // 半角モード
+    //――――――――――――――――――――――――――――――――――――
     private void WriteHankakuMode() {
         byte[] _hankaku = {0x1C, 0x2E};
         WriteByte(_hankaku);
     }
 
+    //――――――――――――――――――――――――――――――――――――
     // 罫線印字モード (2018/01/26 追加)
+    //――――――――――――――――――――――――――――――――――――
     private void WriteLineMode() {
         byte[] _lineon = {0x1B, 0x73, 0x66};
         WriteByte(_lineon);
     }
 
+    //――――――――――――――――――――――――――――――――――――
     // 通常印字速度モード（高速） (2018/01/26 追加)
+    //――――――――――――――――――――――――――――――――――――
     private void WriteLineOffMode() {
         byte[] _lineoff = {0x1B, 0x73, 0x60};
         WriteByte(_lineoff);
     }
 
+    //――――――――――――――――――――――――――――――――――――
     // S-JISへのエンコード処理
+    //――――――――――――――――――――――――――――――――――――
     private byte[] Encode_SJIS(String str)  {
-
         byte[] bytestr = new byte[str.length()];
         try {
-
             bytestr = str.getBytes("Shift-JIS");
-
-        } catch (UnsupportedEncodingException e) {
+        }
+        catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
         return bytestr;
     }
-
 }
 

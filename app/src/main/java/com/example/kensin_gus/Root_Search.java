@@ -23,14 +23,6 @@ import com.example.db_library.Kenshin_DB;
 @SuppressLint("Registered")
 public class Root_Search extends AppCompatActivity {
 
-    //---------------------------------------------------------------------------------------------
-    //
-    // ***  グローバル変数　インスタンス  ***
-    //
-    // Search_Flg           0 : moveToFirst , 1 : moveToNext , 2: moveToPrevious
-    // IndexOut_Flg         0 : 最初のデータを指す　1 : 最後のデータを指す 99 : 初期値
-    // BUTTON_SELECT_FLG    0 : 1 :
-    //---------------------------------------------------------------------------------------------
     ConstraintLayout constraintLayout;
     InputMethodManager inputMethodManager;
 
@@ -38,17 +30,15 @@ public class Root_Search extends AppCompatActivity {
     Cursor cursor = null;
     Intent root_search;
 
-   static final int EXCEPTION_FLG = 99;
-    static final int SEARCH_FLG1 = 1;
-    static final int SEARCH_FLG2 = 2;
-    static final int SEARCH_FLG3 = 3;
-    static final int SEARCH_FLG4 = 4;
+    static final int SEARCH_FLG1 = 1;       // 未検針データ検索
+    static final int SEARCH_FLG2 = 2;       // 得意先コード検索
+    static final int SEARCH_FLG3 = 3;       // 群コード検索
+    static final int SEARCH_FLG4 = 4;       // 得意先、群コード検索
 
     int SUBSCRIPT_LENGTH = 0;
-
-    int BUTTON_SELECT_FLG = 0;
-    int Array_Subscript_Vertical;
-    int Array_Subscript_Size;
+    int BUTTON_SELECT_FLG;                   //検索ボタンフラグ
+    int Array_line;                           //データ配列　行番号
+    int Array_column;                         //データ配列　列番号
     String[][] cursor_data_input = null;
 
     EditText customer_code ;
@@ -61,7 +51,6 @@ public class Root_Search extends AppCompatActivity {
         setContentView(R.layout.root_search);
 
         root_search = getIntent();
-
         kenshin_db = new Kenshin_DB(this);
 
         final Button Not_yet_Button = findViewById(R.id.Kensin_Button);
@@ -73,7 +62,7 @@ public class Root_Search extends AppCompatActivity {
         final Button OK_Button = findViewById(R.id.OK);
 
         cursor = kenshin_db.db.rawQuery("SELECT * FROM TOKUIF ", null);
-        cursor_data_input = new String[cursor.getCount()][7];
+        cursor_data_input = new String[cursor.getCount()][7];   //検索人数分をカラム数に挿入
         cursor = null;
 
         customer_code = findViewById(R.id.customercode);
@@ -84,28 +73,17 @@ public class Root_Search extends AppCompatActivity {
         constraintLayout =findViewById(R.id.root_search_layout);
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        //---------------------------------------------------------------------------------------------
-        // *** Root_Search 道順タスク　***
-        //
-        //  i = 0 : 得意先ｺｰﾄﾞ　i = 1 : 群ｺｰﾄﾞ　i = 2 :　道順
-        //　i = 3 : 道順        i = 4
-        //
-        //---------------------------------------------------------------------------------------------
-
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  Not_yet_Button  クラス  ***
-        //
-        // BUTTON_SELECT_FLG = 1
-        //
-        // ---------------------------------------------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        // 未検針データ検索メソッド
+        //――――――――――――――――――――――――――――――――――――
         Not_yet_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG1;
                 Select_Cursor();
-
+                //データの検索
                 if(cursor_data_input.length > 0) {
+                    //データを配列に挿入
                     if (cursor_data_input[0][0] != null) {
                         Cursor_VIEW();
                     }
@@ -122,19 +100,17 @@ public class Root_Search extends AppCompatActivity {
                 }
             }
         });
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  customer_Button クラス  ***
-        //
-        // BUTTON_SELECT_FLG = 2
-        //
-        // ---------------------------------------------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        // 得意先コード検索メソッド
+        //――――――――――――――――――――――――――――――――――――
         customer_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG2;
                 Select_Cursor();
+                //データの検索
                 if(cursor_data_input.length > 0) {
+                    //データを配列に挿入
                     if (cursor_data_input[0][0] != null) {
                         Cursor_VIEW();
                     }
@@ -152,20 +128,17 @@ public class Root_Search extends AppCompatActivity {
             }
         });
 
-
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  Group_Button クラス  ***
-        //
-        // BUTTON_SELECT_FLG = 3
-        //
-        // ---------------------------------------------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        // 群コード検索メソッド
+        //――――――――――――――――――――――――――――――――――――
         Group_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG3;
                 Select_Cursor();
+                //データの検索
                 if(cursor_data_input.length > 0) {
+                    //データを配列に挿入
                     if (cursor_data_input[0][0] != null) {
                         Cursor_VIEW();
                     }
@@ -183,19 +156,17 @@ public class Root_Search extends AppCompatActivity {
             }
         });
 
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  Group_K_jun_Button クラス  ***
-        //
-        // BUTTON_SELECT_FLG = 4
-        //
-        // ---------------------------------------------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        // 群コード、得意先コード検索メソッド
+        //――――――――――――――――――――――――――――――――――――
         Group_K_jun_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BUTTON_SELECT_FLG = SEARCH_FLG4;
                 Select_Cursor();
+                //データの検索
                 if(cursor_data_input.length > 0) {
+                    //データを配列に挿入
                     if (cursor_data_input[0][0] != null) {
                         Cursor_VIEW();
                     }
@@ -213,47 +184,46 @@ public class Root_Search extends AppCompatActivity {
             }
         });
 
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  Up_Button クラス  ***
-        //
-        // ---------------------------------------------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        // 前の人を検索するメソッド
+        //――――――――――――――――――――――――――――――――――――
         Up_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                Array_Subscript_Vertical++;
+                //行番号を増やす
+                Array_line++;
                 Cursor_VIEW();
             }
         });
 
-        //---------------------------------------------------------------------------------------------
-        //
-        // ***  Down_Button クラス  ***
-        //
-        // ---------------------------------------------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        //  次の人を検索するメソッド
+        //――――――――――――――――――――――――――――――――――――
         Down_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                Array_Subscript_Vertical--;
+                //行番号を減らす
+                Array_line--;
                 Cursor_VIEW();
             }
         });
-
 
         OK_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
                 try {
+                    //検索せずに終わる場合
                     if (cursor_data_input.length == 0) {
                         finish();
                     }
+                    //検索していた場合
                     else {
-                        int cursor_data = Integer.parseInt(cursor_data_input[Array_Subscript_Vertical][6]);
+                        int cursor_data = Integer.parseInt(cursor_data_input[Array_line][6]);
                         root_search.putExtra("ROOT_KEY", cursor_data);
                         setResult(RESULT_OK, root_search);
                         finish();
@@ -268,57 +238,52 @@ public class Root_Search extends AppCompatActivity {
     }
 
 
-    //---------------------------------------------------------------------------------------------
-    //
-    // *** 検索ボタン　Cursor選択クラス  ***
-    //
-    //---------------------------------------------------------------------------------------------
+    //――――――――――――――――――――――――――――――――――――
+    // 検索ボタンメソッド
+    //――――――――――――――――――――――――――――――――――――
     public void Select_Cursor() {
 
+        //検索ボタンの確認
         switch (BUTTON_SELECT_FLG) {
+
+            //未検針データ検索
             case SEARCH_FLG1:
                 cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? ", new String[]{" "});
                 break;
 
+            //得意先コード検索
             case SEARCH_FLG2:
                 cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND customer = ? ", new String[]{" ", customer_code.getText().toString()});
                 break;
 
+            //群コード検索
             case SEARCH_FLG3:
                 cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? ", new String[]{" ", G_code.getText().toString()});
                 break;
 
+            //得意先、群コード検索
             case SEARCH_FLG4:
                 cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? AND customer = ? ", new String[]{" ", Group_K_jun_C.getText().toString(), Group_K_jun_G.getText().toString()});
                 break;
-
-            case EXCEPTION_FLG:
-                break;
         }
-
         if ((cursor.moveToFirst())) {
-
-            Array_Subscript_Vertical = 0;
-            Array_Subscript_Size = 0;
-
+            Array_line = 0;
+            Array_column = 0;
             do {
-
-                for (Array_Subscript_Size = 0; Array_Subscript_Size < cursor.getColumnCount(); Array_Subscript_Size++) {
-                    cursor_data_input[Array_Subscript_Vertical][Array_Subscript_Size] = cursor.getString(Array_Subscript_Size);
+                //検索データ数分
+                for (Array_column = 0; Array_column < cursor.getColumnCount(); Array_column++) {
+                    cursor_data_input[Array_line][Array_column] = cursor.getString(Array_column);
                 }
-                Array_Subscript_Vertical++;
+                Array_line++;
             } while (cursor.moveToNext());
-            Array_Subscript_Vertical = 0;
+            Array_line = 0;
         }
         SUBSCRIPT_LENGTH = cursor_data_input.length;
-
     }
 
-    //---------------------------------------------------------------------------------------------
-    //
-    // *** 下部ボックス内　描画クラス  ***
-    //
-    //---------------------------------------------------------------------------------------------
+    //――――――――――――――――――――――――――――――――――――
+    // 検索データ表示メソッド
+    //――――――――――――――――――――――――――――――――――――
     @SuppressLint("SetTextI18n")
     public void Cursor_VIEW() {
 
@@ -329,36 +294,41 @@ public class Root_Search extends AppCompatActivity {
         final TextView CustomCode = findViewById(R.id.CustomCode);
         final TextView P_name = findViewById(R.id.P_name);
 
-        if (Array_Subscript_Vertical < 0) {
-            Array_Subscript_Vertical = 0;
+        //データ行が0以下になった時
+        if (Array_line < 0) {
+            Array_line = 0;
         }
         else
             {
             try {
-                if (cursor_data_input[Array_Subscript_Vertical][0] == null) {
-                    Array_Subscript_Vertical--;
+                if (cursor_data_input[Array_line][0] == null) {
+                    Array_line--;
 
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                Array_Subscript_Vertical--;
+                Array_line--;
             }
         }
-        Log.d("math", "" + Array_Subscript_Vertical);
+        Log.d("math", "" + Array_line);
 
-
+        //データ表示
         try {
-            G_code.setText(cursor_data_input[Array_Subscript_Vertical][0]);
-            K_jun.setText(cursor_data_input[Array_Subscript_Vertical][1]);
-            Name1.setText(cursor_data_input[Array_Subscript_Vertical][2]);
-            Name2.setText(cursor_data_input[Array_Subscript_Vertical][3]);
-            CustomCode.setText(cursor_data_input[Array_Subscript_Vertical][4]);
-            P_name.setText(cursor_data_input[Array_Subscript_Vertical][5]);
+            G_code.setText(cursor_data_input[Array_line][0]);       //群コード
+            K_jun.setText(cursor_data_input[Array_line][1]);        //検針順
+            Name1.setText(cursor_data_input[Array_line][2]);        //顧客名1
+            Name2.setText(cursor_data_input[Array_line][3]);        //顧客名2
+            CustomCode.setText(cursor_data_input[Array_line][4]);   //得意先コード
+            P_name.setText(cursor_data_input[Array_line][5]);       //設置場所名称
 
         } catch (ArrayIndexOutOfBoundsException e) {
             Log.d("", "配列外にでました");
         }
     }
-    public  boolean onTouchEvent(MotionEvent event){
+    //――――――――――――――――――――――――――――――――――――
+    // タッチイベントメソッド
+    //――――――――――――――――――――――――――――――――――――
+    public boolean onTouchEvent(MotionEvent event){
+        // 画面をタッチすることでキーボード等を隠す
         inputMethodManager.hideSoftInputFromWindow(constraintLayout.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
         constraintLayout.requestFocus();
 

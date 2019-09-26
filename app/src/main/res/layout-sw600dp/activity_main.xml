@@ -143,7 +143,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <EditText
-            android:id="@+id/Row1_Text"
+            android:id="@+id/Input_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -172,8 +172,8 @@
             android:text="前回"
             android:textColor="#000000"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Row1_Text2"
-            app:layout_constraintStart_toStartOf="@+id/Row1_Text2"
+            app:layout_constraintEnd_toEndOf="@+id/zenkai_kensin_number"
+            app:layout_constraintStart_toStartOf="@+id/zenkai_kensin_number"
             app:layout_constraintTop_toTopOf="@+id/konkai_kotei"
             tools:ignore="HardcodedText" />
 
@@ -186,13 +186,13 @@
             android:text="@string/kotei4"
             android:textColor="#000000"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Row1_Text"
-            app:layout_constraintStart_toStartOf="@+id/Row1_Text"
+            app:layout_constraintEnd_toEndOf="@+id/Input_number"
+            app:layout_constraintStart_toStartOf="@+id/Input_number"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlCompat,RtlHardcoded" />
 
         <TextView
-            android:id="@+id/Row1_Text2"
+            android:id="@+id/zenkai_kensin_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
@@ -203,7 +203,7 @@
             android:focusable="false"
             android:gravity="end"
             android:textSize="30sp"
-            app:layout_constraintStart_toEndOf="@+id/Row1_Text"
+            app:layout_constraintStart_toEndOf="@+id/Input_number"
             app:layout_constraintTop_toBottomOf="@+id/zenkai_kotei"
             tools:ignore="LabelFor"
             tools:targetApi="o" />
@@ -225,13 +225,13 @@
             android:text="@string/kotei5"
             android:textColor="#000000"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Row2_Text"
-            app:layout_constraintStart_toStartOf="@+id/Row2_Text"
+            app:layout_constraintEnd_toEndOf="@+id/Used_number"
+            app:layout_constraintStart_toStartOf="@+id/Used_number"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlCompat,RtlHardcoded" />
 
         <TextView
-            android:id="@+id/Row3_Text"
+            android:id="@+id/Using_Amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
@@ -241,13 +241,13 @@
             android:focusable="false"
             android:gravity="end"
             android:textSize="30sp"
-            app:layout_constraintStart_toEndOf="@+id/Row2_Text"
-            app:layout_constraintTop_toTopOf="@+id/Row2_Text"
+            app:layout_constraintStart_toEndOf="@+id/Used_number"
+            app:layout_constraintTop_toTopOf="@+id/Used_number"
             tools:ignore="LabelFor,RtlCompat"
             tools:targetApi="o" />
 
         <TextView
-            android:id="@+id/Row2_Text"
+            android:id="@+id/Used_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -265,20 +265,20 @@
             tools:targetApi="o" />
 
         <TextView
-            android:id="@+id/Tax"
+            android:id="@+id/Tax_Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:focusable="false"
             android:text="@string/Tax"
             android:textSize="30sp"
-            app:layout_constraintEnd_toStartOf="@+id/Row3_Text2"
-            app:layout_constraintTop_toTopOf="@+id/Row3_Text2"
+            app:layout_constraintEnd_toStartOf="@+id/Tax"
+            app:layout_constraintTop_toTopOf="@+id/Tax"
             tools:ignore="LabelFor"
             tools:targetApi="o" />
 
         <TextView
-            android:id="@+id/Row3_Text2"
+            android:id="@+id/Tax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -287,8 +287,8 @@
             android:focusable="false"
             android:gravity="end"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Row3_Text"
-            app:layout_constraintTop_toBottomOf="@+id/Row3_Text"
+            app:layout_constraintEnd_toEndOf="@+id/Using_Amount"
+            app:layout_constraintTop_toBottomOf="@+id/Using_Amount"
             tools:ignore="LabelFor"
             tools:targetApi="o" />
 
@@ -299,8 +299,8 @@
             android:gravity="right|end"
             android:text="@string/kotei8"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Row3_Text"
-            app:layout_constraintStart_toStartOf="@+id/Row3_Text"
+            app:layout_constraintEnd_toEndOf="@+id/Using_Amount"
+            app:layout_constraintStart_toStartOf="@+id/Using_Amount"
             app:layout_constraintTop_toTopOf="@+id/kotei7"
             tools:ignore="RtlCompat,RtlHardcoded" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
-
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
-
 import java.util.Locale;
 
 public class Calendar_Select extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
@@ -18,6 +16,9 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     Intent CALENDAR_INTENT;
     String str ;
 
+    //―――――――――――――――――――――――――――――――――
+    // カレンダーレイアウト　呼び出しメソッド
+    //―――――――――――――――――――――――――――――――――
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +26,11 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
 
         textView = findViewById(R.id.days);
         CALENDAR_INTENT = new Intent();
-
     }
 
+    //―――――――――――――――――――――――――――――――――
+    // 日付出力メソッド
+    //―――――――――――――――――――――――――――――――――
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -39,19 +42,23 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePick();
         newFragment.show(getSupportFragmentManager(), "datePicker");
-
     }
 
+    //OKボタン押下時
     public void OK(View v) {
+        //入力値がある場合
         if(!textView.getText().toString().equals("")) {
             CALENDAR_INTENT.putExtra("CALENDAR_KEY", textView.getText().toString());
             setResult(RESULT_OK, CALENDAR_INTENT);
-            finish();
+            finish();   //Activity破棄
         }
+        //ない場合
         else{
             finish();
         }
     }
+
+    //キャンセルボタン押下時
     public void Cancel(View v){
         finish();
     }

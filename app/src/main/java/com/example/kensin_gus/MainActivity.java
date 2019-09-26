@@ -11,7 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,19 +21,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import com.example.db_library.HYOF;
 import com.example.db_library.Kenshin_DB;
 import com.example.db_library.TOKUIF;
-import com.fujitsufrontech.patioprinter.fhtuprt.SdcardLog;
+
 import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    //―――――――――――――――――――――――――――――――――――――――//
-    //                            グローバル変数　  　　                        //
-    //―――――――――――――――――――――――――――――――――――――――//
     String Number_Input;
     String Usaged;
     String price;
@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
     int REQUEST_CODE = 1; //パーミッション許可
 
 
-    //―――――――――――――――――――――――――――――――――――――――//
-    //              メインアクティビティ内Widgetsのインスタンス                  //
-    //―――――――――――――――――――――――――――――――――――――――//
     Button KENSIN_BUTTON;               //検針ボタン
     Button DOWN_BUTTON;                 //DOWNボタン
     Button UP_BUTTON;                   //UPボタン
@@ -76,11 +73,6 @@ public class MainActivity extends AppCompatActivity {
     TextView DAYS;                        //日付テキスト
     TextView TAX;                         //消費税分テキスト
 
-
-    //―――――――――――――――――――――――――――――――――――――――//
-    //                          グローバルインスタンス                          //
-    //―――――――――――――――――――――――――――――――――――――――//
-
     TOKUIF tokuif;                              //TOKUIFクラス
     Kenshin_DB kenshin_db;                      //検針DBクラス
     Ten_key_Process ten_key_process;           //10キークラス
@@ -91,11 +83,13 @@ public class MainActivity extends AppCompatActivity {
     View main_view;
     Dialog dialog;
     Cursor cursor;
+    ConstraintLayout constraintLayout;
+    InputMethodManager inputMethodManager;
 
 
-    //-------------------------------------------------------
+    //――――――――――――――――――――――――――――――
     //  一番最初に1回だけ呼ばれるメソッド
-    //-------------------------------------------------------
+    //――――――――――――――――――――――――――――――
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
             checkPermission(permissions, REQUEST_CODE);
         }
 
-        //-----------------------------------------------------------
-        //  グローバルインスタンスをインスタンス化
-        //-----------------------------------------------------------
+        //――――――――――――――――――――――――――――――――――――
+        //  オブジェクト生成
+        //――――――――――――――――――――――――――――――――――――
         DOWN_BUTTON = findViewById(R.id.down);
         UP_BUTTON = findViewById(R.id.up);
         END_BUTTON = findViewById(R.id.end_app);
@@ -127,28 +121,28 @@ public class MainActivity extends AppCompatActivity {
         OUT_PUT_BUTTON = findViewById(R.id.OUT_PUT_BUTTON);
         PRINTER_BUTTON = findViewById(R.id.Printer_Button);
 
-        INPUT_NUMBER_EDIT = findViewById(R.id.Row1_Text);
-        CURRENCT_USAGE_TEXT = findViewById(R.id.Row2_Text);
-        CURRENCT_AMOUNT_TEXT = findViewById(R.id.Row3_Text);
-        TAX = findViewById(R.id.Row3_Text2);
+        INPUT_NUMBER_EDIT = findViewById(R.id.Input_number);
+        CURRENCT_USAGE_TEXT = findViewById(R.id.Used_number);
+        CURRENCT_AMOUNT_TEXT = findViewById(R.id.Using_Amount);
+        TAX = findViewById(R.id.Tax);
         DAYS = findViewById(R.id.date_now);
 
+        //――――――――――――――――――――――――――――――――――――
+        //  インスンタンス化
+        //――――――――――――――――――――――――――――――――――――
         kenshin_db = new Kenshin_DB(getApplicationContext());
         tokuif = new TOKUIF();
         ten_key_process = new Ten_key_Process();
-
         button_processing = new Button_Processing();
         main_screen = new Screen_Layout.Main_Screen();
         layoutInflater = LayoutInflater.from(this);
         dialog = new Dialog();
         VALUES = new ContentValues();
 
-
-
-        //―――――――――――――――――――――――――――――――――――――――――
-        //  今日の日付設定
         //―――――――――――――――――――――――――――――――――――――――――
 
+
+        //今日の日付を入力　戻り値：String 型
         TODAY = main_screen.Screen_Data(this);
 
         //―――――――――――――――――――――――――――――――――――――――――
@@ -191,8 +185,10 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermission(String[] permissions, int request_code) {
         ActivityCompat.requestPermissions(this, permissions, request_code);
     }
+    //―――――――――――――――――――――――――――――――――――――
+    //パーミッション許可が下りているか確認メソッド
+    //―――――――――――――――――――――――――――――――――――――
     @Override
-    //パーミッション許可が下りているか確認
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE) {
             for (int i = 0; i < permissions.length; i++) {
@@ -400,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
                 kenshin_db.allDelete("HYOF");   //HYOFデータ削除
 
                 tokuif.TOKUIF_CSV(kenshin_db.db, MainActivity.this);     //TOKUIFの作成
-                new HYOF().HYOF_CSV(kenshin_db.db, MainActivity.this);   //HYOFの作成
+                new HYOF().HYOF_TSV(kenshin_db.db, MainActivity.this);   //HYOFの作成
 
                 new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVを取り込みました")
@@ -530,5 +526,15 @@ public class MainActivity extends AppCompatActivity {
         tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN, DAYS.getText().toString());
         button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
+    }
+    //――――――――――――――――――――――――――――――――――――
+    // タッチイベントメソッド
+    //――――――――――――――――――――――――――――――――――――
+    public boolean onTouchEvent(MotionEvent event){
+        //
+        inputMethodManager.hideSoftInputFromWindow(constraintLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        constraintLayout.requestFocus();
+
+        return false;
     }
 }
