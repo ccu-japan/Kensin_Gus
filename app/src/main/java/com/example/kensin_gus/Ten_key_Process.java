@@ -17,6 +17,7 @@ public class Ten_key_Process extends AppCompatActivity {
     Button DELETE_KEY;
     Intent TEN_KEY_INTENT;
     StringBuilder stringBuilder; //「.」や桁数の調整
+    int Root_Result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,8 @@ public class Ten_key_Process extends AppCompatActivity {
         setContentView(R.layout.kensin_ten_key);
 
         TEN_KEY_INTENT = getIntent();
+
+        Root_Result = TEN_KEY_INTENT.getIntExtra("BUTTON_ID",-1);
 
         ten_key_edit = findViewById(R.id.ten_key_edit);
         button = findViewById(R.id.button);
@@ -43,7 +46,6 @@ public class Ten_key_Process extends AppCompatActivity {
         findViewById(R.id.ten_key_zer).setOnClickListener(buttonNumberListener);
         findViewById(R.id.ten_key_dot).setOnClickListener(buttonNumberListener);
 
-        ten_key_edit.setText("0");
 
         //―――――――――――――――――――――――――――――――――――
         // OKボタン押下時
@@ -65,6 +67,8 @@ public class Ten_key_Process extends AppCompatActivity {
                 }
 
                 TEN_KEY_INTENT.putExtra("RESULT_KEY", ROW1_RESULT);
+                TEN_KEY_INTENT.putExtra("BUTTON_ID",Root_Result);
+
                 setResult(RESULT_OK, TEN_KEY_INTENT);
                 finish();
             }
@@ -104,6 +108,9 @@ public class Ten_key_Process extends AppCompatActivity {
         });
     }
 
+    //―――――――――――――――――――――――――――――――――――――――
+    //  数値入力メソッド
+    //―――――――――――――――――――――――――――――――――――――――
     View.OnClickListener buttonNumberListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -111,11 +118,11 @@ public class Ten_key_Process extends AppCompatActivity {
             int i = 0;
 
             //テキストに文字列「0」　かつ　テンキー「.」以外を押下したとき
-            if(ten_key_edit.getText().toString().equals("0") && button.getId() != R.id.ten_key_dot){
+      //      if(ten_key_edit.getText().toString().equals("0") && button.getId() != R.id.ten_key_dot){
                 stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-                stringBuilder.setLength(stringBuilder.length() - 1); //文字列の末尾を削除
+            //    stringBuilder.setLength(stringBuilder.length() - 1); //文字列の末尾を削除
                 ten_key_edit.setText(stringBuilder);
-            }
+    ///        }
 
             //テンキー「.」を押下したとき
             if (button.getId() == R.id.ten_key_dot) {
@@ -136,7 +143,7 @@ public class Ten_key_Process extends AppCompatActivity {
             //テンキー0~9押下時
             else {
                 ten_key_edit.append(button.getText());
-
+/*
                 //テキスト入力数を６桁にするために６桁目になった時に処理
                 if(ten_key_edit.getText().length() == 6)
                 {
@@ -154,10 +161,8 @@ public class Ten_key_Process extends AppCompatActivity {
                         stringBuilder.insert(0," " + " ");
                         ten_key_edit.setText(stringBuilder);
                     }
-                }
+                }*/
             }
         }
     };
-
-
 }

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import java.util.Locale;
 
-public class Calendar_Select extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
+public class Calendar_Select extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private TextView textView;
     Intent CALENDAR_INTENT;
@@ -34,7 +36,7 @@ public class Calendar_Select extends FragmentActivity implements DatePickerDialo
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-        str = String.format(Locale.US, "%d/%02d/%d", year, monthOfYear + 1, dayOfMonth);
+        str = String.format(Locale.US, "%d/%02d/%02d", year, monthOfYear + 1, dayOfMonth);
         textView.setText(str);
 
     }

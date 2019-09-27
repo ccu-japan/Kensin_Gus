@@ -104,7 +104,7 @@ public class TOKUIF {
                         + COL_PLACE_CODE + "  REAL ,"
                         + COL_PLACE_NAME + "  TEXT ,"
                         + COL_KENSIN + "  REAL ,"
-                        + COL_KENSINJUN + "  REAL ,"
+                        + COL_KENSINJUN + "  TEXT ,"
                         + COL_CUSTOMER_NAME1 + "  TEXT ,"
                         + COL_CUSTOMER_NAME2 + "  TEXT ,"
                         + COL_GAS_PRICE_SECTION + "  TEXT ,"
@@ -114,7 +114,7 @@ public class TOKUIF {
                         + COL_LAST_TIME_KENSIN + " BLOB  ,"
                         + COL_LAST_TIME_POINTER + "  REAL,"
                         + COL_LAST_TIME_USAGE + "  REAL ,"
-                        + COL_THIS_TIME_KENSIN + "  BLOB ,"
+                        + COL_THIS_TIME_KENSIN + " TEXT ,"
                         + COL_THIS_TIME_POINTER + "  REAL ,"
                         + COL_THIS_TIME_USAGE + "  REAL ,"
                         + COL_GAS_PRICE + "  REAL ,"
@@ -193,7 +193,7 @@ public class TOKUIF {
                                 contentValues.put(COL_PLACE_CODE, Integer.parseInt(columnData[5]));
                                 contentValues.put(COL_PLACE_NAME, columnData[6]);
                                 contentValues.put(COL_KENSIN, Integer.parseInt(columnData[7]));
-                                contentValues.put(COL_KENSINJUN, Double.parseDouble(columnData[8]));
+                                contentValues.put(COL_KENSINJUN,columnData[8].replaceAll(".00",""));
                                 contentValues.put(COL_CUSTOMER_NAME1, columnData[9]);
                                 contentValues.put(COL_CUSTOMER_NAME2, columnData[10]);
                                 contentValues.put(COL_GAS_PRICE_SECTION, columnData[11]);
@@ -243,7 +243,6 @@ public class TOKUIF {
                                 contentValues.put(COL_END_CODE, columnData[55]);
                                 db.insert(DB_TABLE, null, contentValues);
                         }
-
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
@@ -264,7 +263,7 @@ public class TOKUIF {
         }
 
         //――――――――――――――――――――――――――――――――――
-        // 入力ファイル読込メソッド
+        // 使用量金額　登録メソッド
         //――――――――――――――――――――――――――――――――――
         @SuppressLint("NewApi")
         public void TAX_PRICE(String Price, String Tax, ContentValues values, SQLiteDatabase db, int COL_BAN, String T_kensin) {

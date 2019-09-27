@@ -11,9 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,14 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import com.example.db_library.HYOF;
 import com.example.db_library.Kenshin_DB;
 import com.example.db_library.TOKUIF;
 
 import java.util.Objects;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     int PRINTER_RESULT = 5;                               //印刷アクティビティ結果の取得
 
     int REQUEST_CODE = 1; //パーミッション許可
-
 
     Button KENSIN_BUTTON;               //検針ボタン
     Button DOWN_BUTTON;                 //DOWNボタン
@@ -83,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
     View main_view;
     Dialog dialog;
     Cursor cursor;
-    ConstraintLayout constraintLayout;
-    InputMethodManager inputMethodManager;
-
 
     //――――――――――――――――――――――――――――――
     //  一番最初に1回だけ呼ばれるメソッド
@@ -228,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
     //――――――――――――――――――――――――――――――――――――
     //　別のアクティビティの結果を受け取るメソッド
     //――――――――――――――――――――――――――――――――――――
+    @SuppressLint("NewApi")
     @Override
     protected void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(REQUEST_CODE, resultCode, intent);
@@ -247,7 +240,20 @@ public class MainActivity extends AppCompatActivity {
 
         //テンキーアクティビティからの結果を受け取る
         if (resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent) {
-            INPUT_NUMBER_EDIT.setText(intent.getStringExtra("RESULT_KEY"));
+            //テンキーアクティビティの結果
+            StringBuilder Result = new StringBuilder(intent.getStringExtra("RESULT_KEY"));
+
+            // 文字列が ２以上の時
+            if(Result.length() > 1){
+                //小数点がないとき
+                if(Result.charAt(1) != '.') {
+                    if (Result.charAt(0) == '0') {
+                        Result.deleteCharAt(0);
+                    }
+                }
+            }
+
+            INPUT_NUMBER_EDIT.setText(Result);
             CURRENCT_USAGE_TEXT.setText(Calc_class.Calc_Used(Float.parseFloat(INPUT_NUMBER_EDIT.getText().toString()), kenshin_db.db, COL_BAN));
             Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
         }
@@ -501,6 +507,7 @@ public class MainActivity extends AppCompatActivity {
         DB_REG_FLG = false; //PRINT_FLGの初期化
     }
 
+
     //-------------------------------------------------------------------------------//
     //                                 点検　メソッド                                 //
     //-------------------------------------------------------------------------------//
@@ -527,14 +534,5 @@ public class MainActivity extends AppCompatActivity {
         button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
 
     }
-    //――――――――――――――――――――――――――――――――――――
-    // タッチイベントメソッド
-    //――――――――――――――――――――――――――――――――――――
-    public boolean onTouchEvent(MotionEvent event){
-        //
-        inputMethodManager.hideSoftInputFromWindow(constraintLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        constraintLayout.requestFocus();
 
-        return false;
-    }
 }

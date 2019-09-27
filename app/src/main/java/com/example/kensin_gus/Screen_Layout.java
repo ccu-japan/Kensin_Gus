@@ -7,9 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AlertDialog;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,7 +37,7 @@ public class Screen_Layout {
         static int SELECT_COM(MainActivity mainActivity, int COL_BAN , SQLiteDatabase db) {
 
             Cursor cursor_ban   = db.rawQuery("SELECT ban FROM TOKUIF",null);
-            Cursor c            = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban ,/*i:10*/T_T_kensin  FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
+            Cursor c            = db.rawQuery("SELECT /*i:0*/C_name1 , /*i:1*/C_name2 , /*i:2*/customer , /*i:3*/P_name , /*i:4*/L_T_pointer  ,/*i:5*/T_T_pointer ,/*i:6*/company  ,/* i:7 */ place ,/*i:8*/ T_T_usage ,/*i:9*/ ban ,/*i:10*/T_T_kensin FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
             Cursor C_price      = db.rawQuery("SELECT /*i:0*/T_T_Billing ,/*i:1*/ G_C_tax FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
 
             c.moveToFirst();
@@ -73,7 +71,7 @@ public class Screen_Layout {
                 Row3_2Text.setText(Row3_text2);
 
                 //登録データが0000/00/00 or 空白以外の時
-                if(!c.getString(10).equals("0000/00/00") || !c.getString(10).equals("")) {
+                if(!c.getString(10).equals("0000/00/00")) {
                     Date_now.setText(c.getString(10));
                 }
             }

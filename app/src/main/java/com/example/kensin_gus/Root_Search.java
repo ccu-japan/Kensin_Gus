@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -40,11 +41,21 @@ public class Root_Search extends AppCompatActivity {
     int Array_line;                           //データ配列　行番号
     int Array_column;                         //データ配列　列番号
     String[][] cursor_data_input = null;
+    int TEN_KEY_RESULT = 1;
 
     EditText customer_code ;
     EditText G_code;
     EditText Group_K_jun_C;
     EditText Group_K_jun_G;
+
+    Button Not_yet_Button;
+    Button customer_Button;
+    Button Group_Button;
+    Button Group_K_jun_Button;
+    Button Up_Button;
+
+    Button Down_Button;
+    Button OK_Button;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +64,14 @@ public class Root_Search extends AppCompatActivity {
         root_search = getIntent();
         kenshin_db = new Kenshin_DB(this);
 
-        final Button Not_yet_Button = findViewById(R.id.Kensin_Button);
-        final Button customer_Button = findViewById(R.id.customer_Button);
-        final Button Group_Button = findViewById(R.id.Printer_Button);
-        final Button Group_K_jun_Button = findViewById(R.id.Calender_Button);
-        final Button Up_Button = findViewById(R.id.Up);
-        final Button Down_Button = findViewById(R.id.Down);
-        final Button OK_Button = findViewById(R.id.OK);
+        Not_yet_Button = findViewById(R.id.Kensin_Button);
+        customer_Button = findViewById(R.id.customer_Button);
+        Group_Button = findViewById(R.id.Printer_Button);
+        Group_K_jun_Button = findViewById(R.id.Calender_Button);
+        Up_Button = findViewById(R.id.Up);
+
+        Down_Button = findViewById(R.id.Down);
+        OK_Button = findViewById(R.id.OK);
 
         cursor = kenshin_db.db.rawQuery("SELECT * FROM TOKUIF ", null);
         cursor_data_input = new String[cursor.getCount()][7];   //検索人数分をカラム数に挿入
@@ -70,8 +82,14 @@ public class Root_Search extends AppCompatActivity {
         Group_K_jun_C = findViewById(R.id.Code02);
         Group_K_jun_G = findViewById(R.id.Code03);
 
+        findViewById(R.id.customercode).setOnClickListener(Input_text);
+        findViewById(R.id.Code01).setOnClickListener(Input_text);
+        findViewById(R.id.Code02).setOnClickListener(Input_text);
+        findViewById(R.id.Code03).setOnClickListener(Input_text);
+
         constraintLayout =findViewById(R.id.root_search_layout);
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
 
         //――――――――――――――――――――――――――――――――――――
         // 未検針データ検索メソッド
@@ -157,7 +175,7 @@ public class Root_Search extends AppCompatActivity {
         });
 
         //――――――――――――――――――――――――――――――――――――
-        // 群コード、得意先コード検索メソッド
+        // 群コード、検針順　検索メソッド
         //――――――――――――――――――――――――――――――――――――
         Group_K_jun_Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,10 +255,10 @@ public class Root_Search extends AppCompatActivity {
         });
     }
 
-
     //――――――――――――――――――――――――――――――――――――
     // 検索ボタンメソッド
     //――――――――――――――――――――――――――――――――――――
+
     public void Select_Cursor() {
 
         //検索ボタンの確認
@@ -261,9 +279,10 @@ public class Root_Search extends AppCompatActivity {
                 cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? ", new String[]{" ", G_code.getText().toString()});
                 break;
 
-            //得意先、群コード検索
+            //群コード,検針順　検索
             case SEARCH_FLG4:
-                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF WHERE P_flag = ? AND G_code = ? AND customer = ? ", new String[]{" ", Group_K_jun_C.getText().toString(), Group_K_jun_G.getText().toString()});
+                cursor = kenshin_db.db.rawQuery("SELECT G_code ,  K_jun , C_name1 , C_name2 , customer , P_name , ban FROM TOKUIF " +
+                                                        "WHERE P_flag = ? AND G_code = ? AND K_jun = ? ", new String[]{" ", Group_K_jun_C.getText().toString(),(Group_K_jun_G.getText().toString())});
                 break;
         }
         if ((cursor.moveToFirst())) {
@@ -282,6 +301,7 @@ public class Root_Search extends AppCompatActivity {
     }
 
     //――――――――――――――――――――――――――――――――――――
+
     // 検索データ表示メソッド
     //――――――――――――――――――――――――――――――――――――
     @SuppressLint("SetTextI18n")
@@ -324,6 +344,49 @@ public class Root_Search extends AppCompatActivity {
             Log.d("", "配列外にでました");
         }
     }
+
+
+    View.OnClickListener Input_text = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+           int i = v.getId();
+
+           Intent ten_key = new Intent(getApplication(),Ten_key_Process.class);
+           ten_key.putExtra("BUTTON_ID",i);
+           startActivityForResult(ten_key,TEN_KEY_RESULT);
+
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(REQUEST_CODE, resultCode, intent);
+
+        //テンキーアクティビティからの結果を受け取る
+        if(resultCode == RESULT_OK && REQUEST_CODE == TEN_KEY_RESULT && null != intent){
+            int TEN_KEY_RETURN = intent.getIntExtra("BUTTON_ID",-1);
+            switch (TEN_KEY_RETURN){
+                case R.id.customercode:
+                    customer_code.setText(intent.getStringExtra("RESULT_KEY"));
+                    break;
+
+                case R.id.Code01:
+                    G_code.setText(intent.getStringExtra("RESULT_KEY"));
+                    break;
+
+                case R.id. Code02:
+                    Group_K_jun_C.setText(intent.getStringExtra("RESULT_KEY"));
+                    break;
+
+                case R.id. Code03:
+                    Group_K_jun_G.setText(intent.getStringExtra("RESULT_KEY"));
+                    break;
+            }
+        }
+
+
+    }
+
     //――――――――――――――――――――――――――――――――――――
     // タッチイベントメソッド
     //――――――――――――――――――――――――――――――――――――
