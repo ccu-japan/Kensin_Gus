@@ -12,7 +12,7 @@ import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
 public class PrintKensin {
     PatioPrinter patio = new PatioPrinter();
 
-    Meter meter;
+    Meter meter;                                           // プリント出力項目
     int COL_BAN;
     int check_result;                                    //点検チェックボックスのチェック数
     Context context;
@@ -145,6 +145,9 @@ public class PrintKensin {
 
     }
 
+    //―――――――――――――――――――――――――――――――――――――
+    //  プリントオープンメソッド　
+    //―――――――――――――――――――――――――――――――――――――
     public void Print_Open(int return_col , Context con, String RETURN_ADDRESS){
         COL_BAN = return_col;
         context = con;
@@ -153,12 +156,12 @@ public class PrintKensin {
         mPrint.fhtPrInit(context,mHandler);
 
         // プリンタのオープン
-        mMode = 0;						// モード：印刷
+        mMode = 0;  // モード：印刷
+
         if( mPrint.fhtPrOpen(mOpenAddrs) != fhtUprt.PRT_SUCCESS ){
             Log.d("Print_Search","接続先がpatioPrinterではありません");
         }
         Log.d("Print_Search",""+ mPrint.fhtPrGetStatus());
-
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -143,7 +143,10 @@ public class Ten_key_Process extends AppCompatActivity {
             //テンキー0~9押下時
             else {
                 ten_key_edit.append(button.getText());
-/*
+
+
+/* 19/09/30 * 未使用　削除するか検討中
+
                 //テキスト入力数を６桁にするために６桁目になった時に処理
                 if(ten_key_edit.getText().length() == 6)
                 {

@@ -111,6 +111,7 @@ public class Print_Search extends AppCompatActivity {
                     //表示リストを作成
                     mItems = new String[add_count];
                     for(int i=0;i< add_count;i++){
+                        //検索したBluetoothの名前が" unknown "の時は空白にする
                         if(!mDevList.get(i).getDevName().equals("unknown")){
                             mItems[i] = mDevList.get(i).getItemMsg();
                         }
@@ -143,8 +144,12 @@ public class Print_Search extends AppCompatActivity {
         }
     };
 
+    //――――――――――――――――――――――――――――――――
+    // 印刷ボタン押下時
+    //――――――――――――――――――――――――――――――――
     public void PrintBack(View view) {
         main_activity_intent.putExtra("PatioPrinter", mDevAddr);
+        // メインアクティビティに値を渡す
         setResult(RESULT_OK, main_activity_intent);
         finish();
     }

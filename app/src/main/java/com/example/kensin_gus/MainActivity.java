@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     View main_view;
     Dialog dialog;
     Cursor cursor;
+    View v_Id;      //印刷ボタンのチェックView
 
     //――――――――――――――――――――――――――――――
     //  一番最初に1回だけ呼ばれるメソッド
@@ -132,8 +133,6 @@ public class MainActivity extends AppCompatActivity {
         VALUES = new ContentValues();
 
         //―――――――――――――――――――――――――――――――――――――――――
-
-
         //今日の日付を入力　戻り値：String 型
         TODAY = main_screen.Screen_Data(this);
 
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //――――――――――――――――――――――――――――――――――――
-    //　別のアクティビティの結果を受け取るメソッド
+    //　アクティビティの結果を受け取るメソッド
     //――――――――――――――――――――――――――――――――――――
     @SuppressLint("NewApi")
     @Override
@@ -269,7 +268,10 @@ public class MainActivity extends AppCompatActivity {
             RETURN_ADDRESS = intent.getStringExtra("PatioPrinter");
             DB_REG_FLG = true;
             new PrintKensin().Print_Open(COL_BAN, MainActivity.this, RETURN_ADDRESS);
-            main_Down(main_view);
+
+            if(v_Id.equals(findViewById(R.id.Update))) {
+                main_Down(main_view);
+            }
         }
     }
 
@@ -288,6 +290,8 @@ public class MainActivity extends AppCompatActivity {
     public void Fixed_UnFixed(View view) {
         db_registration();  //データベース登録
 
+        v_Id = view;
+        Log.d("aaaaa"," : " + view);
         //　未済アクティビティに遷移 戻り値：Boolean型
         CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON, CHECK_FLG, PRINTER_BUTTON);
         //CHECK_FLG　TRUE:済　FALSE:未
@@ -331,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
     //――――――――――――――――――――――――――――――――――――
     public void main_Printer(View view) {
         main_view = view;
+        v_Id = view;
         //印刷アクティビティに遷移
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("確認ダイアログ").setMessage("検針票を印刷しますか？")
@@ -352,7 +357,9 @@ public class MainActivity extends AppCompatActivity {
                 {// 有：選択したプリンタを継続して使用
                     DB_REG_FLG = true;
                     new PrintKensin().Print_Open(COL_BAN, getApplication(), RETURN_ADDRESS);
-                    main_Down(main_view);
+                    if(v_Id.equals(findViewById(R.id.Update))) {
+                        main_Down(main_view);
+                    }
                 }
             }
         }).show();
