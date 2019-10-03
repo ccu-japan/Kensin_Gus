@@ -26,20 +26,14 @@ import com.example.db_library.TOKUIF;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class KensinMainActivity extends AppCompatActivity {
 
-    String Number_Input;
-    String Usaged;
-    String price;
-    String Tax;
+    boolean CHECK_FLG = true;                //未/済ボタンフラグ　true:未　false:済
     boolean DB_REG_FLG = false;              //db_registrationの出力判定
-    int COL_BAN = 0;                           //DBの連番
-    int[] MULTIPLE_CHECKBOX = new int[12];  //点検クラスのチェックボックス(1:入り 0:外す）
-
-    String RETURN_ADDRESS = "";  //使用するBlueToothアドレスの格納変数
+    int COL_BAN = 0;                          //DBの連番
+    int[] MULTIPLE_CHECKBOX = new int[12]; //点検クラスのチェックボックス(1:入り 0:外す）
+    String RETURN_ADDRESS = "";              //使用するBlueToothアドレスの格納変数
     String TODAY;
-
-    boolean CHECK_FLG = true;   //未/済ボタンフラグ　true:未　false:済
 
     //Activityの結果を取得ための整数コード(*整数のみ )
     int CHECK_RESULT = 1;                                 //点検アクティビティ結果の取得
@@ -51,15 +45,8 @@ public class MainActivity extends AppCompatActivity {
     int REQUEST_CODE = 1; //パーミッション許可
 
     Button KENSIN_BUTTON;               //検針ボタン
-    Button DOWN_BUTTON;                 //DOWNボタン
-    Button UP_BUTTON;                   //UPボタン
     Button FIXED_UNFIXED_BUTTON;      //済ボタン
-    Button END_BUTTON;                  //終了ボタン
     Button CHECK_BUTTON;                //点検ボタン
-    Button ROOT_SEARCH_BUTTON;         //道順ボタン
-    Button CALENDER_SELECT_BUTTON;    //カレンダーボタン
-    Button OUT_PUT_BUTTON;              //TSV形式出力ボタン
-    Button TSV_IMPORT_BUTTON;           //TSV形式入力ボタン
     Button PRINTER_BUTTON;              //印刷ボタン
 
     EditText INPUT_NUMBER_EDIT;         //数値入力テキスト
@@ -75,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     Screen_Layout.Main_Screen main_screen;      //表示値変更クラス
     LayoutInflater layoutInflater;
     ContentValues VALUES;
-    View main_view;
     Dialog dialog;
     Cursor cursor;
     View v_Id;      //印刷ボタンのチェックView
@@ -102,16 +88,10 @@ public class MainActivity extends AppCompatActivity {
         //――――――――――――――――――――――――――――――――――――
         //  オブジェクト生成
         //――――――――――――――――――――――――――――――――――――
-        DOWN_BUTTON = findViewById(R.id.down);
-        UP_BUTTON = findViewById(R.id.up);
-        END_BUTTON = findViewById(R.id.end_app);
+
         CHECK_BUTTON = findViewById(R.id.Check_Button);
-        ROOT_SEARCH_BUTTON = findViewById(R.id.customer_Button);
-        TSV_IMPORT_BUTTON = findViewById(R.id.button6);
         KENSIN_BUTTON = findViewById(R.id.Kensin_Button);
-        CALENDER_SELECT_BUTTON = findViewById(R.id.Calender_Button);
         FIXED_UNFIXED_BUTTON = findViewById(R.id.Update);
-        OUT_PUT_BUTTON = findViewById(R.id.OUT_PUT_BUTTON);
         PRINTER_BUTTON = findViewById(R.id.Printer_Button);
 
         INPUT_NUMBER_EDIT = findViewById(R.id.Input_number);
@@ -157,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
             //TOKUIFテーブルの一番最初の人を出力
             cursor.moveToFirst();
             COL_BAN = Integer.parseInt(cursor.getString(0));
-            COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-            button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+            COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(KensinMainActivity.this, COL_BAN, kenshin_db.db);
+            button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);
 
         }
         else
@@ -176,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermission(String[] permissions, int request_code) {
         ActivityCompat.requestPermissions(this, permissions, request_code);
     }
+
     //―――――――――――――――――――――――――――――――――――――
     //パーミッション許可が下りているか確認メソッド
     //―――――――――――――――――――――――――――――――――――――
@@ -233,8 +214,8 @@ public class MainActivity extends AppCompatActivity {
         //道順アクティビティからの結果を受け取る
         if (resultCode == RESULT_OK && REQUEST_CODE == ROOT_SEARCH_RESULT && null != intent) {
             COL_BAN = intent.getIntExtra("ROOT_KEY", 0);
-            COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-            button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+            COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(KensinMainActivity.this, COL_BAN, kenshin_db.db);
+            button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);
         }
 
         //テンキーアクティビティからの結果を受け取る
@@ -244,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
             // 文字列が ２以上の時
             if(Result.length() > 1){
-                //小数点がないとき
                 if(Result.charAt(1) != '.') {
                     if (Result.charAt(0) == '0') {
                         Result.deleteCharAt(0);
@@ -254,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
             INPUT_NUMBER_EDIT.setText(Result);
             CURRENCT_USAGE_TEXT.setText(Calc_class.Calc_Used(Float.parseFloat(INPUT_NUMBER_EDIT.getText().toString()), kenshin_db.db, COL_BAN));
-            Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, MainActivity.this);
+            Calc_class.Calc_HYOF_PRICE(Float.parseFloat(CURRENCT_USAGE_TEXT.getText().toString()), kenshin_db.db, COL_BAN, KensinMainActivity.this);
         }
 
         //カレンダーアクティビティからの結果を受け取る
@@ -267,10 +247,10 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && REQUEST_CODE == PRINTER_RESULT && null != intent) {
             RETURN_ADDRESS = intent.getStringExtra("PatioPrinter");
             DB_REG_FLG = true;
-            new PrintKensin().Print_Open(COL_BAN, MainActivity.this, RETURN_ADDRESS);
+            new PrintKensin().Print_Open(COL_BAN, KensinMainActivity.this, RETURN_ADDRESS);
 
             if(v_Id.equals(findViewById(R.id.Update))) {
-                main_Down(main_view);
+                main_Down(v_Id);
             }
         }
     }
@@ -280,8 +260,9 @@ public class MainActivity extends AppCompatActivity {
     //――――――――――――――――――――――――――――――――――――
     public void Used_text(View view)
     {
+
         //使用量ダイアログの表示
-        dialog.Dialog_SYOSAI(layoutInflater, MainActivity.this, kenshin_db.db, COL_BAN);
+        dialog.Dialog_SYOSAI(layoutInflater, KensinMainActivity.this, kenshin_db.db, COL_BAN);
     }
 
     //――――――――――――――――――――――――――――――――――――
@@ -289,14 +270,14 @@ public class MainActivity extends AppCompatActivity {
     //――――――――――――――――――――――――――――――――――――
     public void Fixed_UnFixed(View view) {
         db_registration();  //データベース登録
-
         v_Id = view;
-        Log.d("aaaaa"," : " + view);
+
         //　未済アクティビティに遷移 戻り値：Boolean型
         CHECK_FLG = button_processing.Check_task(INPUT_NUMBER_EDIT, CHECK_BUTTON, FIXED_UNFIXED_BUTTON, KENSIN_BUTTON, CHECK_FLG, PRINTER_BUTTON);
+
         //CHECK_FLG　TRUE:済　FALSE:未
         if (CHECK_FLG) {
-            main_Printer(view); //印刷メソッド
+            main_Printer(v_Id); //印刷メソッド
         }
     }
 
@@ -333,11 +314,10 @@ public class MainActivity extends AppCompatActivity {
     //――――――――――――――――――――――――――――――――――――
     //  印刷メソッド
     //――――――――――――――――――――――――――――――――――――
-    public void main_Printer(View view) {
-        main_view = view;
+    public void main_Printer(final View view) {
         v_Id = view;
         //印刷アクティビティに遷移
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(KensinMainActivity.this)
                 .setTitle("確認ダイアログ").setMessage("検針票を印刷しますか？")
                 .setPositiveButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -350,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
                 //RETURN_ADDRESSの中身が空かどうか判定
                 if (RETURN_ADDRESS.equals(""))
                 {// 空：印刷タスクに遷移
-                    Intent intent = new Intent(MainActivity.this, Print_Search.class);
+                    Intent intent = new Intent(KensinMainActivity.this, Print_Search.class);
                     startActivityForResult(intent, PRINTER_RESULT);
                 }
                 else
@@ -358,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
                     DB_REG_FLG = true;
                     new PrintKensin().Print_Open(COL_BAN, getApplication(), RETURN_ADDRESS);
                     if(v_Id.equals(findViewById(R.id.Update))) {
-                        main_Down(main_view);
+                        main_Down(v_Id);
                     }
                 }
             }
@@ -387,31 +367,31 @@ public class MainActivity extends AppCompatActivity {
     //  TSV形式入力メソッド
     //――――――――――――――――――――――――――――――――――――
     public void main_Input(View view) {
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(KensinMainActivity.this)
                 .setTitle("確認ダイアログ").setMessage("TSVを取り込みますか？")
                 .setPositiveButton("No", new DialogInterface.OnClickListener() {
                     //No を選択時
                     @Override
                     public void onClick(DialogInterface dialogInterface, int idx) {
-                        new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
+                        new AlertDialog.Builder(KensinMainActivity.this).setTitle("確認ダイアログ")
                                 .setMessage("TSVの取込をｷｬﾝｾﾙしました")
                                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                     }
                                 }).show();
-                    }
-                }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                }
+                }).setNegativeButton("Yes",  new DialogInterface.OnClickListener() {
             @Override
             //Yes　を選択時
             public void onClick(DialogInterface dialogInterface, int i) {
                 kenshin_db.allDelete("TOKUIF"); //TOKUIFデータ削除
                 kenshin_db.allDelete("HYOF");   //HYOFデータ削除
 
-                tokuif.TOKUIF_CSV(kenshin_db.db, MainActivity.this);     //TOKUIFの作成
-                new HYOF().HYOF_TSV(kenshin_db.db, MainActivity.this);   //HYOFの作成
+                tokuif.TOKUIF_CSV(kenshin_db.db, KensinMainActivity.this);     //TOKUIFの作成
+                new HYOF().HYOF_TSV(kenshin_db.db, KensinMainActivity.this);   //HYOFの作成
 
-                new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
+                new AlertDialog.Builder(KensinMainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVを取り込みました")
                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                             @Override
@@ -420,8 +400,8 @@ public class MainActivity extends AppCompatActivity {
                                 cursor = kenshin_db.db.rawQuery(" SELECT ban FROM TOKUIF ", null);
                                 cursor.moveToFirst();
                                 COL_BAN = Integer.parseInt(cursor.getString(0));
-                                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-                                button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+                                COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(KensinMainActivity.this, COL_BAN, kenshin_db.db);
+                                button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);
                             }
                         }).show();
             }
@@ -432,13 +412,13 @@ public class MainActivity extends AppCompatActivity {
     //  TSV形式出力メソッド
     //――――――――――――――――――――――――――――――――――――
     public void main_Output(View view) {
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(KensinMainActivity.this)
                 .setTitle("確認ダイアログ").setMessage("TSVを出力しますか？")
                 .setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
             //No を選択時
             public void onClick(DialogInterface dialogInterface, int idx) {
-                new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
+                new AlertDialog.Builder(KensinMainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVの取込をｷｬﾝｾﾙしました")
                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                             @Override
@@ -451,9 +431,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             //Yes を選択
             public void onClick(DialogInterface dialogInterface, int i) {
-                tokuif.OUT_PUT_TSV(kenshin_db.db, MainActivity.this);   //出力メソッド
+                tokuif.OUT_PUT_TSV(kenshin_db.db, KensinMainActivity.this);   //出力メソッド
 
-                new AlertDialog.Builder(MainActivity.this).setTitle("確認ダイアログ")
+                new AlertDialog.Builder(KensinMainActivity.this).setTitle("確認ダイアログ")
                         .setMessage("TSVを出力しました")
                         .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                             @Override
@@ -483,13 +463,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IndexOutOfBoundsException e) {
             COL_BAN = -1;
         }
-        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-        button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(KensinMainActivity.this, COL_BAN, kenshin_db.db);
+        button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);
     }
 
-    //-------------------------------------------------------------------------------//
-    //                                 進む　タスク                                   //
-    //-------------------------------------------------------------------------------//
+    //――――――――――――――――――――――――――――――――――――
+    //  進むメソッド
+    //――――――――――――――――――――――――――――――――――――
     public void main_Down(View view) {
 
         //　2重登録ではない場合
@@ -508,16 +488,16 @@ public class MainActivity extends AppCompatActivity {
         } catch (IndexOutOfBoundsException e) {
             COL_BAN = COL_BAN + 1;
         }
-        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(MainActivity.this, COL_BAN, kenshin_db.db);
-        button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+        COL_BAN = Screen_Layout.Main_Screen.SELECT_COM(KensinMainActivity.this, COL_BAN, kenshin_db.db);
+        button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);
 
         DB_REG_FLG = false; //PRINT_FLGの初期化
     }
 
+    //――――――――――――――――――――――――――――――――――――
+    //  点検メソッド
+    //――――――――――――――――――――――――――――――――――――
 
-    //-------------------------------------------------------------------------------//
-    //                                 点検　メソッド                                 //
-    //-------------------------------------------------------------------------------//
     public void main_Check(View view) {
         //点検アクティビティのチェック入を出力　戻り値：Int[]
         MULTIPLE_CHECKBOX = TOKUIF.Check_Result(kenshin_db.db, COL_BAN, MULTIPLE_CHECKBOX);
@@ -531,14 +511,14 @@ public class MainActivity extends AppCompatActivity {
 
     //データべースに登録する
     public void db_registration() {
-        Number_Input = INPUT_NUMBER_EDIT.getText().toString();
-        Usaged = CURRENCT_USAGE_TEXT.getText().toString();
-        price = CURRENCT_AMOUNT_TEXT.getText().toString();
-        Tax = TAX.getText().toString();
+        String Number_Input = INPUT_NUMBER_EDIT.getText().toString();
+        String Usaged = CURRENCT_USAGE_TEXT.getText().toString();
+        String price = CURRENCT_AMOUNT_TEXT.getText().toString();
+        String Tax = TAX.getText().toString();
 
         tokuif.Usaged(kenshin_db.db, Number_Input, VALUES, Usaged, COL_BAN, TODAY);
         tokuif.TAX_PRICE(price, Tax, VALUES, kenshin_db.db, COL_BAN, DAYS.getText().toString());
-        button_processing.Up_Down_Button(MainActivity.this, kenshin_db.db, COL_BAN);
+        button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);
 
     }
 

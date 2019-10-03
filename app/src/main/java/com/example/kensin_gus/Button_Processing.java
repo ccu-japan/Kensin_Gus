@@ -27,8 +27,7 @@ public class Button_Processing{
             check = true;
         }
         //true : 済　の場合
-        else
-            {
+        else {
             update_button.setText("未");
             update_button.setBackgroundColor(Color.RED);
             Input_number.setEnabled(true);
@@ -44,17 +43,17 @@ public class Button_Processing{
     //――――――――――――――――――――――――――――――――――――――――――
     //  UP_DOWNキー押下時のFIXED_UNFIXEDボタンのレコード登録メソッド
     //――――――――――――――――――――――――――――――――――――――――――
-    public void Up_Down_Button(MainActivity mainActivity, SQLiteDatabase db , int COL_BAN )
+    public void Up_Down_Button(KensinMainActivity kensinMainActivity, SQLiteDatabase db , int COL_BAN )
     {
         ContentValues contentValues = new ContentValues();
         Cursor cursor = db.rawQuery("SELECT /*i:0*/ P_flag ,/*i:1*/ company ,/*i:2*/ customer , /*i:3*/ place , /*i:4*/T_T_pointer FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
         cursor.moveToFirst();
 
-        final Button Update_button = mainActivity.findViewById(R.id.Update);
-        final Button Check_button = mainActivity.findViewById(R.id.Check_Button);
-        final Button Printer_button = mainActivity.findViewById(R.id.Printer_Button);
-        Button kensin_button = mainActivity.findViewById(R.id.Kensin_Button);
-        EditText Row1 = mainActivity.findViewById(R.id.Input_number);
+        final Button Update_button = kensinMainActivity.findViewById(R.id.Update);
+        final Button Check_button = kensinMainActivity.findViewById(R.id.Check_Button);
+        final Button Printer_button = kensinMainActivity.findViewById(R.id.Printer_Button);
+        Button kensin_button = kensinMainActivity.findViewById(R.id.Kensin_Button);
+        EditText Row1 = kensinMainActivity.findViewById(R.id.Input_number);
         String TRUE = "1";  //ボタンが済の時
         String FALSE = " "; //ボタンが未の時
 

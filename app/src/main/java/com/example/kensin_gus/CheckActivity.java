@@ -15,7 +15,7 @@ public class CheckActivity extends AppCompatActivity {
 
     Intent main_activity;
 
-     int[] check ;
+    int[] check ;
     CheckBox Result1;
     CheckBox Result2;
     CheckBox Result3;
@@ -78,6 +78,7 @@ public class CheckActivity extends AppCompatActivity {
 
         //  使っていないチェックボックスがある場合選択できないようにするための処理
         for (int i=0; i<check.length; i++) {
+
             //  チェックボックスのテキストが空の場合
             if (Result.get(i).getText().toString().equals("")) {
                 Result.get(i).setEnabled(false);    //選択不可

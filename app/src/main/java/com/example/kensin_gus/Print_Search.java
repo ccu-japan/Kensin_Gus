@@ -23,19 +23,16 @@ import java.util.Comparator;
 
 @SuppressLint("Registered")
 public class Print_Search extends AppCompatActivity {
-    private final static String BR = System.getProperty("line.separator");	// 改行コード
-    ArrayList<BluetoothDevice> mDevList = new ArrayList<BluetoothDevice>();	// 検索したBluetoothデバイスリスト
-    private fhtUprt mPrint = new fhtUprt();									// プリンタ制御ライブラリ
-    private String mDevName = "";											// 選択されたBluetoothデバイス名
-    private String mDevAddr = "";											// 選択されたBluetoothアドレス
-    private String mItemMsg = "";											// 選択されたBluetoothデバイス情報
-    private String mImgStr = "";											// PatioPrinter登録済みイメージ一覧
-    private String[] mItems = null;											// 表示用文字列
-    public Context context ;
+    private final static String BR = System.getProperty("line.separator");    // 改行コード
+    private fhtUprt mPrint = new fhtUprt();                                    // プリンタ制御ライブラリ
+    private String mDevName = "";                                            // 選択されたBluetoothデバイス名
+    private String mDevAddr = "";                                            // 選択されたBluetoothアドレス
+    public Context context;
     Intent main_activity_intent;
+    private View view;
 
     @Override
-    public void onCreate(final Bundle savedInstanceState){
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_search);
         main_activity_intent = new Intent();
@@ -46,103 +43,74 @@ public class Print_Search extends AppCompatActivity {
         super.onResume();
         // プリンタ制御ライブラリの初期化
         mPrint = new fhtUprt();
-        mPrint.fhtPrInit(getApplicationContext(),mHandler);
+        mPrint.fhtPrInit(getApplicationContext(), mHandler);
         Log.d("PrtSampleAppActivity", "onResume");
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // PatioPrinterを検索する
     //
-    public void PrintSearch(View v){
-
+    public void PrintSearch(View v) {
+        view = v;
         // プリンタの検索
-        if( mPrint.fhtPrFind() == fhtUprt.PRT_SUCCESS ){
+        if (mPrint.fhtPrFind() == fhtUprt.PRT_SUCCESS) {
             // 検索中メッセージ表示
             TextView view = findViewById(R.id.main_address_text);
             view.setText("検索中");
-
             Log.d("PrtSampleAppActivity", "PrintSearch SUCCESS");
-        }else{
+        } else {
             Log.d("PrtSampleAppActivity", "PrintSearch ERROR");
         }
     }
 
     @SuppressLint("HandlerLeak")
-    private final Handler mHandler = new Handler(){
+    private final Handler mHandler = new Handler() {
+        @SuppressLint("SetTextI18n")
         @Override
-        public void handleMessage(Message msg){
-            switch (msg.what) {
-                //fhtPrFindの完了通知
-                case fhtUprt.FHTPRFIND_FINISHED:
-                    //検索結果を取得
-                    fhtUprt.BTHPRTINFO[] inf;
-                    inf = (fhtUprt.BTHPRTINFO[]) msg.obj;
-                    if (msg.arg2 == 0) {
-                          return;
-                    }
-                    //検索結果をリストに格納
-                    mDevList.clear();
-                    BluetoothDevice btDev;
-                    int	add_count=0;
-                    for(int i = 0; i < msg.arg2; i++){
-                        if( !(inf[i].szBtName.isEmpty()) && !(inf[i].szBtAddr.isEmpty())) {
-                                btDev = new BluetoothDevice(inf[i].szBtName, inf[i].szBtAddr, inf[i].szBtName + BR + "(" + inf[i].szBtAddr + ")");
-                                mDevList.add(btDev);
-                                add_count++;
+        public void handleMessage(Message msg) {
+            //fhtPrFindの完了通知
+            if (msg.what == fhtUprt.FHTPRFIND_FINISHED) {//検索結果を取得
+                fhtUprt.BTHPRTINFO[] inf;
+                inf = (fhtUprt.BTHPRTINFO[]) msg.obj;
+                if (msg.arg2 == 0) {
+                    return;
+
+                }
+                //検索結果をリストに格納
+                for (int i = 0; i < msg.arg2; i++) {
+                    if (!(inf[i].szBtName.isEmpty()) && !(inf[i].szBtAddr.isEmpty())) {
+                        if (inf[i].szBtName.equals("MBH7BTZ47-100008")) {
+                            mDevName = inf[i].szBtName;
+                            mDevAddr = inf[i].szBtAddr;
+                            TextView view = findViewById(R.id.main_address_text);
+                            view.setText(mDevName + "\n" + mDevAddr);
+                            break;
                         }
                     }
-                    if(add_count == 0){
-                        return;
-                    }
+                }
+                //プリンタが見つからなかったとき
+                if(mDevName.isEmpty() && mDevAddr.isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Print_Search.this);
+                    builder.setTitle("注意")
+                            .setMessage("プリンターが見つかりませんでした。")
+                            .setMessage("もう一度検索しますか？")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-                    // 格納数が２個以上の場合、リストをソート
-                    if( add_count > 1 ){
-                        Collections.sort( mDevList, new Comparator<BluetoothDevice>(){
-                            //@Override
-                            public int compare(BluetoothDevice obj0, BluetoothDevice obj1) {
-                                if( obj0.getDevName().equals( obj1.getDevName() ) ){
-                                    return obj0.getDevAddr().compareTo(obj1.getDevAddr());
+                                @Override
+                                //再検索
+                                public void onClick(DialogInterface dialog, int which) {
+                                    PrintSearch(view);
                                 }
-                                return obj0.getDevName().compareTo(obj1.getDevName());
-                            }
-                        });
-                    }
-
-                    //表示リストを作成
-                    mItems = new String[add_count];
-                    for(int i=0;i< add_count;i++){
-                        //検索したBluetoothの名前が" unknown "の時は空白にする
-                        if(!mDevList.get(i).getDevName().equals("unknown")){
-                            mItems[i] = mDevList.get(i).getItemMsg();
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                         }
-                        else{
-                            mItems[i] = "";
-                        }
-                    }
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Print_Search.this);
-                    alertDialogBuilder.setTitle( " 検索結果 " );
-
-                    // Bluetoothデバイス名選択ダイアログ　クリックされたデバイスをオープンする
-                    alertDialogBuilder.setItems( mItems, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {	// クリック処理
-
-                            // 選択されたデバイス情報を表示
-                            TextView view = findViewById(R.id.main_address_text );
-                            view.setText(mDevList.get(which).getItemMsg());
-
-                            // 選択されたデバイス情報を保存
-                            mDevName = mDevList.get(which).getDevName();
-                            mDevAddr = mDevList.get(which).getDevAddr();
-                            mItemMsg = mDevList.get(which).getItemMsg();
-
-                        }
-                    });
-                    // ダイアログを表示
-                    alertDialogBuilder.create().show();
-                    break;
+                    }).show();
+                }
             }
         }
     };
+
 
     //――――――――――――――――――――――――――――――――
     // 印刷ボタン押下時
@@ -153,5 +121,6 @@ public class Print_Search extends AppCompatActivity {
         setResult(RESULT_OK, main_activity_intent);
         finish();
     }
+
 }
 

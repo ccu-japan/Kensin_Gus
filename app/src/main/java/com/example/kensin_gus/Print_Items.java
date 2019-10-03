@@ -11,7 +11,7 @@ import com.example.db_library.Kenshin_DB;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class Meter {
+public class Print_Items {
     private Kenshin_DB kenshin_db;
     Cursor kensin_cursol;
     Cursor customer_cursol;
@@ -37,25 +37,30 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     //　プリント出力メソッド　(TOKUIF)
     //――――――――――――――――――――――――――――――――――――
-    public Meter Meter_List(int COL_BAN, Context context) {
+
+    public Print_Items Print_ItemList(int COL_BAN, Context context) {
 
         kenshin_db = new Kenshin_DB(context);
 
+        //今月検針日、先月検針日、先月使用量、先月検針、今月検針、基本料金、ガス料金、ガス消費税 //
         kensin_cursol = kenshin_db.db.rawQuery("SELECT T_T_kensin, L_T_kensin , L_T_usage , L_T_pointer , T_T_pointer , S_price , G_price , G_C_tax  FROM TOKUIF WHERE ban = ?", new String[]{String.valueOf(COL_BAN)});
         kensin_cursol.moveToFirst();
 
+        //得意先コード、設置場所コード、設置場所名称、顧客名1、顧客名2
         customer_cursol = kenshin_db.db.rawQuery("SELECT customer,place,P_name,C_name1,C_name2  FROM TOKUIF WHERE ban = ?", new String[]{String.valueOf(COL_BAN)});
         customer_cursol.moveToFirst();
 
+        //点検チェックボックス１～１２
         checkbox_cursol = kenshin_db.db.rawQuery("SELECT result1 ,result2 ,result3 ,result4 ,result5 ,result6 , result7," +
                 "result8 ,result9 , result10 , result11 , result12 FROM TOKUIF WHERE ban = ? ", new String[]{String.valueOf(COL_BAN)});
         checkbox_cursol.moveToFirst();
 
-        return Meter.this;
+        return Print_Items.this;
     }
     //――――――――――――――――――――――――――――――――――――
     // 今回検針日
     //――――――――――――――――――――――――――――――――――――
+
     public String TODAY() {
         TODAY = kensin_cursol.getString(0);
         return TODAY;
@@ -63,6 +68,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 前回検針日
     //――――――――――――――――――――――――――――――――――――
+
     public String LAST_TIME_DAY() {
         LAST_TIME_DAY = kensin_cursol.getString(1);
         return LAST_TIME_DAY;
@@ -71,6 +77,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 前回使用量
     //――――――――――――――――――――――――――――――――――――
+
     public String LAST_TIME_USE() {
         LAST_TIME_USE = String.valueOf(kensin_cursol.getDouble(2));
         return LAST_TIME_USE;
@@ -79,6 +86,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 前回検針指針
     //――――――――――――――――――――――――――――――――――――
+
     public String LAST_POINT() {
         LAST_POINT = String.valueOf(kensin_cursol.getDouble(3));
         return LAST_POINT;
@@ -87,6 +95,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 今回検針指針
     //――――――――――――――――――――――――――――――――――――
+
     public String TODAY_POINT() {
         TODAY_POINT = String.valueOf(kensin_cursol.getDouble(4));
         return TODAY_POINT;
@@ -109,6 +118,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 基本料金
     //――――――――――――――――――――――――――――――――――――
+
     public int STANDARD_PRICE() {
         STANDARD_PRICE = kensin_cursol.getInt(5);
         return STANDARD_PRICE;
@@ -116,6 +126,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // ガス料金
     //――――――――――――――――――――――――――――――――――――
+
     public int GUS_PRICE() {
         GUS_PRICE = kensin_cursol.getInt(6);
         return GUS_PRICE;
@@ -124,6 +135,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 消費税
     //――――――――――――――――――――――――――――――――――――
+
     public int TAX() {
         TAX = kensin_cursol.getInt(7);
         return TAX;
@@ -132,6 +144,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 会社コード
     //――――――――――――――――――――――――――――――――――――
+
     public String CUSTOMER() {
         CUSTOMER = customer_cursol.getString(0);
         return CUSTOMER;
@@ -140,6 +153,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 設置場所コード
     //――――――――――――――――――――――――――――――――――――
+
     public String PLACE_CODE() {
         PLACE_CODE = "0" + customer_cursol.getInt(1);
         return PLACE_CODE;
@@ -148,6 +162,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 顧客名
     //――――――――――――――――――――――――――――――――――――
+
     public String C_NAME() {
         C_NAME = customer_cursol.getString(3) + customer_cursol.getString(4);
         return C_NAME.trim();
@@ -156,6 +171,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 設置場所名称
     //――――――――――――――――――――――――――――――――――――
+
     public String P_NAME() {
         P_NAME = customer_cursol.getString(2);
         return P_NAME;
@@ -164,6 +180,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // 出力チェックボックス数
     //――――――――――――――――――――――――――――――――――――
+
     @SuppressLint("NewApi")
     public int CHECKBOX_COL() {
         CHECKBOX_COL = 0;
@@ -180,6 +197,7 @@ public class Meter {
     //――――――――――――――――――――――――――――――――――――
     // チェック入出力メソッド
     //――――――――――――――――――――――――――――――――――――
+
     public String[] CHECK_BOX(Context context) {
         ArrayList<CheckBox> arrayList;
         arrayList = new CheckActivity().Array_Check_Box(context);

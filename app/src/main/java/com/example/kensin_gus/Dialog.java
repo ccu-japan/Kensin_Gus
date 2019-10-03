@@ -32,12 +32,15 @@ public class Dialog extends DialogFragment {
         if("1".equals(cursor.getString(5))){
             dialog_edit1.setText(cursor.getString(3));
         }
+
         //ガス料金区分の判定
         if("B".equals(cursor.getString(4))){
             dialog_edit4.setText(cursor.getString(2));
         }
+
         //前回使用量
         dialog_edit2.setText(cursor.getString(0));
+
         //基本料金
         dialog_edit3.setText(cursor.getString(1));
 

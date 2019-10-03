@@ -283,9 +283,9 @@ public class TOKUIF {
 
                         //全体料金からガス料金のみを出力
                         int price_only_GUS = (int) (Using_Price - Integer.parseInt(cursor.getString(1)) - Float.parseFloat(cursor.getString(2)) - Float.parseFloat(cursor.getString(3)));
-                        //消費税抜き金額
-                        int price_No_Tax = Using_Price - Using_P_Tax;
 
+                        //金額(税抜)
+                        int price_No_Tax = Using_Price - Using_P_Tax;
                         String P_flag = "1";
 
                         //検針料金をデータベースに登録

@@ -30,8 +30,8 @@ public class Calc_class {
     //  使用量金額の計算メソッド
     //――――――――――――――――――――――――――――――――――――――――――
     @SuppressLint("DefaultLocale")
-    static void Calc_HYOF_PRICE(float row, SQLiteDatabase db, int COL_BAN, MainActivity main) {
-        //MainActivity　オブジェクト生成
+    static void Calc_HYOF_PRICE(float row, SQLiteDatabase db, int COL_BAN, KensinMainActivity main) {
+        //KensinMainActivity　オブジェクト生成
         TextView Amount_Text = main.findViewById(R.id.Using_Amount);
         TextView Tax_Text = main.findViewById(R.id.Tax);
         TextView number_Text = main.findViewById(R.id.Used_number);

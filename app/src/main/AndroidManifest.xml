@@ -34,7 +34,7 @@
         <activity android:name=".Calendar_Select"
             android:screenOrientation="portrait"/>              <!-- 日付変更アクティビティ -->
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".KensinMainActivity"
                    android:launchMode="singleTop"
                    android:screenOrientation="portrait">     <!-- メインアクティビティ -->
             <intent-filter>

@@ -2,18 +2,17 @@ package com.example.db_library;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 public class HYOF {
+
     private static final String DB_TABLE = " HYOF ";    //テーブル名
 
     private static final String COL_STX = "stx";        //STX

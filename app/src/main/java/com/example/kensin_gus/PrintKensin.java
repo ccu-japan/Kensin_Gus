@@ -1,7 +1,9 @@
 package com.example.kensin_gus;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +14,7 @@ import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
 public class PrintKensin {
     PatioPrinter patio = new PatioPrinter();
 
-    Meter meter;                                           // プリント出力項目
+    Print_Items printItems;                               // プリント出力項目
     int COL_BAN;
     int check_result;                                    //点検チェックボックスのチェック数
     Context context;
@@ -30,9 +32,9 @@ public class PrintKensin {
     @SuppressLint({"NewApi", "DefaultLocale"})
     public void printKenshin(int COL_BAN, Context con) {
         context = con;
-        meter = new Meter().Meter_List(COL_BAN, context);
-        check_result = meter.CHECKBOX_COL() * 4;        //チェックボックス行　*4は行幅
-        CHECK_BOX = meter.CHECK_BOX(context);
+        printItems = new Print_Items().Print_ItemList(COL_BAN, context);
+        check_result = printItems.CHECKBOX_COL() * 4;        //チェックボックス行　*4は行幅
+        CHECK_BOX = printItems.CHECK_BOX(context);
 
         patio.LengthUnitMode = PatioPrinter.UNIT_MODE.Millimeter;
         patio.rect = new Rect(4,0,70,117 + check_result);   //プリントサイズ
@@ -44,22 +46,22 @@ public class PrintKensin {
         patio.WriteString(28, 10, PatioPrinter.FONT_SIZE.size24, "ガス使用量のお知らせ");
         patio.WriteString(20, 18, "検針日");
 
-        String TODAY = meter.TODAY();   //今日の日付
+        String TODAY = printItems.TODAY();   //今日の日付
         TODAY = TODAY.replace("/", "");  //　YYYY/MM/DD　入力から "/"を消す
 
         patio.WriteString(31, 18, PatioPrinter.FONT_SIZE.size32, TODAY.substring(0, 4) + "年");  //substring 0~4 「YYYY」まで入力
         patio.WriteString(43, 18, TODAY.substring(4, 6) + "月");                                  //substring 5~6 「MM」
         patio.WriteString(51, 18, TODAY.substring(6, 8) + "日");                                  //substring 7~8 「DD」
-        patio.WriteString(20, 25, meter.CUSTOMER() + " - " + meter.PLACE_CODE());               //顧客名　＋　設置場所コード
+        patio.WriteString(20, 25, printItems.CUSTOMER() + " - " + printItems.PLACE_CODE());               //顧客名　＋　設置場所コード
 
         patio.ZenkakuMode = true;
 
         //顧客名が10文字以上の場合
-        if(meter.C_NAME().length() >= 10) {
+        if(printItems.C_NAME().length() >= 10) {
             patio.FontSize = PatioPrinter.FONT_SIZE.size24;
         }
         //顧客名が7以上9文字までの場合
-        else if(meter.C_NAME().length() >=7)
+        else if(printItems.C_NAME().length() >=7)
         {
             patio.FontSize = PatioPrinter.FONT_SIZE.size32;
         }
@@ -69,10 +71,10 @@ public class PrintKensin {
             patio.FontSize = PatioPrinter.FONT_SIZE.size48;
         }
 
-        patio.WriteString(20, 31, meter.C_NAME());
+        patio.WriteString(20, 31, printItems.C_NAME());
         patio.ZenkakuMode = false;
         patio.WriteString(63, 31, PatioPrinter.FONT_SIZE.size24, "様");
-        patio.WriteString(25, 35, PatioPrinter.FONT_SIZE.size32, meter.P_NAME());
+        patio.WriteString(25, 35, PatioPrinter.FONT_SIZE.size32, printItems.P_NAME());
         patio.LineMode = true;
         patio.WriteString(20, 38, PatioPrinter.FONT_SIZE.size24, "───────────────");
         patio.LineMode = false;
@@ -80,8 +82,8 @@ public class PrintKensin {
         patio.WriteString(22, 40, PatioPrinter.FONT_SIZE.size24, "前回検針日");
         patio.WriteString(45, 40, "前回使用量");
 
-        patio.WriteString(22, 44, PatioPrinter.FONT_SIZE.size32, meter.LAST_TIME_DAY().substring(2));
-        patio.WriteString(45, 44, String.format("%7s", meter.LAST_TIME_USE()) + " m");
+        patio.WriteString(22, 44, PatioPrinter.FONT_SIZE.size32, printItems.LAST_TIME_DAY().substring(2));
+        patio.WriteString(45, 44, String.format("%7s", printItems.LAST_TIME_USE()) + " m");
         patio.WriteString(63, 42, PatioPrinter.FONT_SIZE.size16, "3");
         patio.LineMode = true;
         patio.WriteString(20, 46, PatioPrinter.FONT_SIZE.size24, "───────────────");
@@ -96,9 +98,9 @@ public class PrintKensin {
         patio.WriteString(22, 56, PatioPrinter.FONT_SIZE.size24, "今回検針");
         patio.WriteString(38, 56, "前回検針");
         patio.WriteString(55, 56, "使用量");
-        patio.WriteString(22, 60, PatioPrinter.FONT_SIZE.size32, String.format("%6s", meter.TODAY_POINT())); // 今回指針
-        patio.WriteString(38, 60, String.format("%6s", meter.LAST_POINT())); // 前回指針
-        patio.WriteString(52, 60, String.format("%6s", meter.USE_COMP()));  // 今回使用量
+        patio.WriteString(22, 60, PatioPrinter.FONT_SIZE.size32, String.format("%6s", printItems.TODAY_POINT())); // 今回指針
+        patio.WriteString(38, 60, String.format("%6s", printItems.LAST_POINT())); // 前回指針
+        patio.WriteString(52, 60, String.format("%6s", printItems.USE_COMP()));  // 今回使用量
         patio.LineMode = true;
         patio.WriteString(20, 62, PatioPrinter.FONT_SIZE.size24, "───────────────");
         patio.LineMode = false;
@@ -106,16 +108,16 @@ public class PrintKensin {
         patio.WriteString(22, 64, PatioPrinter.FONT_SIZE.size24, "基本料金");
         patio.WriteString(38, 64, "ガス料金");
         patio.WriteString(53, 64, "内消費税");
-        patio.WriteString(20, 68, PatioPrinter.FONT_SIZE.size32, String.format("%7s", String.format("%,d", meter.STANDARD_PRICE())));
-        patio.WriteString(36, 68, String.format("%7s", String.format("%,d", meter.GUS_PRICE())));
-        patio.WriteString(51, 68, String.format("%7s", String.format("%,d", meter.TAX())));
+        patio.WriteString(20, 68, PatioPrinter.FONT_SIZE.size32, String.format("%7s", String.format("%,d", printItems.STANDARD_PRICE())));
+        patio.WriteString(36, 68, String.format("%7s", String.format("%,d", printItems.GUS_PRICE())));
+        patio.WriteString(51, 68, String.format("%7s", String.format("%,d", printItems.TAX())));
 
         patio.LineMode = true;
         patio.WriteString(20, 70, PatioPrinter.FONT_SIZE.size24, "───────────────");
         patio.LineMode = false;
         patio.WriteString(24, 73, PatioPrinter.FONT_SIZE.size24, "合計");
-        patio.WriteString(36, 74, PatioPrinter.FONT_SIZE.size32, String.format("%7s", String.format("%,d", meter.GUS_PRICE())));
-        patio.WriteString(51, 74, String.format("%7s", String.format("%,d", meter.TAX())));
+        patio.WriteString(36, 74, PatioPrinter.FONT_SIZE.size32, String.format("%7s", String.format("%,d", printItems.GUS_PRICE())));
+        patio.WriteString(51, 74, String.format("%7s", String.format("%,d", printItems.TAX())));
         patio.LineMode = true;
         patio.WriteString(20, 76, PatioPrinter.FONT_SIZE.size24, "───────────────");
         patio.LineMode = false;
@@ -191,26 +193,65 @@ public class PrintKensin {
                     // MCU異常out true RetryCnt
                     if ((mStatus & (byte) fhtUprt.PRT_ERRSTATUS_MCU) == fhtUprt.PRT_ERRSTATUS_MCU) {
                         mPrint.fhtPrClose();
+                        new AlertDialog.Builder(context)
+                                .setTitle("注意！")
+                                .setMessage("\n MCUに異常が発生しました")
+                                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
                         return;
                     }
                     // ヘッド温度異常
                     else if ((mStatus & (byte) fhtUprt.PRT_ERRSTATUS_HEADTEMP) == fhtUprt.PRT_ERRSTATUS_HEADTEMP) {
-                        mPrint.fhtPrClose();
+                        mPrint.fhtPrClose();   new AlertDialog.Builder(context)
+                                .setTitle("注意！")
+                                .setMessage("\n ヘッドの温度に異常を確認！")
+                                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
                         return;
                     }
                     // パワーアラーム
                     else if ((mStatus & (byte) fhtUprt.PRT_ERRSTATUS_POWERALARM) == fhtUprt.PRT_ERRSTATUS_POWERALARM) {
                         mPrint.fhtPrClose();
+                        new AlertDialog.Builder(context)
+                                .setTitle("注意！")
+                                .setMessage("\n パワーアラームが作動しました！")
+                                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
                         return;
                     }
                     // カバーオープン（カバーオープン中は用紙なしも検出するため、先に確認する）
                     else if ((mStatus & (byte) fhtUprt.PRT_ERRSTATUS_COVEROPEN) == fhtUprt.PRT_ERRSTATUS_COVEROPEN) {
                         mPrint.fhtPrClose();
+                        new AlertDialog.Builder(context)
+                                .setTitle("注意！")
+                                .setMessage("\n プリンターカバーが開いています！")
+                                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
                         return;
                     }
                     // 用紙なし
                     else if ((mStatus & (byte) fhtUprt.PRT_ERRSTATUS_ENDOFPAPER) == fhtUprt.PRT_ERRSTATUS_ENDOFPAPER) {
                         mPrint.fhtPrClose();
+                        new AlertDialog.Builder(context)
+                                .setTitle("注意！")
+                                .setMessage("\n　印刷用紙がなくなりました！")
+                                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
                         return;
                     }
                     // エラーなしのため印刷・自動電源オフ実行（バッテリアラームはエラーとしない）
