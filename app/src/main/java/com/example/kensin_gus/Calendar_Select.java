@@ -18,9 +18,9 @@ public class Calendar_Select extends AppCompatActivity implements DatePickerDial
     Intent CALENDAR_INTENT;
     String str ;
 
-    //―――――――――――――――――――――――――――――――――
+    //----------------------------------------------------------------------
     // カレンダーレイアウト　呼び出しメソッド
-    //―――――――――――――――――――――――――――――――――
+    //----------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +28,12 @@ public class Calendar_Select extends AppCompatActivity implements DatePickerDial
 
         textView = findViewById(R.id.days);
         CALENDAR_INTENT = new Intent();
+        textView.setText(CALENDAR_INTENT.getStringExtra("CALENDAR_KEY"));
     }
 
-    //―――――――――――――――――――――――――――――――――
+    //----------------------------------------------------------------------
     // 日付出力メソッド
-    //―――――――――――――――――――――――――――――――――
+    //----------------------------------------------------------------------
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 

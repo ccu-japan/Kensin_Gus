@@ -3,19 +3,35 @@ package com.example.kensin_gus;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.db_library.Kenshin_DB;
+import com.example.db_library.TENKEN;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 public class CheckActivity extends AppCompatActivity {
 
     Intent main_activity;
 
-    int[] check ;
+    Kenshin_DB kenshin_db;
+    int[] check;
     CheckBox Result1;
     CheckBox Result2;
     CheckBox Result3;
@@ -29,25 +45,26 @@ public class CheckActivity extends AppCompatActivity {
     CheckBox Result11;
     CheckBox Result12;
 
-    ArrayList<CheckBox> Result;
-    Button Check_Cancel = null;
+    Button bt_OK;
+    Button bt_Chancel;
 
-    //――――――――――――――――――――――――――――――
-    //  一番最初に1回だけ呼ばれるメソッド
-    //――――――――――――――――――――――――――――――
+    ArrayList<CheckBox> Result;
+
+    //----------------------------------------------------------------------
+    //  起動時読込
+    //----------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check);
 
-        //  値受け取り
+                                                                            //  値受け取り
         main_activity = getIntent();
         check = main_activity.getIntArrayExtra("CHECK_KEY");
-        Check_Cancel = findViewById(R.id.Check_Cancel);
+        bt_Chancel = findViewById(R.id.Check_Cancel);
+        bt_OK = findViewById(R.id.Check_OK);
 
-        Button Check_OK = findViewById(R.id.Check_OK);
-
-        //  checkboxのオブジェクト生成
+                                                                            //  checkboxのオブジェクト生成
         Result1 = findViewById(R.id.Result1);
         Result2 = findViewById(R.id.Result2);
         Result3 = findViewById(R.id.Result3);
@@ -61,7 +78,13 @@ public class CheckActivity extends AppCompatActivity {
         Result11 = findViewById(R.id.Result11);
         Result12 = findViewById(R.id.Result12);
 
-        //  for文でくくるためにList化　 *リスト化する必要性はあまりない
+
+
+
+
+
+
+                                                                            //  for文でくくるためにList化　 *リスト化する必要性はあまりない
         Result = new ArrayList<>();
         Result.add(Result1);
         Result.add(Result2);
@@ -76,33 +99,89 @@ public class CheckActivity extends AppCompatActivity {
         Result.add(Result11);
         Result.add(Result12);
 
+        /*
+        //　チェックボックス名の取得
+        File path = null;
+        File file;
+        String fileName = "TENKEN.TSV";
+        String[] columnData;
+        FileInputStream fileInputStream = null;
+        InputStreamReader inputStreamReader = null;
+
+        //SDKバージョンの確認
+        if (Build.VERSION.SDK_INT >= 29) {
+            //path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        }
+        //SDK28以下のみ対応  *2019/09/25
+        else {
+            //内部ストレージ,SDカード直下
+            path = new File(Environment.getExternalStorageDirectory().getPath());
+        }
+        try {
+            file = new File(path, fileName);
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        //Shift-JIS形式で読取
+        try {
+            inputStreamReader = new InputStreamReader(fileInputStream, "Shift-JIS");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        BufferedReader buffer = new BufferedReader(inputStreamReader);
+        String line;
+        try {
+            while ((line = buffer.readLine()) != null) {
+                columnData = line.split("\t",-1);
+                for (int i=0; i<columnData.length; i++) {
+                    Result.get(i).setText(columnData[i]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
+        kenshin_db = new Kenshin_DB(this);
+        @SuppressLint("Recycle") Cursor cursor = kenshin_db.db.rawQuery("SELECT num1,num2,num3,num4,num5,num6,num7,num8,num9,num10,num11,num12 FROM TENKEN_ITEM ",null);
+        cursor.moveToFirst();
+        for (int i=0; i<cursor.getColumnCount(); i++) {
+            Result.get(i).setText(cursor.getString(i));
+        }
+
+
         //  使っていないチェックボックスがある場合選択できないようにするための処理
-        for (int i=0; i<check.length; i++) {
+        for (int i = 0; i < check.length; i++) {
 
             //  チェックボックスのテキストが空の場合
             if (Result.get(i).getText().toString().equals("")) {
                 Result.get(i).setEnabled(false);    //選択不可
             } else {
                 //  前回使用時、チェックの有無の確認
+                Result.get(i).setChecked(check[i] == 1);
+
+                /*
                 if (check[i] == 1) {
                     Result.get(i).setChecked(true);
                 } else {
                     Result.get(i).setChecked(false);
                 }
+                */
+
             }
         }
 
         //ＯＫボタン押下時
-        Check_OK.setOnClickListener(new View.OnClickListener() {
+        bt_OK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                main_activity.putExtra("CHECK_KEY",check);
-                setResult(RESULT_OK,main_activity);
+                main_activity.putExtra("CHECK_KEY", check);
+                setResult(RESULT_OK, main_activity);
                 finish();
             }
         });
         //キャンセルボタン押下時
-        Check_Cancel.setOnClickListener(new View.OnClickListener() {
+        bt_Chancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -112,8 +191,9 @@ public class CheckActivity extends AppCompatActivity {
     }
 
     //CheckBox押下時
+    @SuppressLint("NonConstantResourceId")
     public void onCheckboxClicked(View view) {
-        final boolean checked = ((CheckBox)view).isChecked();
+        final boolean checked = ((CheckBox) view).isChecked();
         //CheckBoxのID
         switch (view.getId()) {
             case R.id.Result1:
@@ -217,10 +297,10 @@ public class CheckActivity extends AppCompatActivity {
     //―――――――――――――――――――――――――――――――――――
     // 他クラスで使用するときのCheckBoxのオブジェクト生成メソッド
     //―――――――――――――――――――――――――――――――――――
-    public ArrayList<CheckBox> Array_Check_Box(Context context){
+    public ArrayList<CheckBox> Array_Check_Box(Context context) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        @SuppressLint("InflateParams") View view =  inflater.inflate(R.layout.activity_check,null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.activity_check, null);
 
         //CheckBoxのオブジェクト生成
         Result1 = view.findViewById(R.id.Result1);

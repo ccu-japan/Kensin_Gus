@@ -1,5 +1,6 @@
 package com.example.db_library;
 
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,9 +16,9 @@ public class Kenshin_DB extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
     }
 
-    //――――――――――――――――――――――――――――――――――――
+    //----------------------------------------------------------------------
     // テーブルを削除するメソッド
-    //――――――――――――――――――――――――――――――――――――
+    //----------------------------------------------------------------------
     public void allDelete(String DB_TABLE){
         try{
             // deleteメソッド DBのレコードを削除
@@ -32,9 +33,8 @@ public class Kenshin_DB extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        new TOKUIF().onCreate(db);
-        new HYOF().CreateTBL_HYOF(db);
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
     }
 
     //――――――――――――――――――――――――――――――――――――

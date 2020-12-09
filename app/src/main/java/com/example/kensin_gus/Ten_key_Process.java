@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.db_library.GlobalFlag;
+
 @SuppressLint("Registered")
 public class Ten_key_Process extends AppCompatActivity {
     TextView ten_key_edit;  //テキスト最大入力文字数　6ケタ(「.」も含める (例)123456 or 1234.5)
@@ -18,90 +20,148 @@ public class Ten_key_Process extends AppCompatActivity {
     Intent TEN_KEY_INTENT;
     StringBuilder stringBuilder; //「.」や桁数の調整
     int Root_Result;
-
+    int SELECT_FLG;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kensin_ten_key);
 
         TEN_KEY_INTENT = getIntent();
-
+        
         Root_Result = TEN_KEY_INTENT.getIntExtra("BUTTON_ID",-1);
-
+        
         ten_key_edit = findViewById(R.id.ten_key_edit);
         button = findViewById(R.id.button);
         ten_key_OK = findViewById(R.id.ten_key_OK);
         DELETE_KEY = findViewById(R.id.ten_key_delete);
-
-        //オブジェクト生成
-        findViewById(R.id.ten_key_one).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_two).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_thr).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_for).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_fiv).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_six).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_sev).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_eig).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_nin).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_zer).setOnClickListener(buttonNumberListener);
-        findViewById(R.id.ten_key_dot).setOnClickListener(buttonNumberListener);
-
+    
+        
+        if(Root_Result == GlobalFlag.Flag.NUMBER_1)
+        {                                                                            //オブジェクト生成
+            ten_key_edit.setText("0");
+            findViewById(R.id.ten_key_one).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_two).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_thr).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_for).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_fiv).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_six).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_sev).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_eig).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_nin).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_zer).setOnClickListener(buttonNumberListener);
+            findViewById(R.id.ten_key_dot).setOnClickListener(buttonNumberListener);
+        }
+        else
+        {
+            findViewById(R.id.ten_key_one).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_two).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_thr).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_for).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_fiv).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_six).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_sev).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_eig).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_nin).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_zer).setOnClickListener(buttonNumberListener2);
+            findViewById(R.id.ten_key_dot).setVisibility(View.INVISIBLE);
+        }
+        
 
         //―――――――――――――――――――――――――――――――――――
         // OKボタン押下時
         //―――――――――――――――――――――――――――――――――――
-        ten_key_OK.setOnClickListener(new View.OnClickListener() {
+        ten_key_OK.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
+    
                 String ROW1_RESULT = ten_key_edit.getText().toString();
-
-                //テキストが未入力の場合
-                if (ROW1_RESULT.equals("")) {
-                    ROW1_RESULT = "0";
+    
+                try
+                {
+                    do
+                    {
+                        //テキストが未入力の場合
+                        if (ROW1_RESULT.equals(""))
+                        {
+                            ROW1_RESULT = "0";
+                            break;
+                        }
+    
+                        if (ROW1_RESULT.substring(ROW1_RESULT.length() - 1, ROW1_RESULT.length()).equals("."))
+                        {
+                            stringBuilder = new StringBuilder(ROW1_RESULT);
+                            stringBuilder.setLength(stringBuilder.length() - 1);  //末尾を削除
+                            ROW1_RESULT = String.valueOf(stringBuilder);
+                            break;
+                        }
+                    }
+                    while (false);
+    
+                    TEN_KEY_INTENT.putExtra("RESULT_KEY", ROW1_RESULT);
+                    TEN_KEY_INTENT.putExtra("BUTTON_ID", Root_Result);
+    
+                    setResult(RESULT_OK, TEN_KEY_INTENT);
+                    finish();
                 }
-                //テキストの最後の文字が「.」の場合
-                else if(String.valueOf(ROW1_RESULT.charAt(ROW1_RESULT.length() - 1)).equals(".")){
-                    stringBuilder = new StringBuilder(ROW1_RESULT);
-                    stringBuilder.setLength(stringBuilder.length()-1);  //末尾を削除
-                    ROW1_RESULT = String.valueOf(stringBuilder);
+                catch (Exception ex)
+                {
+                    System.out.println("Ten_Key_Process  : " + ex.getMessage());
                 }
-
-                TEN_KEY_INTENT.putExtra("RESULT_KEY", ROW1_RESULT);
-                TEN_KEY_INTENT.putExtra("BUTTON_ID",Root_Result);
-
-                setResult(RESULT_OK, TEN_KEY_INTENT);
-                finish();
             }
         });
 
         //―――――――――――――――――――――――――――――――――――
         //  消去ボタンメソッド
         //―――――――――――――――――――――――――――――――――――
-        DELETE_KEY.setOnClickListener(new View.OnClickListener() {
+        DELETE_KEY.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
                 int result = stringBuilder.indexOf(" ");
 
                 //空白がある場合は result >= 0 ない場合は -1を返す
-                if(result != -1){
+                if(result != -1)
+                {
 
-                    stringBuilder.replace(result,result+2,"");  //空白を詰める
+                    stringBuilder.replace(result,result+2,"");              //空白を詰める
                     ten_key_edit.setText(stringBuilder);
                 }
-
-                //テキスト値が「0」以外のとき
-                if(!ten_key_edit.getText().toString().equals("0")) {
-                    try {
-                        stringBuilder.setLength(stringBuilder.length() - 1); //末尾を消去
-                        ten_key_edit.setText(stringBuilder);
-
-                        //全消去した場合
-                        if(ten_key_edit.getText().toString().equals("")){
-                            ten_key_edit.setText("0");
+    
+                if(Root_Result == GlobalFlag.Flag.NUMBER_1)
+                {
+                                                                            //テキスト値が「0」以外のとき
+                    if (!ten_key_edit.getText().toString().equals("0"))
+                    {
+                        try
+                        {
+                                                                            //末尾を消去
+                            stringBuilder.setLength(stringBuilder.length() - 1);
+                            ten_key_edit.setText(stringBuilder);
+            
+                                                                            //全消去した場合
+                            if (ten_key_edit.getText().toString().equals(""))
+                                ten_key_edit.setText("0");
                         }
-                    } catch (StringIndexOutOfBoundsException e) {
-                        e.printStackTrace();
+                        catch (StringIndexOutOfBoundsException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else
+                {
+                    {
+                        if(((int)stringBuilder.length()-1) >= 0)
+                        {
+                                                                            //末尾を消去
+                            stringBuilder.setLength(stringBuilder.length() - 1);
+                            ten_key_edit.setText(stringBuilder);
+                        }
                     }
                 }
             }
@@ -109,62 +169,65 @@ public class Ten_key_Process extends AppCompatActivity {
     }
 
     //―――――――――――――――――――――――――――――――――――――――
-    //  数値入力メソッド
+    //  数値入力メソッド (メインアクティビティ　数値計算用)
     //―――――――――――――――――――――――――――――――――――――――
-    View.OnClickListener buttonNumberListener = new View.OnClickListener() {
+    View.OnClickListener buttonNumberListener = new View.OnClickListener()
+    {
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View view) {
             Button button = (Button) view;
             int i = 0;
-
-            //テキストに文字列「0」　かつ　テンキー「.」以外を押下したとき
-      //      if(ten_key_edit.getText().toString().equals("0") && button.getId() != R.id.ten_key_dot){
+    
+            try {
                 stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-            //    stringBuilder.setLength(stringBuilder.length() - 1); //文字列の末尾を削除
                 ten_key_edit.setText(stringBuilder);
-    ///        }
-
-            //テンキー「.」を押下したとき
-            if (button.getId() == R.id.ten_key_dot) {
-                stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-                String[] array = ten_key_edit.getText().toString().split(""); //split("")で1文字ずつ配列に入力
-
-                //テキストの文字列内に「.」があるか1個ずつ検索
-                for (String s : array) { //拡張for文
-                    if (s.equals(".")) {
-                        i++;
-                    }
+        
+                switch (button.getId()) {
+                    case R.id.ten_key_dot:
+                        if (!ten_key_edit.getText().toString().contains("."))
+                            ten_key_edit.append(button.getText());
+                        break;
+            
+                    case R.id.ten_key_zer:
+                        if (ten_key_edit.getText().toString().length() >= 1 && !ten_key_edit.getText().toString().equals("0"))
+                            ten_key_edit.append(button.getText());
+                            
+                        break;
+            
+                    default:
+                        if (ten_key_edit.getText().toString().length() == 1 && ten_key_edit.getText().toString().equals("0"))
+                            ten_key_edit.setText(button.getText());
+                        else
+                            ten_key_edit.append(button.getText());
+                
+                        break;
                 }
-                //「.」がない場合は入力
-                if (i == 0) {
-                    ten_key_edit.append(button.getText());
-                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
             }
-            //テンキー0~9押下時
-            else {
+        }
+    };
+    
+    
+    //―――――――――――――――――――――――――――――――――――――――
+    //  数値入力メソッド　（検索用）
+    //―――――――――――――――――――――――――――――――――――――――
+    View.OnClickListener buttonNumberListener2 = new View.OnClickListener() {
+        @SuppressLint("NonConstantResourceId")
+        @Override
+        public void onClick(View view) {
+            Button button = (Button) view;
+            int i = 0;
+            
+            try {
+                stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
+                ten_key_edit.setText(stringBuilder);
+                
                 ten_key_edit.append(button.getText());
-
-
-/* 19/09/30 * 未使用　削除するか検討中
-
-                //テキスト入力数を６桁にするために６桁目になった時に処理
-                if(ten_key_edit.getText().length() == 6)
-                {
-                    stringBuilder = new StringBuilder(ten_key_edit.getText().toString());
-                    String[] array = ten_key_edit.getText().toString().split("");
-
-                    //テキストの文字列内に「.」があるか検索
-                    for (String s : array) {
-                        if (s.equals(".")) {
-                            i++;
-                        }
-                    }
-                    //テキストの最大入力数は8桁なので小数点がない場合は残り２桁を空白で埋める
-                    if(i == 0){
-                        stringBuilder.insert(0," " + " ");
-                        ten_key_edit.setText(stringBuilder);
-                    }
-                }*/
+                
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
             }
         }
     };

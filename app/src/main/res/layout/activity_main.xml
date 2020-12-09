@@ -2,15 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".KensinMainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/constraintLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#C4C4C4"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,10 +21,12 @@
 
         <Button
             android:id="@+id/Update"
-            android:layout_width="142dp"
+            android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="25dp"
             android:background="@android:color/background_dark"
             android:onClick="Fixed_UnFixed"
             android:text="@string/mi"
@@ -30,93 +35,82 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             tools:ignore="RtlCompat" />
 
         <TextView
             android:id="@+id/date_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="8dp"
             android:focusable="false"
             android:text="@string/date"
             android:textColor="#000000"
             android:textSize="36sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintBottom_toBottomOf="@+id/Update"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
             tools:ignore="RtlCompat" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="24dp"
             android:enabled="false"
             android:focusable="false"
             android:text="@string/kotei"
             android:textColor="#000000"
             android:textSize="36sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/Update"
             tools:ignore="RtlCompat" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#EEEEEE"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout1">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:focusable="false"
             android:gravity="start"
             android:text="@string/kotei3"
             android:textColor="#000000"
             android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Name2"
+            app:layout_constraintStart_toStartOf="@+id/kotei2"
+            app:layout_constraintTop_toBottomOf="@+id/kotei2"
             tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/Name1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="24dp"
             android:ems="8"
             android:focusable="false"
+            android:maxLines="1"
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@+id/kotei2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/kotei2"
-            app:layout_constraintTop_toTopOf="@+id/kotei2"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="@+id/kotei2" />
 
         <TextView
             android:id="@+id/kotei2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
             android:focusable="false"
             android:text="@string/kotei2"
             android:textColor="#000000"
@@ -126,29 +120,20 @@
             tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:id="@+id/Name2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:ems="8"
-            android:focusable="false"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Name1"
-            app:layout_constraintStart_toEndOf="@+id/kotei2"
-            app:layout_constraintTop_toBottomOf="@+id/Name1" />
-
-        <TextView
             android:id="@+id/code"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
             android:ems="8"
             android:focusable="false"
+            android:maxLines="1"
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/Name1"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -157,7 +142,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#EEEEEE"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
@@ -165,19 +152,17 @@
             android:id="@+id/Input_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/frame_draw"
             android:cursorVisible="true"
             android:ellipsize="end"
             android:ems="5"
             android:gravity="end"
             android:maxLength="8"
-            android:onClick="number_form"
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:windowSoftInputMode="stateHidden"
+            app:layout_constraintStart_toStartOf="@+id/konkai_kotei"
             app:layout_constraintTop_toBottomOf="@+id/konkai_kotei"
             tools:ignore="Autofill,HardcodedText,LabelFor,OnClick,RtlCompat,RtlHardcoded,TextFields"
             tools:targetApi="o">
@@ -186,30 +171,18 @@
         </EditText>
 
         <TextView
-            android:id="@+id/zenkai_kotei"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:text="前回"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/zenkai_kensin_number"
-            app:layout_constraintStart_toStartOf="@+id/zenkai_kensin_number"
-            app:layout_constraintTop_toTopOf="@+id/konkai_kotei"
-            tools:ignore="HardcodedText" />
-
-        <TextView
             android:id="@+id/konkai_kotei"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
             android:focusable="false"
             android:gravity="right|end"
             android:text="@string/kotei4"
             android:textColor="#000000"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Input_number"
-            app:layout_constraintStart_toStartOf="@+id/Input_number"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlCompat,RtlHardcoded" />
 
@@ -217,9 +190,8 @@
             android:id="@+id/zenkai_kensin_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:autofillHints=""
             android:ems="5"
             android:focusable="false"
@@ -227,7 +199,7 @@
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
             app:layout_constraintStart_toEndOf="@+id/Input_number"
-            app:layout_constraintTop_toBottomOf="@+id/zenkai_kotei"
+            app:layout_constraintTop_toTopOf="@+id/Input_number"
             tools:ignore="LabelFor"
             tools:targetApi="o" />
 
@@ -238,20 +210,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+        tools:layout_editor_absoluteX="0dp">
 
         <TextView
             android:id="@+id/kotei7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:layout_marginTop="10dp"
             android:focusable="false"
             android:gravity="right|end"
             android:text="@string/kotei5"
             android:textColor="#000000"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Used_number"
-            app:layout_constraintStart_toStartOf="@+id/Used_number"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlCompat,RtlHardcoded" />
 
@@ -259,8 +233,8 @@
             android:id="@+id/Using_Amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:autofillHints=""
             android:ems="5"
             android:focusable="false"
@@ -276,17 +250,14 @@
             android:id="@+id/Used_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:autofillHints=""
             android:ems="5"
             android:focusable="false"
             android:gravity="end"
-            android:onClick="Used_text"
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/kotei7"
             app:layout_constraintTop_toBottomOf="@+id/kotei7"
             tools:ignore="LabelFor,RtlCompat"
             tools:targetApi="o" />
@@ -295,15 +266,12 @@
             android:id="@+id/Tax_Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="60dp"
-            android:layout_marginRight="60dp"
             android:autofillHints=""
             android:focusable="false"
             android:text="@string/Tax"
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
-            app:layout_constraintEnd_toStartOf="@+id/Tax"
-            app:layout_constraintStart_toStartOf="@+id/kotei7"
+            app:layout_constraintEnd_toEndOf="@+id/Used_number"
             app:layout_constraintTop_toTopOf="@+id/Tax"
             tools:ignore="LabelFor"
             tools:targetApi="o" />
@@ -333,7 +301,6 @@
             android:text="@string/kotei8"
             android:textColor="@android:color/background_dark"
             android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="@+id/Using_Amount"
             app:layout_constraintStart_toStartOf="@+id/Using_Amount"
             app:layout_constraintTop_toTopOf="@+id/kotei7"
             tools:ignore="RtlCompat,RtlHardcoded" />
@@ -343,10 +310,11 @@
         android:id="@+id/tableLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/frame_draw"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout4"
         app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout4"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
 
         <TableRow
@@ -354,55 +322,75 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/Kensin_Button"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Kensin"
-                android:text="@string/kotei9"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
 
-            <Button
-                android:id="@+id/customer_Button"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Root_Search"
-                android:text="@string/kotei11"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+                <Button
+                    android:id="@+id/Kensin_Button"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei9"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
 
-            <Button
-                android:id="@+id/Printer_Button"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Printer"
-                android:text="@string/kotei12"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
 
-            <Button
-                android:id="@+id/Calender_Button"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Calendar"
-                android:text="@string/kotei13"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+                <Button
+                    android:id="@+id/customer_Button"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei11"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
 
-            <Button
-                android:id="@+id/end_app"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Finish"
-                android:text="@string/kotei14"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
+
+                <Button
+                    android:id="@+id/Printer_Button"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei12"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
+
+                <Button
+                    android:id="@+id/Calender_Button"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei13"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
+
+                <Button
+                    android:id="@+id/end_app"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei14"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
         </TableRow>
 
         <TableRow
@@ -411,61 +399,77 @@
             android:layout_height="wrap_content"
             tools:ignore="UselessParent">
 
-            <Button
-                android:id="@+id/button6"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Input"
-                android:text="@string/kotei15"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
 
-            <Button
-                android:id="@+id/OUT_PUT_BUTTON"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Output"
-                android:text="@string/kotei16"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+                <Button
+                    android:id="@+id/Input_tsv"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei15"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
 
-            <Button
-                android:id="@+id/up"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:onClick="main_up"
-                android:text="@string/up"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                tools:ignore="ButtonStyle" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
 
-            <Button
-                android:id="@+id/down"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:onClick="main_Down"
-                android:text="@string/down"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                tools:ignore="ButtonStyle" />
+                <Button
+                    android:id="@+id/Output_tsv"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei16"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
 
-            <Button
-                android:id="@+id/Check_Button"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_draw"
-                android:onClick="main_Check"
-                android:text="@string/kotei17"
-                android:textSize="20sp"
-                tools:ignore="ButtonStyle" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
+
+                <Button
+                    android:id="@+id/up"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/up"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
+
+                <Button
+                    android:id="@+id/down"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/down"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/frame_draw">
+
+                <Button
+                    android:id="@+id/Check_Button"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kotei17"
+                    android:textSize="24sp"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
 
         </TableRow>
 

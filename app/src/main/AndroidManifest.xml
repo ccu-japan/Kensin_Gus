@@ -20,21 +20,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:windowSoftInputMode="stateAlwaysHidden"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon">
 
         <activity android:name=".CheckActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"/>           <!-- 点検項目アクティビティ -->
 
         <activity android:name=".Root_Search"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>           <!-- 未検針検索アクティビティ -->
 
         <activity android:name=".Ten_key_Process"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>           <!--１０キー入力アクティビティ -->
 
         <activity android:name=".Calendar_Select"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>              <!-- 日付変更アクティビティ -->
 
         <activity android:name=".KensinMainActivity"
+                    android:windowSoftInputMode="stateAlwaysHidden"
                    android:launchMode="singleTop"
                    android:screenOrientation="portrait">     <!-- メインアクティビティ -->
             <intent-filter>
@@ -43,6 +53,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Print_Search"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>
 
     </application>

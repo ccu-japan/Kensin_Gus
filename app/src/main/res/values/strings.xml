@@ -33,11 +33,11 @@
     <string name="Result4">ﾎｰｽﾊﾞﾝﾄﾞ</string>
     <string name="Result5">危険標識</string>
     <string name="Result6">消費設備</string>
-    <string name="Result7"></string>
-    <string name="Result8"></string>
-    <string name="Result9"></string>
-    <string name="Result10"></string>
-    <string name="Result11"></string>
+    <string name="Result7"/>
+    <string name="Result8"/>
+    <string name="Result9"/>
+    <string name="Result10"/>
+    <string name="Result11"/>
     <string name="Result12">現金供給</string>
     <string name="check_text">不具合箇所をチェック</string>
     <string name="cancel">キャンセル</string>
@@ -67,6 +67,7 @@
     <string name="ten_key_left">←</string>
     <string name="ten_key_dot">.</string>
     <string name="ten_key_OK">OK</string>
+    <string name="zenkai">前回</string>
 
 
 </resources>

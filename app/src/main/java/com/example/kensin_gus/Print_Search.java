@@ -12,21 +12,15 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.fujitsufrontech.patioprinter.fhtuprt.fhtUprt;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 @SuppressLint("Registered")
 public class Print_Search extends AppCompatActivity {
-    private final static String BR = System.getProperty("line.separator");    // 改行コード
-    private fhtUprt mPrint = new fhtUprt();                                    // プリンタ制御ライブラリ
-    private String mDevName = "";                                            // 選択されたBluetoothデバイス名
-    private String mDevAddr = "";                                            // 選択されたBluetoothアドレス
+    private final static String BR = System.getProperty("line.separator");  // 改行コード
+    private fhtUprt mPrint = new fhtUprt();                                 // プリンタ制御ライブラリ
+    private String mDevName = "";                                           // 選択されたBluetoothデバイス名
+    private String mDevAddr = "";                                           // 選択されたBluetoothアドレス
     public Context context;
     Intent main_activity_intent;
     private View view;
@@ -53,6 +47,7 @@ public class Print_Search extends AppCompatActivity {
     public void PrintSearch(View v) {
         view = v;
         // プリンタの検索
+
         if (mPrint.fhtPrFind() == fhtUprt.PRT_SUCCESS) {
             // 検索中メッセージ表示
             TextView view = findViewById(R.id.main_address_text);
@@ -60,6 +55,7 @@ public class Print_Search extends AppCompatActivity {
             Log.d("PrtSampleAppActivity", "PrintSearch SUCCESS");
         } else {
             Log.d("PrtSampleAppActivity", "PrintSearch ERROR");
+
         }
     }
 
@@ -74,7 +70,6 @@ public class Print_Search extends AppCompatActivity {
                 inf = (fhtUprt.BTHPRTINFO[]) msg.obj;
                 if (msg.arg2 == 0) {
                     return;
-
                 }
                 //検索結果をリストに格納
                 for (int i = 0; i < msg.arg2; i++) {
@@ -104,6 +99,7 @@ public class Print_Search extends AppCompatActivity {
                             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                        
                         }
                     }).show();
                 }
