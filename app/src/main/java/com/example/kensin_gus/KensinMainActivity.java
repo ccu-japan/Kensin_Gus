@@ -105,7 +105,7 @@ public class KensinMainActivity  extends AppCompatActivity
 		{
 			Bulid_Permission.Permmsion_Search(this);                        //アプリ権限許可
 			
-			// インスタンス化
+																			// インスタンス化
 			kenshin_db = new Kenshin_DB(this);
 			tokuif = new TOKUIF();
 			hyof = new HYOF();
@@ -118,7 +118,7 @@ public class KensinMainActivity  extends AppCompatActivity
 			layout_size = new Layout_Size();
 			getter = new GETTER();
 			
-			//ViewにID設定
+																			//ViewにID設定
 			CHECK_BUTTON = findViewById(R.id.Check_Button);
 			KENSIN_BUTTON = findViewById(R.id.Kensin_Button);
 			FIXED_UNFIXED_BUTTON = findViewById(R.id.Update);
@@ -451,10 +451,13 @@ public class KensinMainActivity  extends AppCompatActivity
 																			//　未済アクティビティに遷移 戻り値：Boolean型
 		Log.d("CHECK_FLG",String.valueOf(CHECK_FLG));
 		CHECK_FLG = button_processing.Check_task(CHECK_FLG,this);
+		
 																			//CHECK_FLG　TRUE:済　FALSE:未
+																			
 		if (CHECK_FLG)
 		{
-			main_Printer(view);                                             //印刷メソッド
+																			//印刷メソッド
+			main_Printer(view);
 		}
 	}
 	
@@ -679,7 +682,8 @@ public class KensinMainActivity  extends AppCompatActivity
 	@RequiresApi(api = Build.VERSION_CODES.O)
 	public void main_up()
 	{
-		db_registration();  //データベースの登録
+																			//データベースの登録
+		db_registration();
 		cursor = kenshin_db.db.rawQuery("SELECT ban FROM TOKUIF ", null);
 		cursor.moveToFirst();
 		//  連番を検索
@@ -755,12 +759,17 @@ public class KensinMainActivity  extends AppCompatActivity
 																			//データべースに登録する
 	public void db_registration()
 	{
+																			// 検針入力数値
 		String Number_Input = ((EditText)findViewById(R.id.Input_number)).getText().toString();
+																			// 使用量超過分
 		String Usaged = ((TextView)findViewById(R.id.Used_number)).getText().toString();
+																			// 使用量金額
 		String price =  ((TextView)findViewById(R.id.Using_Amount)).getText().toString();
+																			// 消費税
 		String Tax = ((TextView)findViewById(R.id.Tax)).getText().toString();
+																			// 今日の日付
 		TODAY = ((TextView)findViewById(R.id.date_now)).getText().toString();
-		
+																			// 消費税計算
 		tokuif.TAX_PRICE(price, Tax, kenshin_db.db, COL_BAN, ((TextView)findViewById(R.id.date_now)).getText().toString(),Number_Input, Usaged , TODAY);
 		
 		button_processing.Up_Down_Button(KensinMainActivity.this, kenshin_db.db, COL_BAN);

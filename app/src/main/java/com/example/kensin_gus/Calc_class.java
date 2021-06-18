@@ -12,11 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Calc_class {
-    
-    
-    
-    
-
     //----------------------------------------------------------------------
     //
     //  使用量の計算メソッド
@@ -62,10 +57,9 @@ public class Calc_class {
         String s = String.valueOf(row);
         Matcher matcher = p.matcher(s);
 
-                                                                            //minutes = String.valueOf((int) (row % 1.0 * 10));
-        if (matcher.matches()) {
-                                                                            //minutes = String.format("%s",(BigDecimal.valueOf(row%1.0*10)));
-                                                                            //int row1 = (int)((float)(row % 1.0 * 10));
+        
+        if (matcher.matches())
+        {
             double d_row = row % 1.0;
             BigDecimal bd_row = new BigDecimal(d_row);
             BigDecimal bd_row_up = new BigDecimal("10");

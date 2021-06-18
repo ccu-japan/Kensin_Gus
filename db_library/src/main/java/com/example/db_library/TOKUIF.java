@@ -110,60 +110,62 @@ public class TOKUIF {
 		public void onCreate(SQLiteDatabase db) {
 
 			String createTbl = "CREATE TABLE " + TOKUIF.DB_TABLE + " ("
-					+ COL_BAN + " TEXT ,"+ COL_STX + "  TEXT ,"	+ COL_TYPE + "  TEXT ,"
-					+ COL_COMPANY_CODE + "  TEXT ,"
-					+ COL_CUSTOMER_CODE + "  TEXT  ,"
-					+ COL_PLACE_CODE + "  REAL ,"
-					+ COL_PLACE_NAME + "  TEXT ,"
-					+ COL_KENSIN + "  REAL ,"
-					+ COL_KENSINJUN + "  TEXT ,"
-					+ COL_CUSTOMER_NAME1 + "  TEXT ,"
-					+ COL_CUSTOMER_NAME2 + "  TEXT ,"
-					+ COL_GAS_PRICE_SECTION + "  TEXT ,"
-					+ COL_GAS_PRICE_TABLE + "  TEXT ,"
-					+ COL_UNIT_PRICE + "  REAL ,"
-					+ COL_STANDARD_USAGE + "  REAL ,"
-					+ COL_LAST_TIME_KENSIN + " BLOB  ,"
-					+ COL_LAST_TIME_POINTER + "  REAL,"
-					+ COL_LAST_TIME_USAGE + "  REAL ,"
-					+ COL_THIS_TIME_KENSIN + " TEXT ,"
-					+ COL_THIS_TIME_POINTER + "  REAL ,"
-					+ COL_THIS_TIME_USAGE + "  REAL ,"
-					+ COL_GAS_PRICE + "  REAL ,"
-					+ COL_STANDARD_PRICE + "  REAL ,"
-					+ COL_MICRO_COMPUTER_PRICE + "  REAL ,"
-					+ COL_ALARM_PRICE + "  REAL ,"
-					+ COL_BILLING_AMOUNT + "  REAL ,"
-					+ COL_GAS_CONSUMPTION_TAX + "  REAL ,"
-					+ COL_GAS_TAX_RATE + "  REAL ,"
-					+ COL_THIS_TIME_BILLING + "  REAL ,"
-					+ COL_MATER_EXCHANGE_FLAG + "  TEXT ,"
-					+ COL_MATER_EXCHANGE_DATE + "  BLOB ,"
-					+ COL_MATER_EXCHANGE_USAGE + "  REAL ,"
-					+ COL_TENKEN_RESULT01 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT02 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT03 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT04 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT05 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT06 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT07 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT08 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT09 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT10 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT11 + "  INTEGER ,"
-					+ COL_TENKEN_RESULT12 + "  INTEGER ,"
-					+ COL_TANTOUSYA + "  TEXT ,"
-					+ COL_GROUP_CODE + "  TEXT ,"
+					+ COL_BAN                   + " TEXT ,"
+				    + COL_STX                   + " TEXT ,"
+				    + COL_TYPE                  + " TEXT ,"
+					+ COL_COMPANY_CODE          + " TEXT ,"
+					+ COL_CUSTOMER_CODE         + " TEXT  ,"
+					+ COL_PLACE_CODE            + " REAL ,"
+					+ COL_PLACE_NAME            + " TEXT ,"
+					+ COL_KENSIN                + " REAL ,"
+					+ COL_KENSINJUN             + " TEXT ,"
+					+ COL_CUSTOMER_NAME1        + " TEXT ,"
+					+ COL_CUSTOMER_NAME2        + " TEXT ,"
+					+ COL_GAS_PRICE_SECTION     + " TEXT ,"
+					+ COL_GAS_PRICE_TABLE       + " TEXT ,"
+					+ COL_UNIT_PRICE            + " REAL ,"
+					+ COL_STANDARD_USAGE        + " REAL ,"
+					+ COL_LAST_TIME_KENSIN      + " BLOB  ,"
+					+ COL_LAST_TIME_POINTER     + " REAL,"
+					+ COL_LAST_TIME_USAGE       + " REAL ,"
+					+ COL_THIS_TIME_KENSIN      + " TEXT ,"
+					+ COL_THIS_TIME_POINTER     + " REAL ,"
+					+ COL_THIS_TIME_USAGE       + " REAL ,"
+					+ COL_GAS_PRICE             + " REAL ,"
+					+ COL_STANDARD_PRICE        + " REAL ,"
+					+ COL_MICRO_COMPUTER_PRICE  + " REAL ,"
+					+ COL_ALARM_PRICE           + "  REAL ,"
+					+ COL_BILLING_AMOUNT        + "  REAL ,"
+					+ COL_GAS_CONSUMPTION_TAX   + "  REAL ,"
+					+ COL_GAS_TAX_RATE          + "  REAL ,"
+					+ COL_THIS_TIME_BILLING     + "  REAL ,"
+					+ COL_MATER_EXCHANGE_FLAG   + "  TEXT ,"
+					+ COL_MATER_EXCHANGE_DATE   + "  BLOB ,"
+					+ COL_MATER_EXCHANGE_USAGE  + "  REAL ,"
+					+ COL_TENKEN_RESULT01       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT02       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT03       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT04       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT05       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT06       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT07       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT08       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT09       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT10       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT11       + "  INTEGER ,"
+					+ COL_TENKEN_RESULT12       + "  INTEGER ,"
+					+ COL_TANTOUSYA             + "  TEXT ,"
+					+ COL_GROUP_CODE            + "  TEXT ,"
 					+ COL_TAX_CALCULATION_TABLE + "  TEXT ,"
-					+ COL_FILLER + "  TEXT ,"
-					+ COL_PROBED_FLAG + "  TEXT ,"
-					+ COL_LAST_TIME__BILLING_REMAINDER + " REAL ,"
-					+ COL_LAST_TIME__BILLING_REMAINDER_tax + " REAL ,"
-					+ COL_OTHER_SALES + "  REAL ,"
-					+ COL_OTHER_SALES_TAX + "  REAL ,"
-					+ COL_TERMINAL_ID + "  TEXT ,"
-					+ COL_ETX + " TEXT ,"
-					+ COL_END_CODE + "  TEXT ,"
+					+ COL_FILLER                + "  TEXT ,"
+					+ COL_PROBED_FLAG           + "  TEXT ,"
+					+ COL_LAST_TIME__BILLING_REMAINDER      + " REAL ,"
+					+ COL_LAST_TIME__BILLING_REMAINDER_tax  + " REAL ,"
+					+ COL_OTHER_SALES           + "  REAL ,"
+					+ COL_OTHER_SALES_TAX       + "  REAL ,"
+					+ COL_TERMINAL_ID           + "  TEXT ,"
+					+ COL_ETX                   + " TEXT ,"
+					+ COL_END_CODE              + "  TEXT ,"
 					+ "PRIMARY KEY(" + COL_COMPANY_CODE + " ," + COL_CUSTOMER_CODE + ",  " + COL_PLACE_CODE + ")"
 					+ ");";
 			db.execSQL(createTbl);
@@ -176,12 +178,12 @@ public class TOKUIF {
 				// 入力ファイル読込メソッド
 				//――――――――――――――――――――――――――――――――――
 				try {
-						//SDKバージョンの確認
+																				//SDKバージョンの確認
 						if (Build.VERSION.SDK_INT >= 29) {
 								path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-						//28以下に対応 *2019/09/25
+																				//28以下に対応 *2019/09/25
 						} else {
-								//内部ストレージもしくはSDカード直下
+																				//内部ストレージもしくはSDカード直下
 								path = new File(Environment.getExternalStorageDirectory().getPath());
 								Log.d("file_path", "API29以下です");
 								Log.d("fill_path", String.valueOf(path));
@@ -313,7 +315,8 @@ public class TOKUIF {
 					values.put("T_T_kensin", now);
 					values.put("T_T_pointer", Usaged_now);
 					values.put("T_T_usage", Usaged_now2);
-					db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});  //レコード登録
+																			//レコード登録
+					db.update(DB_TABLE, values, "  ban = ? ", new String[]{String.valueOf(COL_BAN)});
 				
 			}
 			catch (NumberFormatException e)

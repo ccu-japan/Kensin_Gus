@@ -10,10 +10,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-public class INFOMF {
-
+public class INFOMF
+{
+    
     FileInputStream fileInputStream;
-
+    
     public String STX;
     public String TYPE;
     public String COMPANY_CODE;
@@ -23,17 +24,18 @@ public class INFOMF {
     public String FILLER;
     public String ETX;
     public String END_CODE;
-
+    
     private String fileName = "INFOMF.TSV";
     private String[] str;
     private File path;
-    private File file ;
+    private File file;
     private String[] columnData;
-
+    
     //――――――――――――――――――――――――――――――
     //  INFOMF出力メソッド
     //――――――――――――――――――――――――――――――
-    public INFOMF Infomf_list(){
+    public INFOMF Infomf_list()
+    {
         try
         {
             //SDKバージョンの確認
@@ -47,33 +49,28 @@ public class INFOMF {
                 //内部ストレージ,SDカード直下
                 path = new File(Environment.getExternalStorageDirectory().getPath());
             }
-
-            try
-            {
-                file = new File(path, fileName);
-                fileInputStream = new FileInputStream(file);
-            }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
-            }
+       
+            file = new File(path, fileName);
+            fileInputStream = new FileInputStream(file);
+            
             //Shift-JIS形式で読取
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream,"Shift-JIS");
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "Shift-JIS");
             BufferedReader buffer = new BufferedReader(inputStreamReader);
             String line;
             while ((line = buffer.readLine()) != null)
             {
-                columnData = line.split("\t", -1);//タブ区切り
+                //タブ区切り
+                columnData = line.split("\t", -1);
                 str = new String[columnData.length];
-                for(int i=0;i<columnData.length;i++)
-                {
+                for (int i = 0; i < columnData.length; i++)
                     str[i] = columnData[i];
-                }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
-        return INFOMF.this;
+        return this;
     }
 
     //----------------------------------------------------------------------

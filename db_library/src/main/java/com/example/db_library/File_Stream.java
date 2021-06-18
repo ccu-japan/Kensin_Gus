@@ -21,10 +21,7 @@ public class File_Stream
 			BufferedReader buffer = new BufferedReader(inputStreamReader);
 			ContentValues contentValues = new ContentValues();
 			String line;
-			
 		}
-			
-			
 			return "";
 	}
 }

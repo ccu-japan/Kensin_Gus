@@ -64,17 +64,20 @@ public class Print_Search extends AppCompatActivity {
         @SuppressLint("SetTextI18n")
         @Override
         public void handleMessage(Message msg) {
-            //fhtPrFindの完了通知
-            if (msg.what == fhtUprt.FHTPRFIND_FINISHED) {//検索結果を取得
+                                                                            //fhtPrFindの完了通知
+                                                                            //検索結果を取得
+            if (msg.what == fhtUprt.FHTPRFIND_FINISHED) {
                 fhtUprt.BTHPRTINFO[] inf;
                 inf = (fhtUprt.BTHPRTINFO[]) msg.obj;
                 if (msg.arg2 == 0) {
                     return;
                 }
-                //検索結果をリストに格納
+                                                                            //検索結果をリストに格納
                 for (int i = 0; i < msg.arg2; i++) {
-                    if (!(inf[i].szBtName.isEmpty()) && !(inf[i].szBtAddr.isEmpty())) {
-                        if (inf[i].szBtName.equals("MBH7BTZ47-100008")) {
+                    if (!(inf[i].szBtName.isEmpty()) && !(inf[i].szBtAddr.isEmpty()))
+                    {
+                        if (inf[i].szBtName.equals("MBH7BTZ47-100008"))
+                        {
                             mDevName = inf[i].szBtName;
                             mDevAddr = inf[i].szBtAddr;
                             TextView view = findViewById(R.id.main_address_text);
